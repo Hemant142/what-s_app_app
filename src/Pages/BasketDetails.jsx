@@ -37,15 +37,19 @@ export default function BasketDetails() {
   // Get token from cookies
   let token = Cookies.get('whats_app_token');
   const basicAuth = Cookies.get('login_token_stoqclub');
-
+console.log(token,"token")
   // Cookies.set('whats_app_token','')
   // Cookies.set('basketId','')
   useEffect(() => {
-    if (id) {
+    if (id&&token) {
     
         // If basketId is present, set it in cookies
         Cookies.set("basketId", id);
      
+    }
+
+    if(!token){
+      navigate(`/${id}`)
     }
   }, [id, token]);
 

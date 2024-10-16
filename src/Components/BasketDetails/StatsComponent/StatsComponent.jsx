@@ -131,7 +131,7 @@ const StatsComponent = ({ basketData }) => {
               style={{ marginRight: "8px" }} // Add space between icon and text
             />
             <Text
-              fontSize="12px" // Smaller text size
+              // fontSize="normal" // Smaller text size
               color={
                 basketData.graphIndicatorCheck === "low"
                   ? "green"
@@ -158,14 +158,14 @@ const StatsComponent = ({ basketData }) => {
 
       
     </Flex>
-    <Box display={"flex"} justifyContent={"space-between"} p={2}>
+    <Box display={"flex"} justifyContent={"space-between"} mt={4}>
     <Box
       width="154px"
       height="73px"
       top="326px"
       left="44px"
       padding="10px 23px 11px 18px"
-      borderRadius="8px"
+      borderRadius="8px"gtr
       border="1px solid #565E6C"
       bg=" #262A33;
 "

@@ -11,6 +11,7 @@ const BasketHeader = ({ basketData }) => {
     textAlign={"left"}
     border={"2px solid red"}
       width="100%"
+      mt={2}
       p={2}
       height="43px"
       alignItems="center"
