@@ -180,7 +180,7 @@ console.log(token,"token")
           height="100vh"
           backgroundColor="rgba(23, 26, 31, 1)"
           boxShadow="0px 3px 6px 0px rgba(18, 15, 40, 0.12)"
-          paddingBottom="20px"
+          // paddingBottom="20px"
         >
           {basketData === null ? (
             <Flex

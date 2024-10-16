@@ -247,9 +247,10 @@ const handleStarClick = (starRating) => {
 };
 
   return (
-    <Box>
+    <Box display={"grid"} justifyContent={"space-between"}>
 
 <Box
+
       className="investment-section"
       p={5}
       // borderWidth="1px"
@@ -621,11 +622,12 @@ const handleStarClick = (starRating) => {
       </Box>
 
 
-     
-
+    
     </Box>
+
+
        <Box
-         position="relative" // Fix the box at the bottom of the screen
+        //  position="fixed" // Fix the box at the bottom of the screen
          bottom="0" // Align it to the bottom
          left="0" // Make sure it spans the full width
          right="0"
@@ -640,16 +642,20 @@ const handleStarClick = (starRating) => {
           p={2}
         >
           <Text
-            fontFamily="Inter"
-            fontSize="12px"
-            fontWeight="noral"
-            lineHeight="18px"
-            textAlign="left"
-            color="#A7ADB7"
-          >
-            You are placing an order after market hours for these 3 stocks. Your
-            order will be executed on next market day.
-          </Text>
+  fontFamily="Inter"
+  fontSize="12px"
+  fontWeight="normal"
+  lineHeight="18px"
+  textAlign="left"
+  color="#A7ADB7"
+>
+  You are placing an{' '}
+  <Text as="span" fontWeight="bold" color="white">
+    order after market hours
+  </Text>{' '}
+  for these 3 stocks. Your order will be executed on the next market day.
+</Text>
+
         </Box>
 
         <Box
