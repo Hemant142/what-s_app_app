@@ -131,7 +131,10 @@ const StatsComponent = ({ basketData }) => {
               style={{ marginRight: "8px" }} // Add space between icon and text
             />
             <Text
-              // fontSize="normal" // Smaller text size
+            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+            fontSize="12px"
+            fontWeight="600"
+            lineHeight="22px"
               color={
                 basketData.graphIndicatorCheck === "low"
                   ? "green"

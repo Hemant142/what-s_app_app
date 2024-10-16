@@ -625,11 +625,15 @@ const handleStarClick = (starRating) => {
 
     </Box>
        <Box
-        border="2px solid #9095A0"
-        boxShadow="0px 2px 5px 0px #171A1F17, 0px 0px 2px 0px #171A1F1F"
-        p={4}
-        width={"100%"}
-        alignItems={"center"}
+         position="relative" // Fix the box at the bottom of the screen
+         bottom="0" // Align it to the bottom
+         left="0" // Make sure it spans the full width
+         right="0"
+         border="2px solid #9095A0"
+         boxShadow="0px 2px 5px 0px #171A1F17, 0px 0px 2px 0px #171A1F1F"
+         p={4}
+         width={"100%"}
+         alignItems={"center"}
       >
         <Box
           // left="20px"
