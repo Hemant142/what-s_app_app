@@ -51,6 +51,7 @@ export default function BasketDetails() {
 
 
   let userId = Cookies.get("userId");
+  console.log(id)
   // let userId="E0002160"
   // let currentBalance = Cookies.get("balance");
   let currentBalance = 100000

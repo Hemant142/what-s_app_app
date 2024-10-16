@@ -28,7 +28,9 @@ const Login = () => {
   const [lockoutTimer, setLockoutTimer] = useState(0);
   const toast = useToast();
   const dispatch = useDispatch();
+  const navigate=useNavigate()
   const { id } = useParams();
+  const token = Cookies.get('whats_app_token');
   console.log(id,"Login")
  
 
@@ -39,7 +41,11 @@ const Login = () => {
         Cookies.set("basketId", id);
      
     }
-  }, [id]);
+    if(token&&id){
+      navigate(`/basket/${id}`)
+    }
+
+  }, [id,token]);
 
   // Handle 5-minute lockout timer
   useEffect(() => {

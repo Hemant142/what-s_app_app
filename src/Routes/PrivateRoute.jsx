@@ -6,7 +6,7 @@ export default function PrivateRoute({ children }) {
   const token = Cookies.get('whats_app_token'); // Assuming this is your authentication token
   const location = useLocation();
   const { id } = useParams();
-  console.log(id,"PrivateRoute ")
+  console.log(token,"token ")
 // const basketId=Cookies.get('basketId')
   // Extract the `id` from the URL if it exists
   const currentPath = location.pathname;
@@ -14,9 +14,6 @@ export default function PrivateRoute({ children }) {
 
   // If token is not present, redirect to the login page and store the basketId
   if (!token) {
-    // if (basketId) {
-    //   localStorage.setItem('basketIdToRedirect', basketId); // Store basketId in localStorage
-    // }
     return <Navigate to={`/${id}`} state={{ from: location }} replace />;
   }
 
