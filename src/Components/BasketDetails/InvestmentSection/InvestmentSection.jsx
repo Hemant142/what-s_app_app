@@ -36,31 +36,25 @@ const InvestmentSection = (props) => {
   const [othercharges, setOtherCharges] = useState(0);
   const [total, setTotal] = useState(0);
   const [rating, setRating] = useState(null);
-  const [tempRating,setTempRating] =useState(0)
+  const [tempRating, setTempRating] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
- const basketId=props.basketId
- let token =Cookies.get('whats_app_token')
- let userName = Cookies.get("user-name");
+  const basketId = props.basketId;
+  let token = Cookies.get("whats_app_token");
+  let userName = Cookies.get("user-name");
 
   const location = useLocation();
 
   const dispatch = useDispatch();
   console.log(currentBalance, "currentBalance");
-  
-
-
-
 
   useEffect(() => {
     setTotal(brokerage + othercharges + amountToInvest);
-  }, [brokerage, othercharges,lots]);
+  }, [brokerage, othercharges, lots]);
 
-  
   useEffect(() => {
     setBrokerage(345);
     setOtherCharges(237);
   }, []);
-
 
   const handleInvestClick = () => {
     setShowInvestmentOptions(true);
@@ -140,11 +134,9 @@ const InvestmentSection = (props) => {
     }
   };
 
-
-    // Use fallback values to prevent errors
-const formattedAmountToInvest = (amountToInvest || 0).toLocaleString();
-const formattedTotal = (total || 0).toLocaleString();
-
+  // Use fallback values to prevent errors
+  const formattedAmountToInvest = (amountToInvest || 0).toLocaleString();
+  const formattedTotal = (total || 0).toLocaleString();
 
   const handleBuyClick = () => {
     if (amountToInvest < minReqAmt) {
@@ -198,35 +190,31 @@ const formattedTotal = (total || 0).toLocaleString();
     // }
   };
 
-
-
   const handleConfirmOrder = () => {
     if (total > currentBalance) {
       toast({
-        title: 'Warning',
+        title: "Warning",
         description: "Your total exceeds your current balance.",
-        status: 'warning',
+        status: "warning",
         duration: 5000,
         isClosable: true,
       });
       return;
     }
-// console.log(basketId,lots,token)
+    // console.log(basketId,lots,token)
     // Cookies.set('whats_app_token',"")
     // Cookies.set('basketId',"")
-    dispatch(OrderPlaced(basketId,lots,token))
-    .then((res)=>{
-      console.log(res,"REsponse")
-      
-    })
-    .catch((error)=>{
-      console.log(error,"error confirm order ")
-    })
+    dispatch(OrderPlaced(basketId, lots, token))
+      .then((res) => {
+        console.log(res, "REsponse");
+      })
+      .catch((error) => {
+        console.log(error, "error confirm order ");
+      });
 
-    
     toast({
       duration: 10000,
-      position: 'bottom',
+      position: "bottom",
       render: (props) => (
         <CustomToast
           userName={userName}
@@ -238,456 +226,386 @@ const formattedTotal = (total || 0).toLocaleString();
         />
       ),
     });
+  };
 
-
-};
-
-const handleStarClick = (starRating) => {
-  setRating(starRating); // Set rating immediately
-};
+  const handleStarClick = (starRating) => {
+    setRating(starRating); // Set rating immediately
+  };
 
   return (
-    <Box display={"grid"} justifyContent={"space-between"}>
+    <Box >
+       <Box
+          // mt={2}
+          width={"100%"}
+          bg={"#D3F9E0"}
+          display="flex" // Ensure content aligns in one line
+          alignItems="center" // Vertically align the text in the center
+          padding="7px 12px" // Add padding to give spacing similar to top and left
+        >
+          <Text
+            fontFamily="Inter"
+            fontSize="14px"
+            fontWeight="400"
+            lineHeight="22px"
+            textAlign="left"
+            color="#117B34"
+          >
+            Complete your transaction in 5:00 before the session expires
+          </Text>
+        </Box>
+      <Box
+ 
+        className="investment-section"
+        p={5}
+        // borderWidth="1px"
+        // borderRadius="lg"
+        // boxShadow="lg"
+      >
+       
 
-<Box
-
-      className="investment-section"
-      p={5}
-      // borderWidth="1px"
-      // borderRadius="lg"
-      // boxShadow="lg"
-    >
-     
 
   
-     <Box
-        // mt={2}
-        width={"100%"}
-        bg={"#D3F9E0"}
-        display="flex" // Ensure content aligns in one line
-        alignItems="center" // Vertically align the text in the center
-        padding="7px 12px" // Add padding to give spacing similar to top and left
-      >
+        <Box display={"flex"} justifyContent={"space-between"} mt={4} mb={6}>
+          <Box>
+            <HStack spacing={4} mt={4}>
+              <Button
+                colorScheme="white"
+                variant="outline"
+                _hover={{
+                  boxShadow: "0 0 10px white",
+                  transform: "scale(1.05)",
+                }}
+                size="md"
+                _active={{
+                  boxShadow: "0 0 15px white",
+                  transform: "scale(0.95)",
+                }}
+                onClick={decreaseLot}
+                disabled={lots <= 1}
+              >
+                <Icon as={MinusIcon} />
+              </Button>
+              <Input
+                value={lots}
+                readOnly
+                textAlign="center"
+                width="50px"
+                //   bg="white"
+                fontWeight="bold"
+              />
+              <Button
+                size="md"
+                color={"#1DD75B"}
+                border={"1px solid #1DD75B"}
+                _hover={{
+                  boxShadow: "0 0 10px rgba(29, 215, 91, 0.7)",
+                  transform: "scale(1.05)",
+                }}
+                _active={{
+                  boxShadow: "0 0 15px rgba(29, 215, 91, 1)",
+                  transform: "scale(0.95)",
+                }}
+                variant="outline"
+                onClick={increaseLot}
+                disabled={amountToInvest >= currentBalance}
+              >
+                <Icon as={AddIcon} />
+              </Button>
+            </HStack>
+            <Text
+              fontSize="14px"
+              fontFamily="Inter"
+              fontWeight="400"
+              lineHeight="22px"
+              textAlign="left"
+              color="#FFFFFF"
+              mt={4}
+            >
+              Basket Multiple
+            </Text>
+          </Box>
+      
+        </Box>
+
         <Text
+          fontSize="sm"
           fontFamily="Inter"
-          fontSize="14px"
-          fontWeight="400"
+          fontWeight="noraml"
           lineHeight="22px"
           textAlign="left"
-          color="#117B34"
         >
-          Complete your transaction in 5:00 before the session expires
+          Basket Minimum Amount : {amountToInvest}
         </Text>
-      </Box>
 
-
-      {/* <Text
-        fontSize="lg"
-        fontFamily="Inter"
-        fontWeight="400"
-        lineHeight="22px"
-        textAlign="left"
-      >
-        Basket Minimum Amount: ₹{minReqAmt}
-      </Text> */}
    
 
-      {/* <Box display={"flex"} justifyContent={"space-between"}>
-        <Text
-          fontSize="14px"
-          fontFamily="Inter"
-          fontWeight="400"
-          lineHeight="22px"
-          textAlign="left"
-          color="#FFFFFF"
-          mt={4}
-        >
-          Amount: <strong>₹{amountToInvest}</strong>
-        </Text>
-        <Text
-          fontSize="14px"
-          fontFamily="Inter"
-          fontWeight="400"
-          lineHeight="22px"
-          textAlign="left"
-          color="#FFFFFF"
-          mt={4}
-        >
-          Current Balance: <strong>₹{currentBalance}</strong>
-        </Text>
-        <Text fontSize="lg"></Text>
-      </Box> */}
-
-      <Box display={"flex"} justifyContent={"space-between"}mt={4} mb={6}>
-        <Box>
-          <HStack spacing={4} mt={4}>
-            <Button
-              colorScheme="white"
-              variant="outline"
-              _hover={{
-                boxShadow: "0 0 10px white",
-                transform: "scale(1.05)",
-              }}
-              size="md"
-              _active={{
-                boxShadow: "0 0 15px white",
-                transform: "scale(0.95)",
-              }}
-              onClick={decreaseLot}
-              disabled={lots <= 1}
-            >
-              <Icon as={MinusIcon} />
-            </Button>
-            <Input
-              value={lots}
-              readOnly
-              textAlign="center"
-              width="50px"
-              //   bg="white"
+        <Box mt={2} p={2} >
+          {/* Brokerage Section */}
+          <Box
+            display="flex"
+            gap={6}
+   
+            alignItems="center"
+            color={"white"}
+            width={"70%"}
+            
+            justifyContent={"space-between"}
+            height="40px"
+          >
+            <Text
+              fontFamily="Inter"
+              fontSize="sm"
+            
               fontWeight="bold"
-            />
-            <Button
-              size="md"
-              color={"#1DD75B"}
-              border={"1px solid #1DD75B"}
-              _hover={{
-                boxShadow: "0 0 10px rgba(29, 215, 91, 0.7)",
-                transform: "scale(1.05)",
-              }}
-              _active={{
-                boxShadow: "0 0 15px rgba(29, 215, 91, 1)",
-                transform: "scale(0.95)",
-              }}
-              variant="outline"
-              onClick={increaseLot}
-              disabled={amountToInvest >= currentBalance}
+              lineHeight="40px"
+              textAlign="left"
+              height="40px"
+              color="white" // Updated height
             >
-              <Icon as={AddIcon} />
-            </Button>
-          </HStack>
-          <Text
-            fontSize="14px"
-            fontFamily="Inter"
-            fontWeight="400"
-            lineHeight="22px"
-            textAlign="left"
-            color="#FFFFFF"
-            mt={4}
-          >
-            Basket Multiple
-          </Text>
-        </Box>
-        {/* <Box mt={4}>
-          <Button
-            color={"#1DD75B"}
-            size="lg"
-            height="60px" // Increase button height
-            width="160px" // Increase button width
-            border={"1px solid #1DD75B"}
-            variant="outline"
-            _hover={{
-              boxShadow: "0 0 10px rgba(29, 215, 91, 0.7)",
-              transform: "scale(1.05)",
-            }}
-            _active={{
-              boxShadow: "0 0 15px rgba(29, 215, 91, 1)",
-              transform: "scale(0.95)",
-            }}
-            onClick={handleBuyClick}
-            isLoading={apiLoader}
-          >
-            Invest
-          </Button>
-        </Box> */}
-      </Box>
+              Amount :
+            </Text>
 
+            <Text
+      
+              fontFamily="Inter"
+              width={'30%'}
+              fontSize="sm"
+              fontWeight="bold"
+              lineHeight="40px"
+              textAlign="left"
+              height="40px"
+              color="white" // Ensure the amountToInvest text is white
+            >
+              {amountToInvest}
+            </Text>
+          </Box>
 
-        <Text
-        fontSize="sm"
-        fontFamily="Inter"
-        fontWeight="noraml"
-        lineHeight="22px"
-        textAlign="left"
-      >
-        Basket Minimum Amount : {amountToInvest}
-      </Text>
-
-     
-      {/* <Divider
-        ml={2}
-        mr={2}
-        m={"auto"}
-        width="350px" // Sets the width
-        border="1px solid #BCC1CA" // Adds the solid border with the specified color
-        position="relative"
-      /> */}
-
-      <Box mt={2} p={2}>
-        {/* Brokerage Section */}
-        <Box
-          display="flex"
-          gap={6}
-          alignItems="center"
-          color={"white"}
-          width={"60%"}
-          justifyContent={"space-between"}
-          height="40px"
-        >
-          <Text
-            fontFamily="Inter"
-            fontSize="sm"
-            fontWeight="bold"
-            lineHeight="40px"
-            textAlign="left"
+          <Box
+            display="flex"
+           
+            gap={6}
+            alignItems="center"
+            color={"white"}
+            width={"70%"}
+            justifyContent={"space-between"}
             height="40px"
-            color="white" // Updated height
           >
-            Amount :
-          </Text>
+            <Text
+              fontFamily="Inter"
+              fontSize="sm"
+              fontWeight="noraml"
+              lineHeight="22px"
+              textAlign="left"
+              color="white" // Updated height
+            >
+              Brokerage :
+            </Text>
 
-          <Text
-            fontFamily="Inter"
-            fontSize="sm"
-            fontWeight="bold"
-            lineHeight="40px"
-            textAlign="right"
-            height="40px"
-            color="white" // Ensure the amountToInvest text is white
-          >
-            {amountToInvest}
-          </Text>
-        </Box>
+            <Text
+              fontFamily="Inter"
+              fontSize="sm"
+              width={'30%'}
+              // fontFamily="Inter"
+              fontWeight="noraml"
+              lineHeight="22px"
+              textAlign="left"
+              color="white" // Ensure the amountToInvest text is white
+            >
+              {brokerage}
+            </Text>
+          </Box>
 
-
-        <Box
-          display="flex"
-          gap={6}
-          alignItems="center"
-          color={"white"}
-          width={"60%"}
-          justifyContent={"space-between"}
-          height="40px"
-        >
-          <Text
-            fontFamily="Inter"
-            fontSize="sm"
+          {/* Other Charges Section */}
+          <Box
+            mb={4}
+            display="flex"
           
-            fontWeight="noraml"
-            lineHeight="22px"
-            textAlign="left"
-            color="white" // Updated height
-          >
-            Brokerage :
-          </Text>
-
-          <Text
-            fontFamily="Inter"
-            fontSize="sm"
-            // fontFamily="Inter"
-            fontWeight="noraml"
-            lineHeight="22px"
-            textAlign="left"
-            color="white" // Ensure the amountToInvest text is white
-          >
-            {brokerage}
-          </Text>
-        </Box>
-
-        {/* Other Charges Section */}
-        <Box
-          mb={4}
-          display="flex"
-          gap={6}
-       
-          alignItems="center"
-          color={"white"}
-          width={"60%"}
-          justifyContent={"space-between"}
-          height="40px"
-        >
-          <Text
-             fontSize="sm"
-             fontFamily="Inter"
-             fontWeight="noraml"
-             lineHeight="22px"
-             textAlign="left"
-            color="white" // Updated height
-          >
-            Other Charges :
-          </Text>
-
-          <Text
-           fontSize="sm"
-           fontFamily="Inter"
-           fontWeight="noraml"
-           lineHeight="22px"
-         
-            textAlign="right"
-            // height="40px"
-            color="white" // Ensure the amountToInvest text is white
-          >
-            {othercharges}
-          </Text>
-        </Box>
-
-        <Divider
-          ml={2}
-          mr={2}
-          m={"auto"}
-          width="350px" // Sets the width
-          border="1px solid #BCC1CA" // Adds the solid border with the specified color
-          position="relative"
-        />
-
-        {/* Total Section */}
-        <Box
-          mt={4}
-          display="flex"
-          gap={6}
-          alignItems="center"
-          color={"white"}
-          justifyContent={"space-between"}
-          width={"70%"}
-          height="40px"
-        >
-          <Text
-            fontFamily="Inter"
-            fontSize="md"
-            fontWeight="normal"
-            lineHeight="22px"
-            textAlign="left"
+            gap={6}
+            alignItems="center"
+            color={"white"}
+            width={"70%"}
+            justifyContent={"space-between"}
             height="40px"
-            color="white" // Updated height
           >
-            Total Amt :
-          </Text>
+            <Text
+              fontSize="sm"
+              fontFamily="Inter"
+              fontWeight="noraml"
+              lineHeight="22px"
+              textAlign="left"
+              color="white" // Updated height
+            >
+              Other Charges :
+            </Text>
 
-          <Text
-            fontFamily="Inter"
-            fontSize="md"
-            fontWeight="400"
-            lineHeight="22px"
-            textAlign="right"
-            height="28px"
-            color="white" // Ensure the amountToInvest text is white
-          >
-            ₹ {formattedTotal}
-          </Text>
-        </Box>
+            <Text
+              fontSize="sm"
+              fontFamily="Inter"
+              fontWeight="noraml"
+              lineHeight="22px"
+              textAlign="left"
+              width={'30%'}
+              // height="40px"
+              color="white" // Ensure the amountToInvest text is white
+            >
+              {othercharges}
+            </Text>
+          </Box>
 
-        <Divider
-          ml={2}
-          mr={2}
-          m={"auto"}
-          width="350px" // Sets the width
-          border="1px solid #BCC1CA" // Adds the solid border with the specified color
-          position="relative"
-        />
+          <Divider
+            ml={2}
+            mr={2}
+            m={"auto"}
+            width="350px" // Sets the width
+            border="1px solid #BCC1CA" // Adds the solid border with the specified color
+            position="relative"
+          />
 
-        {/* Current Balance Section */}
-        <Box
-          mt={4}
-          display="flex"
-          gap={6}
-          alignItems="center"
-          color={"white"}
-          justifyContent={"space-between"}
-          width={"70%"}
-          height="40px"
-        >
-          <Text
-            fontFamily="Inter"
-            fontSize="md"
-            fontWeight="normal"
-            lineHeight="22px"
-            textAlign="left"
-            height="40px"
-            color="white" // Updated height
-          >
-            Current Balance :
-          </Text>
-
-          <Text
-            fontFamily="Inter"
-            fontSize="md"
-            fontWeight="400"
-            lineHeight="22px"
-            textAlign="right"
-            height="28px"
-            color="white" // Ensure the amountToInvest text is white
-          >
-            ₹ {currentBalance}
-          </Text>
-        </Box>
-      </Box>
-
-
-    
-    </Box>
-
-
-       <Box
-        //  position="fixed" // Fix the box at the bottom of the screen
-         bottom="0" // Align it to the bottom
-         left="0" // Make sure it spans the full width
-         right="0"
-         border="2px solid #9095A0"
-         boxShadow="0px 2px 5px 0px #171A1F17, 0px 0px 2px 0px #171A1F1F"
-         p={4}
-         width={"100%"}
-         alignItems={"center"}
-      >
-        <Box
-          // left="20px"
-          p={2}
-        >
-          <Text
-  fontFamily="Inter"
-  fontSize="12px"
-  fontWeight="normal"
-  lineHeight="18px"
-  textAlign="left"
-  color="#A7ADB7"
->
-  You are placing an{' '}
-  <Text as="span" fontWeight="bold" color="white">
-    order after market hours
-  </Text>{' '}
-  for these 3 stocks. Your order will be executed on the next market day.
-</Text>
-
-        </Box>
-
-        <Box
-          margin="auto"
-          display="flex" // Enable Flexbox
-          justifyContent="center" // Center the button horizontally
-          alignItems="center" // Center the button vertically
-          height="100px" // Set a height to ensure vertical centering
-        >
-          <Button
-           color={"#1DD75B"}
-           border={"1px solid #1DD75B"}
-            variant="outline"
+          {/* Total Section */}
+          <Box
+            mt={4}
+            display="flex"
+            gap={6}
+            alignItems="center"
+            color={"white"}
+            justifyContent={"space-between"}
             width={"80%"}
-            height={"60%"}
-            _hover={{
-              boxShadow: "0 0 10px rgba(29, 215, 91, 0.7)",
-              transform: "scale(1.05)",
-            }}
-            _active={{
-              boxShadow: "0 0 15px rgba(29, 215, 91, 1)",
-              transform: "scale(0.95)",
-            }}
-            onClick={handleConfirmOrder}
-            isLoading={isSubmitting}
+            height="40px"
+        
           >
-            Confirm Order
-          </Button>
+            <Text
+              fontFamily="Inter"
+              fontSize="md"
+              fontWeight="normal"
+              lineHeight="22px"
+              textAlign="left"
+              height="40px"
+              color="white" // Updated height
+            >
+              Total Amt :
+            </Text>
+
+            <Text
+              fontFamily="Inter"
+              fontSize="md"
+              fontWeight="400"
+              lineHeight="22px"
+           
+              width={"43%"}
+              textAlign="left"
+              height="28px"
+              color="white" // Ensure the amountToInvest text is white
+            >
+              ₹ {formattedTotal}
+            </Text>
+          </Box>
+
+          <Divider
+            ml={2}
+            mr={2}
+            m={"auto"}
+            width="350px" // Sets the width
+            border="1px solid #BCC1CA" // Adds the solid border with the specified color
+            position="relative"
+          />
+
+          {/* Current Balance Section */}
+          <Box
+            mt={4}
+            display="flex"
+            // gap={6}
+            alignItems="center"
+           
+            color={"white"}
+            justifyContent={"space-between"}
+            width={"80%"}
+            height="40px"
+          >
+            <Text
+              fontFamily="Inter"
+              fontSize="md"
+              fontWeight="normal"
+              lineHeight="22px"
+              textAlign="left"
+              height="40px"
+              color="white" // Updated height
+            >
+              Current Balance :
+            </Text>
+
+            <Text
+              fontFamily="Inter"
+              fontSize="md"
+              fontWeight="400"
+              lineHeight="22px"
+             
+              textAlign="left"
+              height="28px"
+              width={"43%"}
+              color="white" // Ensure the amountToInvest text is white
+            >
+              ₹ {currentBalance}
+            </Text>
+          </Box>
         </Box>
       </Box>
+
+
+      <Box
+  border="2px solid #9095A0"
+  boxShadow="px 2px 5px 0px #171A1F17, 0px 0px 2px 0px #171A1F1F"
+  p={2}
+  width="100%" // Ensure the container spans full width
+  alignItems="center"
+>
+  <Box p={2} textAlign="center" >
+    <Text
+      fontFamily="Inter"
+      fontSize={["10px", "12px"]}
+      fontWeight="normal"
+      lineHeight={["16px", "18px"]}
+      color="#A7ADB7"
+    >
+      You are placing an{" "}
+      <Text as="span" fontWeight="bold" color="white">
+        order after market hours
+      </Text>{" "}
+      for these 3 stocks. Your order will be executed on the next market day.
+    </Text>
+  </Box>
+
+  <Box
+    display="flex"
+    justifyContent="center"
+    alignItems="center"
+    height="100px"
+    mt={2}
+    width="100%" // Ensure the box spans full width to avoid cutoff
+  >
+    <Button
+      color="#1DD75B"
+      border="1px solid #1DD75B"
+      variant="outline"
+      width={["90%", "80%"]} // Responsive width
+      height={["50px", "60px"]}
+      _hover={{
+        boxShadow: "0 0 10px rgba(29, 215, 91, 0.7)",
+        transform: "scale(1.05)",
+      }}
+      _active={{
+        boxShadow: "0 0 15px rgba(29, 215, 91, 1)",
+        transform: "scale(0.95)",
+      }}
+      onClick={handleConfirmOrder}
+      isLoading={isSubmitting}
+    >
+      Confirm Order
+    </Button>
+  </Box>
+</Box>
+
+
     </Box>
-  
   );
 };
 
