@@ -5,7 +5,7 @@ import { IoIosSpeedometer } from "react-icons/io";
 
 
 
-const StatsComponent = ({ basketData,minAmount }) => {
+const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPercentage }) => {
 
 
 
@@ -196,7 +196,7 @@ const StatsComponent = ({ basketData,minAmount }) => {
         color="white" // Change text color as needed
       >
         {/* {basketData.basketInfo.cagr} */}
-        2,000 (20%)
+        {upsidePotential.toLocaleString('en-IN')} ({upsidePotentialPercentage.toLocaleString('en-IN')}%)
       </Text>
     </Box>
     <Box
@@ -235,7 +235,14 @@ const StatsComponent = ({ basketData,minAmount }) => {
       </Text>
     </Box>
 
+
+    
+
     </Box>
+
+
+
+      
 
     </Box>
   );

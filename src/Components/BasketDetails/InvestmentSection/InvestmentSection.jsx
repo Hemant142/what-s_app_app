@@ -40,6 +40,8 @@ const InvestmentSection = (props) => {
   const [rating, setRating] = useState(null);
   const [tempRating, setTempRating] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [upsidePotential,setUpsidePotential]=useState(0)
+  const [upsidePotentialPercentage,setUpsidePotentialPercentage]=useState(0)
 
   const basketId = props.basketId || ''; // Ensure a default value if props.basketId is undefined
   let token = Cookies.get("whats_app_token");
@@ -56,6 +58,32 @@ const InvestmentSection = (props) => {
       setAmountToInvest(minReqAmt);
     }
   }, [minReqAmt]);
+
+
+  useEffect(() => {
+    if (props) {
+      // Calculate the total required fund
+   
+  
+      // Calculate the sum of all upside potential percentages
+      const totalUpsidePotentialPercentage = props.instrumentList.reduce(
+        (acc, instrument) => acc + handleUpsidePotentialPercentage(instrument),
+        0
+      );
+  
+      const totalUpsidePotential = props.instrumentList.reduce(
+        (acc, instrument) => acc + handleUpsidePotential(instrument),
+        0
+      );
+  
+      // Set the calculated values in the state
+  
+      setUpsidePotentialPercentage(totalUpsidePotentialPercentage); // Assuming you have a state for upside potential
+      setUpsidePotential(totalUpsidePotential)
+      // console.log("Total Upside Potential:", totalUpsidePotential);
+    }
+  }, [props]);
+
 
   const handleInvestClick = () => {
     setShowInvestmentOptions(true);
@@ -115,10 +143,13 @@ const InvestmentSection = (props) => {
   const increaseLot = () => {
     const newLots = lots + 1;
     const newAmount = minReqAmt * newLots;
-
+const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
+const newUpsidePotentialPercentage=parseFloat((upsidePotentialPercentage * newLots).toFixed(2));
     if (newAmount <= currentBalance) {
       setLots(newLots);
       setAmountToInvest(newAmount);
+      setUpsidePotential(newUpsidePotential)
+      setUpsidePotentialPercentage(newUpsidePotentialPercentage)
     } else {
       handleInsufficientBalance("Cannot exceed current balance.");
     }
@@ -128,8 +159,12 @@ const InvestmentSection = (props) => {
     if (lots > 1) {
       const newLots = lots - 1;
       const newAmount = minReqAmt / newLots;
+      const newUpsidePotential=parseFloat((upsidePotential/lots).toFixed(2))
+      const newUpsidePotentialPercentage=parseFloat((upsidePotentialPercentage/lots).toFixed(2))
       setLots(newLots);
       setAmountToInvest(newAmount);
+      setUpsidePotential(newUpsidePotential)
+      setUpsidePotentialPercentage(newUpsidePotentialPercentage)
     } else {
       handleInvalidAmount("Cannot have less than one lot.", minReqAmt);
     }
@@ -203,8 +238,8 @@ const InvestmentSection = (props) => {
       return;
     }
  
-    // Cookies.set('whats_app_token',"")
-    // Cookies.set('basketId',"")
+    Cookies.set('whats_app_token',"")
+    Cookies.set('basketId',"")
     dispatch(OrderPlaced(basketId, lots, token))
       .then((res) => {
        
@@ -248,10 +283,41 @@ console.log(res,"response")
     setRating(starRating); // Set rating immediately
   };
 
+
+
+  const handleUpsidePotentialPercentage = (instrumentListData) => {
+    let cmp = Number(instrumentListData.currentPrice);
+    let takeProfit = Number(instrumentListData.takeProfit);
+  
+    let upsidePotential = ((takeProfit - cmp) / cmp) * 100;
+    let upsidePotentialPercentage = Math.floor(upsidePotential);
+  
+    // If the upside potential is less than 0, return 0 to avoid summing a negative value
+    if (upsidePotentialPercentage < 0) {
+      return 0; // or you can handle this differently based on your requirement
+    }
+  // console.log(upsidePotentialPercentage)
+    return upsidePotentialPercentage;
+  };
+
+
+
+  const handleUpsidePotential = (instrumentListData) => {
+    console.log(instrumentListData,"instrumentListData")
+    let cmp = Number(instrumentListData.currentPrice);
+    let takeProfit = Number(instrumentListData.takeProfit);
+    let qty=Number(instrumentListData.quantity)
+  
+    let upsidePotential = ((takeProfit - cmp)*qty).toFixed(2)
+ 
+  // console.log(upsidePotential,"upsidePotential")
+    return Number(upsidePotential);
+  };
+
   return (
     <Box >
        <Box
-          // mt={2}
+          mt={8}
           width={"100%"}
           bg={"#D3F9E0"}
           display="flex" // Ensure content aligns in one line
@@ -282,6 +348,9 @@ console.log(res,"response")
 
   
         <Box display={"flex"} justifyContent={"space-between"} mt={4} mb={6}>
+        
+
+          <Box display={"flex"} width={"100%"} justifyContent={"space-between"} mt={4}  >
           <Box>
             <HStack spacing={4} mt={4}>
               <Button
@@ -291,7 +360,7 @@ console.log(res,"response")
                   boxShadow: "0 0 10px white",
                   transform: "scale(1.05)",
                 }}
-                size="md"
+                size="sm"
                 _active={{
                   boxShadow: "0 0 15px white",
                   transform: "scale(0.95)",
@@ -306,11 +375,12 @@ console.log(res,"response")
                 readOnly
                 textAlign="center"
                 width="50px"
+                   size="sm"
                 //   bg="white"
                 fontWeight="bold"
               />
               <Button
-                size="md"
+                size="sm"
                 color={"#1DD75B"}
                 border={"1px solid #1DD75B"}
                 _hover={{
@@ -340,6 +410,53 @@ console.log(res,"response")
               Basket Multiple
             </Text>
           </Box>
+    <Box
+      width="154px"
+      // height="73px"
+      // top="326px"
+      // left="44px"
+      textAlign={"center"}
+      alignItems={"center"}
+      padding="10px 23px 11px 18px"
+      borderRadius="8px"
+      border="1px solid #565E6C"
+      bg=" #262A33"
+      p={4}
+      boxShadow="0px 2px 5px 0px #171A1F17"
+     
+    >
+      <Box >
+      <Text
+        fontFamily="Inter"
+        fontSize="12px"
+        fontWeight="400"
+        lineHeight="20px"
+       
+        textAlign="center"
+        color="white" // Change text color as needed
+        marginBottom={1} // Add spacing between the two text elements
+      >
+        {/*Potential UPSIDE*/}
+        Potential UPSIDE
+      </Text>
+      <Text
+        fontFamily="Inter"
+        fontSize="16px" // You can adjust this size based on your design preference
+        fontWeight="500" // Change weight as needed
+        lineHeight="20px"
+        textAlign="center"
+        color="#1DD75B" // Change text color as needed
+      >
+        {/* {basketData.basketInfo.cagr} */}
+      {upsidePotential} ({upsidePotentialPercentage}%)
+      </Text>
+      </Box>
+    </Box>
+    </Box>
+
+
+      
+         
       
         </Box>
 
@@ -355,15 +472,15 @@ console.log(res,"response")
 
    
 
-        <Box mt={2} p={2} >
+        <Box mt={2}  >
           {/* Brokerage Section */}
           <Box
             display="flex"
             gap={6}
-   
+
             alignItems="center"
             color={"white"}
-            width={"70%"}
+            width={"100%"}
             
             justifyContent={"space-between"}
             height="40px"
@@ -402,7 +519,7 @@ console.log(res,"response")
             gap={6}
             alignItems="center"
             color={"white"}
-            width={"70%"}
+            width={"100%"}
             justifyContent={"space-between"}
             height="40px"
           >
@@ -439,7 +556,7 @@ console.log(res,"response")
             gap={6}
             alignItems="center"
             color={"white"}
-            width={"70%"}
+            width={"100%"}
             justifyContent={"space-between"}
             height="40px"
           >
@@ -472,22 +589,23 @@ console.log(res,"response")
             ml={2}
             mr={2}
             m={"auto"}
-            width="350px" // Sets the width
+            // width="350px" // Sets the width
             border="1px solid #BCC1CA" 
             position="relative"
           />
 
           {/* Total Section */}
           <Box
-            mt={4}
+            // mb={4}
             display="flex"
+          mt={4}
             gap={6}
             alignItems="center"
-        
             color={"white"}
+            width={"100%"}
             justifyContent={"space-between"}
-            width={"80%"}
             height="40px"
+        
         
           >
             <Text
@@ -509,12 +627,12 @@ console.log(res,"response")
             
               lineHeight="22px"
            
-              width={"43%"}
+              width={'30%'}
               textAlign="left"
               height="40px"
               color="white" 
             >
-              ₹ {formattedTotal}
+              {formattedTotal}
             </Text>
           </Box>
 
@@ -522,7 +640,7 @@ console.log(res,"response")
             ml={2}
             mr={2}
             m={"auto"}
-            width="350px" // Sets the width
+            // width="350px" // Sets the width
             border="1px solid #BCC1CA" // Adds the solid border with the specified color
             position="relative"
           />
@@ -536,7 +654,7 @@ console.log(res,"response")
            
             color={"white"}
             justifyContent={"space-between"}
-            width={"80%"}
+            width={"100%"}
             height="40px"
           >
             <Text
@@ -559,10 +677,10 @@ console.log(res,"response")
              
               textAlign="left"
               height="40px"
-              width={"43%"}
+              width={"30%"}
               color="white" // Ensure the amountToInvest text is white
             >
-              ₹ {currentBalance.toLocaleString('en-IN')}
+              {currentBalance.toLocaleString('en-IN')}
             </Text>
           </Box>
         </Box>

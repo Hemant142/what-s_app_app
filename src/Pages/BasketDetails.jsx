@@ -24,6 +24,8 @@ export default function BasketDetails() {
   const [brokerageData, setBrokerageData] = useState([]);
    const [minAmount,setMinAmount]=useState(0)
   const [brokerage, setBrokerage] = useState(0);
+  const [upsidePotential,setUpsidePotential]=useState(0)
+  const [upsidePotentialPercentage,setUpsidePotentialPercentage]=useState(0)
 
   const { id } = useParams(); // Get the basket ID from the route params
 
@@ -61,28 +63,36 @@ export default function BasketDetails() {
 
 // console.log(userId,"UserId")
  
-  useEffect(() => {
+useEffect(() => {
+  if (basketData) {
+    // Calculate the total required fund
+    const total = basketData.instrumentList.reduce(
+      (acc, instrument) => acc + calculateFundREquired(instrument),
+      0
+    );
 
-    if (basketData) {
-      const total = basketData.instrumentList.reduce(
-        (acc, instrument) => acc + calculateFundREquired(instrument),
-        0
-      );
-      // Cookies.set('minAmount',total)
-      setMinAmount(total);
+    // Calculate the sum of all upside potential percentages
+    const totalUpsidePotentialPercentage = basketData.instrumentList.reduce(
+      (acc, instrument) => acc + handleUpsidePotentialPercentage(instrument),
+      0
+    );
 
-    }
-  }, [basketData]);
+    const totalUpsidePotential = basketData.instrumentList.reduce(
+      (acc, instrument) => acc + handleUpsidePotential(instrument),
+      0
+    );
+
+    // Set the calculated values in the state
+    setMinAmount(total);
+    setUpsidePotentialPercentage(totalUpsidePotentialPercentage); // Assuming you have a state for upside potential
+    setUpsidePotential(totalUpsidePotential)
+    // console.log("Total Upside Potential:", totalUpsidePotential);
+  }
+}, [basketData]);
+
+// console.log(upsidePotential,"upsidePotential")
 
 
-
-  const calculateFundREquired = (instrumentListData) => {
-    const qty = instrumentListData.quantity;
-    const cmp = instrumentListData.currentPrice;
-    const fundRequired = Math.floor(cmp * qty);
-
-    return fundRequired;
-  };
 
   // let userId="E0002160"
   // let currentBalance = Cookies.get("balance");
@@ -191,6 +201,46 @@ export default function BasketDetails() {
   }, [dispatch, id, userId]);
   // console.log(basketData,"basket data")
 
+  const calculateFundREquired = (instrumentListData) => {
+    const qty = instrumentListData.quantity;
+    const cmp = instrumentListData.currentPrice;
+    const fundRequired = Math.floor(cmp * qty);
+
+    return fundRequired;
+  };
+
+
+
+  const handleUpsidePotentialPercentage = (instrumentListData) => {
+    let cmp = Number(instrumentListData.currentPrice);
+    let takeProfit = Number(instrumentListData.takeProfit);
+  
+    let upsidePotential = ((takeProfit - cmp) / cmp) * 100;
+    let upsidePotentialPercentage = Math.floor(upsidePotential);
+  
+    // If the upside potential is less than 0, return 0 to avoid summing a negative value
+    if (upsidePotentialPercentage < 0) {
+      return 0; // or you can handle this differently based on your requirement
+    }
+  // console.log(upsidePotentialPercentage)
+    return upsidePotentialPercentage;
+  };
+
+
+
+  const handleUpsidePotential = (instrumentListData) => {
+    console.log(instrumentListData,"instrumentListData")
+    let cmp = Number(instrumentListData.currentPrice);
+    let takeProfit = Number(instrumentListData.takeProfit);
+    let qty=Number(instrumentListData.quantity)
+  
+    let upsidePotential = ((takeProfit - cmp)*qty).toFixed(2)
+ 
+  // console.log(upsidePotential,"upsidePotential")
+    return Number(upsidePotential);
+  };
+  // console.log(upsidePotential)
+
   return (
     <Box>
       {apiLoading ? (
@@ -230,7 +280,10 @@ export default function BasketDetails() {
               {/* <BackArrow /> */}
               <DesktopWarning />
               <BasketComponent basketData={basketData} />
-              <StatsComponent basketData={basketData}  minAmount={minAmount || 0}/>
+              <StatsComponent basketData={basketData}  
+              upsidePotential={upsidePotential || 0}
+              upsidePotentialPercentage={upsidePotentialPercentage || 0}
+              minAmount={minAmount || 0}/>
               {/* <LineGraph data={basketData.lineChartData} /> */}
               <Divider
                 ml={2}
@@ -263,7 +316,7 @@ export default function BasketDetails() {
               />
 
               {/* <Activity basketData={basketData} /> */}
-{/* 
+
               <Divider
                 ml={2}
                 mr={2}
@@ -271,7 +324,7 @@ export default function BasketDetails() {
                 width="350px" // Sets the width
                 border="1px solid #BCC1CA" // Adds the solid border with the specified color
                 position="relative"
-              /> */}
+              />
 
               {/* <AboutCentrum basketData={basketData} id={id} /> */}
 

@@ -20,7 +20,8 @@ const BasketHeader = ({ basketData }) => {
       borderColor="rgba(184, 245, 205, 1)"
       borderRadius="8px"
       boxShadow="0px 0px 2px rgba(23, 26, 31, 0.12)"
-      fontFamily={"Epilogue"}
+      // fontFamily={"Epilogue"}
+      fontFamily={"Arial, Helvetica, sans-serif"}
     //   fontWeight={"normal"}
     >
       <Heading
