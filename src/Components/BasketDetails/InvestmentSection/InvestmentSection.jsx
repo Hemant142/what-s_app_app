@@ -467,6 +467,7 @@ const InvestmentSection = (props) => {
             display="flex"
             gap={6}
             alignItems="center"
+        
             color={"white"}
             justifyContent={"space-between"}
             width={"80%"}
@@ -489,11 +490,12 @@ const InvestmentSection = (props) => {
               fontFamily="Inter"
               fontSize="md"
               fontWeight="400"
+            
               lineHeight="22px"
            
               width={"43%"}
               textAlign="left"
-              height="28px"
+              height="40px"
               color="white" // Ensure the amountToInvest text is white
             >
               ₹ {formattedTotal}
@@ -540,7 +542,7 @@ const InvestmentSection = (props) => {
               lineHeight="22px"
              
               textAlign="left"
-              height="28px"
+              height="40px"
               width={"43%"}
               color="white" // Ensure the amountToInvest text is white
             >
@@ -574,7 +576,7 @@ const InvestmentSection = (props) => {
         fontSize={["10px", "12px"]}
         fontWeight="normal"
         lineHeight={["16px", "18px"]}
-        
+
         color="#A7ADB7"
       >
         You are placing an{" "}
