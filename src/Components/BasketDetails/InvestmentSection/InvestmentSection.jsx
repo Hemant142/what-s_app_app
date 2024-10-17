@@ -24,37 +24,38 @@ import { OrderPlaced } from "../../../Redux/basketReducer/action";
 const InvestmentSection = (props) => {
   const toast = useToast();
   const navigate = useNavigate();
-  const minReqAmt = parseInt(props.minReq);
-  const currentBalance = parseInt(props.currentBalance);
-  // const instrumentList=  parseInt(props.instrumentList);
-  // const { id } = useParams();
+  const location = useLocation();
+  const dispatch = useDispatch();
+
+  const minReqAmt = parseInt(props.minReq, 10) || 0; // Ensure base 10 and default value
+  const currentBalance = parseInt(props.currentBalance, 10) || 0;
+
   const [showInvestmentOptions, setShowInvestmentOptions] = useState(false);
-  const [amountToInvest, setAmountToInvest] = useState(minReqAmt);
+  const [amountToInvest, setAmountToInvest] = useState(minReqAmt); // Set initial amount based on minReqAmt
   const [lots, setLots] = useState(1); // Initial lot size as 1
   const [apiLoader, setApiLoader] = useState(false);
-  const [brokerage, setBrokerage] = useState(0);
-  const [othercharges, setOtherCharges] = useState(0);
-  const [total, setTotal] = useState(0);
+  const [brokerage, setBrokerage] = useState(345); // Default value can be set here instead of `useEffect`
+  const [othercharges, setOtherCharges] = useState(237); // Same for other charges
+  const [total, setTotal] = useState(brokerage + othercharges + minReqAmt);
   const [rating, setRating] = useState(null);
   const [tempRating, setTempRating] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const basketId = props.basketId;
+
+  const basketId = props.basketId || ''; // Ensure a default value if props.basketId is undefined
   let token = Cookies.get("whats_app_token");
   let userName = Cookies.get("user-name");
 
-  const location = useLocation();
-
-  const dispatch = useDispatch();
-  console.log(currentBalance, "currentBalance");
-
+  // Update total amount when amountToInvest, brokerage, or other charges change
   useEffect(() => {
     setTotal(brokerage + othercharges + amountToInvest);
-  }, [brokerage, othercharges, lots]);
+  }, [brokerage, othercharges, amountToInvest]);
 
+  // Optional: Use this effect if `minReqAmt` changes during the lifecycle of the component
   useEffect(() => {
-    setBrokerage(345);
-    setOtherCharges(237);
-  }, []);
+    if (minReqAmt) {
+      setAmountToInvest(minReqAmt);
+    }
+  }, [minReqAmt]);
 
   const handleInvestClick = () => {
     setShowInvestmentOptions(true);
@@ -201,17 +202,26 @@ const InvestmentSection = (props) => {
       });
       return;
     }
-    // console.log(basketId,lots,token)
+ 
     // Cookies.set('whats_app_token',"")
     // Cookies.set('basketId',"")
     dispatch(OrderPlaced(basketId, lots, token))
       .then((res) => {
-        console.log(res, "REsponse");
-      })
-      .catch((error) => {
-        console.log(error, "error confirm order ");
-      });
+       
+console.log(res,"response")
+        if(res.data.status==="failed"){
+          toast({
+            title: "Warning",
+            description: res.data.message,
+            status: "warning",
+            duration: 5000,
+            isClosable: true,
+          });
+        }
 
+
+        if(res.data.status==="success"&& res.data.message==="Order Created Successfuly"){
+         
     toast({
       duration: 10000,
       position: "bottom",
@@ -226,6 +236,12 @@ const InvestmentSection = (props) => {
         />
       ),
     });
+        }
+      })
+      .catch((error) => {
+        console.log(error, "error confirm order ");
+      });
+
   };
 
   const handleStarClick = (starRating) => {
@@ -457,7 +473,7 @@ const InvestmentSection = (props) => {
             mr={2}
             m={"auto"}
             width="350px" // Sets the width
-            border="1px solid #BCC1CA" // Adds the solid border with the specified color
+            border="1px solid #BCC1CA" 
             position="relative"
           />
 
@@ -481,7 +497,7 @@ const InvestmentSection = (props) => {
               lineHeight="22px"
               textAlign="left"
               height="40px"
-              color="white" // Updated height
+              color="white" 
             >
               Total Amt :
             </Text>
@@ -496,7 +512,7 @@ const InvestmentSection = (props) => {
               width={"43%"}
               textAlign="left"
               height="40px"
-              color="white" // Ensure the amountToInvest text is white
+              color="white" 
             >
               ₹ {formattedTotal}
             </Text>

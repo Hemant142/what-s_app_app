@@ -3,7 +3,7 @@ import axios from "axios";
 
 let URL= process.env.REACT_APP_STOQCLUB_URL
 let NewURL=process.env.REACT_APP_NewURL;
-console.log(NewURL,"NewURL")
+
 
 // Action for OTP verification
 export const otpVarificationClient = (otp, authToken) => (dispatch) => {
@@ -35,7 +35,7 @@ export const otpSend=(token)=>(dispatch)=>{
 
 }
 export const clientToken = (data) => (dispatch) => {
- console.log(data,"clientToken")
+
     dispatch({ type: USER_LOADING });
     return axios.post(
       `${NewURL}/app/client/generate-token?userId=${data.userId}&password=${data.panCard}`

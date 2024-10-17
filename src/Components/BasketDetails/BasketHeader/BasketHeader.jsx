@@ -47,10 +47,12 @@ const BasketHeader = ({ basketData }) => {
         color="rgba(10, 77, 32, 1)"
         borderRadius="full"
         paddingX={2}
+        textAlign={"center"}
         // marginTop={3}
         marginRight={2}
       >
-        {basketData.month}
+        {/* {basketData.month} */}
+        sep
       </Badge>
     </Flex>
   );

@@ -22,6 +22,7 @@ export default function BasketDetails() {
   const [basketData, setBasketData] = useState(null);
   const [instrumentList, setInstrumentList] = useState([]);
   const [brokerageData, setBrokerageData] = useState([]);
+   const [minAmount,setMinAmount]=useState(0)
   const [brokerage, setBrokerage] = useState(0);
 
   const { id } = useParams(); // Get the basket ID from the route params
@@ -33,11 +34,12 @@ export default function BasketDetails() {
   const search = window.location.search;
   const params = new URLSearchParams(search);
   const basket = params.get("/");
-  console.log(basket,"Params")
+
+
   // Get token from cookies
   let token = Cookies.get('whats_app_token');
   const basicAuth = Cookies.get('login_token_stoqclub');
-console.log(token,"token")
+
   // Cookies.set('whats_app_token','')
   // Cookies.set('basketId','')
   useEffect(() => {
@@ -55,84 +57,111 @@ console.log(token,"token")
 
 
   let userId = Cookies.get("userId");
-  console.log(id)
+
+
+// console.log(userId,"UserId")
+ 
+  useEffect(() => {
+
+    if (basketData) {
+      const total = basketData.instrumentList.reduce(
+        (acc, instrument) => acc + calculateFundREquired(instrument),
+        0
+      );
+      // Cookies.set('minAmount',total)
+      setMinAmount(total);
+
+    }
+  }, [basketData]);
+
+
+
+  const calculateFundREquired = (instrumentListData) => {
+    const qty = instrumentListData.quantity;
+    const cmp = instrumentListData.currentPrice;
+    const fundRequired = Math.floor(cmp * qty);
+
+    return fundRequired;
+  };
+
   // let userId="E0002160"
   // let currentBalance = Cookies.get("balance");
   let currentBalance = 100000
   // Function to handle each brokerage API call
-  console.log(userId,"User ID")
+
   if(userId==="H0002444"){
     userId="E0002160"
   }
 
 
 
-  const fetchBrokerage = async (instrument) => {
-    const brokerageRequestData = {
-      userId: "E0002160",
-      exchange: "NSE_EQ",
-      tradingSymbol: "IDEAFORGE",
-      qty: 12,
-      price: 684.5,
-      product: "delivery",
-      transType: "buy"
-  }
+  // const fetchBrokerage = async (instrument) => {
+  //   const brokerageRequestData = {
+  //     userId: "E0002160",
+  //     exchange: "NSE_EQ",
+  //     tradingSymbol: "IDEAFORGE",
+  //     qty: 12,
+  //     price: 684.5,
+  //     product: "delivery",
+  //     transType: "buy"
+  // }
     
     
-    // {
-    //   userId: userId, // Use the value from cookies
-    //   exchange: "NSE_EQ", // Hardcoded
-    //   tradingSymbol: instrument.name, // From instrumentList
-    //   qty: Number(instrument.quantity), // From instrumentList
-    //   price: instrument.currentPrice, // From instrumentList
-    //   product: "delivery", // Hardcoded
-    //   transType: "buy", // Hardcoded
-    // };
+  //   // {
+  //   //   userId: userId, // Use the value from cookies
+  //   //   exchange: "NSE_EQ", // Hardcoded
+  //   //   tradingSymbol: instrument.name, // From instrumentList
+  //   //   qty: Number(instrument.quantity), // From instrumentList
+  //   //   price: instrument.currentPrice, // From instrumentList
+  //   //   product: "delivery", // Hardcoded
+  //   //   transType: "buy", // Hardcoded
+  //   // };
 
-    console.log(brokerageRequestData, "brokerageRequestData");
+   
 
-    try {
-      const response = await axios.post(
-        "https://centralizedapi.centrumgalaxc.com/Advance/Brokerage/GetBrokerage",
-        brokerageRequestData
-      );
-      console.log(response, "response");
+  //   try {
+  //     const response = await axios.post(
+  //       "https://centralizedapi.centrumgalaxc.com/Advance/Brokerage/GetBrokerage",
+  //       brokerageRequestData
+  //     );
+  //     // console.log(response, "response");
 
-      if (response.data && response.data.length > 0) {
-        const brokerData = response.data[0]; // Assuming the API returns data in an array
-        const otherPrices =
-          brokerData.STT +
-          brokerData.transactionCharges +
-          brokerData.StampDuty +
-          brokerData.SebiCharges +
-          brokerData.DPcharges +
-          brokerData.ClearingCharges;
+  //     if (response.data && response.data.length > 0) {
+  //       const brokerData = response.data[0]; // Assuming the API returns data in an array
+  //       const otherPrices =
+  //         brokerData.STT +
+  //         brokerData.transactionCharges +
+  //         brokerData.StampDuty +
+  //         brokerData.SebiCharges +
+  //         brokerData.DPcharges +
+  //         brokerData.ClearingCharges;
 
-        // Return the broker data along with calculated other prices
-        return {
-          ...brokerData,
-          otherPrices,
-        };
-      } else {
-        console.error("No data found in brokerage response");
-        return null;
-      }
-    } catch (error) {
-      console.log("Error fetching brokerage:", error);
-      return null;
-    }
-  };
+  //       // Return the broker data along with calculated other prices
+  //       return {
+  //         ...brokerData,
+  //         otherPrices,
+  //       };
+  //     } else {
+  //       console.error("No data found in brokerage response");
+  //       return null;
+  //     }
+  //   } catch (error) {
+  //     // console.log("Error fetching brokerage:", error);
+  //     return null;
+  //   }
+  // };
 // console.log(userId,"id", id)
   useEffect(() => {
-    dispatch(getBasketDetails(userId, id))
+    dispatch(getBasketDetails(id, token))
       .then((res) => {
-        if (res.data.status === "SUCCESS") {
+      
+        if (res.data.status === "success") {
           setApiLoading(false);
           Cookies.set("basketData", JSON.stringify(res.data.data), {
             expires: 7, // Cookie expires in 7 days
           });
-          setBasketData(res.data.data);
-          setInstrumentList(res.data.data.instrumentList); // Set the instrumentList from the response
+          setBasketData(res.data.data.basketList[0]);
+          setInstrumentList(res.data.data.basketList[0].instrumentList); // Set the instrumentList from the response
 
           // If instrumentList exists and has length > 0
           if (
@@ -157,9 +186,10 @@ console.log(token,"token")
         setApiLoading(false);
         console.log(error, "getBasketDetails error");
       });
-      fetchBrokerage()
+      // fetchBrokerage()
 
   }, [dispatch, id, userId]);
+  // console.log(basketData,"basket data")
 
   return (
     <Box>
@@ -200,7 +230,7 @@ console.log(token,"token")
               {/* <BackArrow /> */}
               <DesktopWarning />
               <BasketComponent basketData={basketData} />
-              <StatsComponent basketData={basketData} />
+              <StatsComponent basketData={basketData}  minAmount={minAmount || 0}/>
               {/* <LineGraph data={basketData.lineChartData} /> */}
               <Divider
                 ml={2}
@@ -245,13 +275,13 @@ console.log(token,"token")
 
               {/* <AboutCentrum basketData={basketData} id={id} /> */}
 
-              <InvestmentSection
+               <InvestmentSection
                 basketId={id}
-                minReq={basketData.fundRequired || 0} // Provide a default value if fundRequired is undefined
+                minReq={minAmount || 0} // Provide a default value if fundRequired is undefined
                 basketName={basketData.title || "N/A"} // Provide a default if title is undefined
                 currentBalance={Number(currentBalance) || 0} // Provide a default if currentBalance is undefined
                 instrumentList={basketData.instrumentList || []} // Provide a default if instrumentList is undefined
-              />
+              /> 
             </Box>
           )}
         </Box>

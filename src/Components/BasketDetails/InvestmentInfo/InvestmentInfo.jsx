@@ -36,7 +36,7 @@ const InvestmentInfo = ({ basketData }) => {
           WebkitLineClamp: isExpanded ? "unset" : "4", // Custom line clamp
         }}
       >
-        {basketData.rational}
+        {basketData.rationale}
       </Text>
 
       <Button

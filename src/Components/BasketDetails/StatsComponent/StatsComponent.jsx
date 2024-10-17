@@ -1,16 +1,14 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Box, Text, Heading, Flex, Image } from "@chakra-ui/react";
-
+import Cookies from "js-cookie";
 import { IoIosSpeedometer } from "react-icons/io";
 
-const StatsComponent = ({ basketData }) => {
-  const indicatorText = basketData.graphIndicator.includes("Risk")
-    ? basketData.graphIndicator
-        .replace(" Risk high", "")
-        .replace(" Risk medium", "")
-        .replace(" Risk low", "")
-    : basketData.graphIndicator;
-  console.log(basketData, "basketData");
+
+
+const StatsComponent = ({ basketData,minAmount }) => {
+
+
+
   return (
     <Box   padding={4}>
     <Flex
@@ -53,13 +51,14 @@ const StatsComponent = ({ basketData }) => {
             color="rgba(255, 255, 255, 1)"
             marginLeft={1} // Space between Rupee symbol and value
           >
-            {basketData.fundRequired.toLocaleString('en-IN')}
+            {minAmount.toLocaleString('en-IN')}
+          
           </Heading>
         </Flex>
       </Box>
 
       {/* 3Y CAGR */}
-      {basketData.CAGR !== undefined && (
+      {basketData.isActive !== undefined && (
         <Box
        
           className="stat-item"
@@ -76,7 +75,7 @@ const StatsComponent = ({ basketData }) => {
             textAlign="left"
             color="rgba(144, 149, 160, 1)"
           >
-            Potential Upside
+            3Y CAGR
           </Text>
           <Heading
             as="h3"
@@ -87,8 +86,9 @@ const StatsComponent = ({ basketData }) => {
             color="green.400"
             marginTop={1}
           >
+            87%
             {/* {basketData.CAGR} */}
-            2,000 (20%)
+            {/* 2,000 (20%) */}
           </Heading>
         </Box>
       )}
@@ -121,9 +121,9 @@ const StatsComponent = ({ basketData }) => {
             {/* Icon with color change based on the volatility level */}
             <IoIosSpeedometer
               color={
-                basketData.graphIndicatorCheck === "low"
+                basketData.riskLevel === "Low"
                   ? "green"
-                  : basketData.graphIndicatorCheck === "medium"
+                  : basketData.riskLevel === "Medium"
                   ? "orange"
                   : "red"
               }
@@ -136,22 +136,22 @@ const StatsComponent = ({ basketData }) => {
             fontWeight="600"
             lineHeight="22px"
               color={
-                basketData.graphIndicatorCheck === "low"
+                basketData.riskLevel === "Low"
                   ? "green"
-                  : basketData.graphIndicatorCheck === "medium"
+                  : basketData.riskLevel === "Medium"
                   ? "orange"
                   : "red"
               }
             >
-              {basketData.graphIndicator == "Equity Risk high"
+              {basketData.riskLevel == "Hign"
                 ? "High Risk"
                 : ""}
-                   {basketData.graphIndicator == "Equity Risk medium"
+                   {basketData.riskLevel == "Medium"
                 ? "Medium Risk"
                 : ""}
 
                
-                   {basketData.graphIndicator == "Equity Risk low"
+                   {basketData.riskLevel == "Low"
                 ? "Low Risk"
                 : ""}
             </Text>
@@ -168,7 +168,7 @@ const StatsComponent = ({ basketData }) => {
       top="326px"
       left="44px"
       padding="10px 23px 11px 18px"
-      borderRadius="8px"gtr
+      borderRadius="8px"
       border="1px solid #565E6C"
       bg=" #262A33;
 "
@@ -184,7 +184,8 @@ const StatsComponent = ({ basketData }) => {
         color="white" // Change text color as needed
         marginBottom={1} // Add spacing between the two text elements
       >
-        3 Year CAGR
+        {/* 3 Year CAGR */}
+        Potential UPSIDE
       </Text>
       <Text
         fontFamily="Inter"
@@ -194,7 +195,8 @@ const StatsComponent = ({ basketData }) => {
         textAlign="center"
         color="white" // Change text color as needed
       >
-        {basketData.basketInfo.cagr}
+        {/* {basketData.basketInfo.cagr} */}
+        2,000 (20%)
       </Text>
     </Box>
     <Box
@@ -228,7 +230,8 @@ const StatsComponent = ({ basketData }) => {
         textAlign="center"
         color="white" // Change text color as needed
       >
-        {basketData.basketInfo.annualReturns}
+        {/* {basketData.basketInfo.annualReturns} */}
+        100%
       </Text>
     </Box>
 
