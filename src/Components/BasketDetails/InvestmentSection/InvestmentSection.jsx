@@ -334,7 +334,7 @@ const InvestmentSection = (props) => {
           lineHeight="22px"
           textAlign="left"
         >
-          Basket Minimum Amount : {amountToInvest}
+          Basket Minimum Amount : {amountToInvest.toLocaleString('en-IN')}
         </Text>
 
    
@@ -376,7 +376,7 @@ const InvestmentSection = (props) => {
               height="40px"
               color="white" // Ensure the amountToInvest text is white
             >
-              {amountToInvest}
+              {amountToInvest.toLocaleString('en-IN')}
             </Text>
           </Box>
 
@@ -411,7 +411,7 @@ const InvestmentSection = (props) => {
               textAlign="left"
               color="white" // Ensure the amountToInvest text is white
             >
-              {brokerage}
+              {brokerage.toLocaleString('en-IN')}
             </Text>
           </Box>
 
@@ -448,7 +448,7 @@ const InvestmentSection = (props) => {
               // height="40px"
               color="white" // Ensure the amountToInvest text is white
             >
-              {othercharges}
+              {othercharges.toLocaleString('en-IN')}
             </Text>
           </Box>
 
@@ -544,7 +544,7 @@ const InvestmentSection = (props) => {
               width={"43%"}
               color="white" // Ensure the amountToInvest text is white
             >
-              ₹ {currentBalance}
+              ₹ {currentBalance.toLocaleString('en-IN')}
             </Text>
           </Box>
         </Box>
@@ -558,21 +558,35 @@ const InvestmentSection = (props) => {
   width="100%" // Ensure the container spans full width
   alignItems="center"
 >
-  <Box p={2} textAlign="center" >
-    <Text
-      fontFamily="Inter"
-      fontSize={["10px", "12px"]}
-      fontWeight="normal"
-      lineHeight={["16px", "18px"]}
-      color="#A7ADB7"
-    >
-      You are placing an{" "}
-      <Text as="span" fontWeight="bold" color="white">
-        order after market hours
-      </Text>{" "}
-      for these 3 stocks. Your order will be executed on the next market day.
-    </Text>
-  </Box>
+{(() => {
+  const currentTime = new Date();
+  const currentHour = currentTime.getHours();
+  const currentMinute = currentTime.getMinutes();
+  
+  const isMarketOpen = 
+    (currentHour > 9 || (currentHour === 9 && currentMinute >= 15)) &&
+    (currentHour < 15 || (currentHour === 15 && currentMinute <= 20));
+
+  return !isMarketOpen && (
+    <Box p={2} textAlign="center">
+      <Text
+        fontFamily="Inter"
+        fontSize={["10px", "12px"]}
+        fontWeight="normal"
+        lineHeight={["16px", "18px"]}
+        
+        color="#A7ADB7"
+      >
+        You are placing an{" "}
+        <Text as="span" fontWeight="bold" color="white">
+          order after market hours
+        </Text>{" "}
+        for these {props.instrumentList.length} stocks. Your order will be executed on the next market day.
+      </Text>
+    </Box>
+  );
+})()}
+
 
   <Box
     display="flex"

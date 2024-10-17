@@ -181,7 +181,7 @@ const BasketConstituents = ({ basketData }) => {
       color="#1DD75B"
       ml={2}                 // Add spacing between texts
     >
-      ₹{inst.profitLossAmount} ({handleUpsidePotential(inst)})
+      ₹{inst.profitLossAmount.toLocaleString('en-IN')} ({handleUpsidePotential(inst)})
     </Text>
   </Flex>
 </Flex>

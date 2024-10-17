@@ -60,15 +60,19 @@ const CustomToast = ({ userName, rating, handleStarClick, onClose }) => {
         <HStack spacing={3}>
           <Icon as={FaCircleCheck} color="#17A948" boxSize={12} />
           <Text
-            fontFamily="Epilogue"
-            fontSize="18px"
-            fontWeight="normal"
-            lineHeight="28px"
-            textAlign="left"
-            color="white"
-          >
-            Your order will be placed at the next market open
-          </Text>
+  fontFamily="Epilogue"
+  fontSize="18px"
+  fontWeight="normal"
+  lineHeight="28px"
+  textAlign="left"
+  color="white"
+>
+  {orderStatus === 'Completed'
+    ? "Your order has been successfully placed."
+    : "Your order will be processed at the next market open."
+  }
+</Text>
+
         </HStack>
       </Box>
 
@@ -153,15 +157,19 @@ const CustomToast = ({ userName, rating, handleStarClick, onClose }) => {
           </Box>
         </Box>
         <Text
-          fontFamily="Inter"
-          fontSize="14px"
-          fontWeight="normal"
-          lineHeight="22px"
-          textAlign="left"
-          color="#A7ADB7"
-        >
-          Your order's status will be updated once the markets open.
-        </Text>
+  fontFamily="Inter"
+  fontSize="14px"
+  fontWeight="normal"
+  lineHeight="22px"
+  textAlign="left"
+  color="#A7ADB7"
+>
+  {orderStatus === 'Completed'
+    ? "Your order has been successfully placed."
+    : "Your order's status will be updated once the markets open."
+  }
+</Text>
+
         <Text
           fontFamily="Inter"
           fontSize="14px"

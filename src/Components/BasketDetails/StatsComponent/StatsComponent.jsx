@@ -53,7 +53,7 @@ const StatsComponent = ({ basketData }) => {
             color="rgba(255, 255, 255, 1)"
             marginLeft={1} // Space between Rupee symbol and value
           >
-            {basketData.fundRequired}
+            {basketData.fundRequired.toLocaleString('en-IN')}
           </Heading>
         </Flex>
       </Box>
@@ -88,7 +88,7 @@ const StatsComponent = ({ basketData }) => {
             marginTop={1}
           >
             {/* {basketData.CAGR} */}
-            2000 (20%)
+            2,000 (20%)
           </Heading>
         </Box>
       )}
