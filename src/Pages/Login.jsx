@@ -152,6 +152,7 @@ const Login = () => {
 
     try {
       const response = await dispatch(otpVarificationClient(otp, authToken));
+      console.log(response,"RESponse")
       if (response.data.status === "success") {
         const { verifiedAccessToken, centrumId, username } = response.data.data;
 

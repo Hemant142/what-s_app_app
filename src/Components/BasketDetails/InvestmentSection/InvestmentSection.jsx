@@ -80,7 +80,7 @@ const InvestmentSection = (props) => {
   
       setUpsidePotentialPercentage(totalUpsidePotentialPercentage); // Assuming you have a state for upside potential
       setUpsidePotential(totalUpsidePotential)
-      // console.log("Total Upside Potential:", totalUpsidePotential);
+  
     }
   }, [props]);
 
@@ -242,7 +242,7 @@ const newUpsidePotentialPercentage=parseFloat((upsidePotentialPercentage * newLo
     dispatch(OrderPlaced(basketId, lots, token))
       .then((res) => {
        
-console.log(res,"response")
+console.log(res.data,"response")
         if(res.data.status==="failed"){
           toast({
             title: "Warning",
@@ -254,23 +254,31 @@ console.log(res,"response")
         }
 
 
-        if(res.data.status==="success"&& res.data.message==="Order Created Successfuly"){
-         
-    toast({
-      duration: 10000,
-      position: "bottom",
-      render: (props) => (
-        <CustomToast
-          userName={userName}
-          rating={rating}
-          tempRating={tempRating}
-          setTempRating={setTempRating}
-          handleStarClick={handleStarClick}
-          onClose={props.onClose}
-        />
-      ),
-    });
+        if (res.data.status === "success") {
+          toast({
+            duration: 10000,
+            position: "bottom",
+            render: (props) => (
+              <CustomToast
+                userName={userName}
+                rating={rating}
+                tempRating={tempRating}
+                setTempRating={setTempRating}
+                handleStarClick={handleStarClick}
+                onClose={props.onClose}
+              />
+            ),
+          });
+        
+          // Clear the token
+          Cookies.set('whats_app_token', "");
+          
+          // Navigate back to /basketId after 10 seconds
+          setTimeout(() => {
+            navigate(`/basketId`);  // Redirect to /basketId
+          }, 10000);
         }
+        
       })
       .catch((error) => {
         console.log(error, "error confirm order ");
@@ -295,21 +303,20 @@ console.log(res,"response")
     if (upsidePotentialPercentage < 0) {
       return 0; // or you can handle this differently based on your requirement
     }
-  // console.log(upsidePotentialPercentage)
+
     return upsidePotentialPercentage;
   };
 
 
 
   const handleUpsidePotential = (instrumentListData) => {
-    console.log(instrumentListData,"instrumentListData")
+
     let cmp = Number(instrumentListData.currentPrice);
     let takeProfit = Number(instrumentListData.takeProfit);
     let qty=Number(instrumentListData.quantity)
   
     let upsidePotential = ((takeProfit - cmp)*qty).toFixed(2)
  
-  // console.log(upsidePotential,"upsidePotential")
     return Number(upsidePotential);
   };
 
