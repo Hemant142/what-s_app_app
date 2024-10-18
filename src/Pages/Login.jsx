@@ -99,7 +99,7 @@ const Login = () => {
               .then((otpResponse) => {
                 console.log(otpResponse, "otpResponse");
                 toast({
-                  title: "OTP sent to your registered email!",
+                  title: "OTP sent to your registered mobile!",
                   position: "bottom",
                   status: "success",
                   duration: 2000,

@@ -715,7 +715,8 @@ console.log(res.data,"response")
   border="2px solid #9095A0"
   boxShadow="px 2px 5px 0px #171A1F17, 0px 0px 2px 0px #171A1F1F"
   p={2}
-  width="100%" // Ensure the container spans full width
+  margin={"auto"}
+  width="98%" // Ensure the container spans full width
   alignItems="center"
 >
 { !isMarketOpen && (
