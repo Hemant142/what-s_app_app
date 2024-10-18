@@ -49,7 +49,7 @@ const BasketHeader = ({ basketData }) => {
         borderRadius="full"
         paddingX={2}
         textAlign={"center"}
-        // marginTop={3}
+        paddingTop={1}
         marginRight={2}
       >
         {/* {basketData.month} */}

@@ -37,7 +37,7 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
           textAlign="left"
           color="rgba(144, 149, 160, 1)"
         >
-          Min Ammount
+          Min Amount
         </Text>
         <Flex alignItems="center" marginTop={1}>
           <Text color="green.400" fontSize="xl" fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
