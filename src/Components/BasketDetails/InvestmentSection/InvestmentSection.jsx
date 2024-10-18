@@ -238,8 +238,7 @@ const newUpsidePotentialPercentage=parseFloat((upsidePotentialPercentage * newLo
       return;
     }
  
-    Cookies.set('whats_app_token',"")
-    Cookies.set('basketId',"")
+ 
     dispatch(OrderPlaced(basketId, lots, token))
       .then((res) => {
        

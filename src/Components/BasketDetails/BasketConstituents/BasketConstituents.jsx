@@ -368,9 +368,9 @@ const BasketConstituents = ({ basketData }) => {
                     fontWeight="600"
                     lineHeight="22px"
                     textAlign={"center"}
-                    color={"#117B34"}
+                    color={inst.orderType==="Entry"?"#117B34":"red"}
                   >
-                    Enter
+                    {inst.orderType}
                   </Text>
                 </Box>
               </Box>

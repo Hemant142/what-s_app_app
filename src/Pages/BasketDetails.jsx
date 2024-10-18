@@ -161,10 +161,13 @@ useEffect(() => {
   //   }
   // };
 // console.log(userId,"id", id)
+// Cookies.set('whats_app_token',"")
+// Cookies.set('basketId',"")
+console.log(token,"token")
   useEffect(() => {
     dispatch(getBasketDetails(id, token))
       .then((res) => {
-      
+      console.log(res,"RESponse")
         if (res.data.status === "success") {
           setApiLoading(false);
           Cookies.set("basketData", JSON.stringify(res.data.data), {
@@ -204,7 +207,7 @@ useEffect(() => {
   const calculateFundREquired = (instrumentListData) => {
     const qty = instrumentListData.quantity;
     const cmp = instrumentListData.currentPrice;
-    const fundRequired = Math.floor(cmp * qty);
+    const fundRequired = cmp * qty
 
     return fundRequired;
   };

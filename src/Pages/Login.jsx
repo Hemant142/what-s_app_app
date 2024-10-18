@@ -31,7 +31,7 @@ const Login = () => {
   const navigate=useNavigate()
   const { id } = useParams();
   const token = Cookies.get('whats_app_token');
-  console.log(id,"Login")
+  // console.log(id,"Login")
  
 
   useEffect(() => {
