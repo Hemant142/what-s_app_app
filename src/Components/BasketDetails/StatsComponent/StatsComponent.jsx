@@ -40,12 +40,14 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
           Min Ammount
         </Text>
         <Flex alignItems="center" marginTop={1}>
-          <Text color="green.400" fontSize="xl" position="relative" top={1}>
+          <Text color="green.400" fontSize="xl" fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+             position="relative" top={1}>
             ₹
           </Text>
           <Heading
             as="h3"
             fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+            
             fontSize="16px"
             fontWeight="500"
             color="rgba(255, 255, 255, 1)"

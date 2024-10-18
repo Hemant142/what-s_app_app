@@ -320,6 +320,16 @@ console.log(res.data,"response")
     return Number(upsidePotential);
   };
 
+
+
+  const currentTime = new Date();
+  const currentHour = currentTime.getHours();
+  const currentMinute = currentTime.getMinutes();
+  
+  const isMarketOpen = 
+    (currentHour > 9 || (currentHour === 9 && currentMinute >= 15)) &&
+    (currentHour < 15 || (currentHour === 15 && currentMinute <= 20));
+
   return (
     <Box >
        <Box
@@ -461,7 +471,7 @@ console.log(res.data,"response")
       overflow="hidden"
       textOverflow="ellipsis" // Handle overflow with ellipsis for long text
     >
-      {upsidePotential} ({upsidePotentialPercentage}%)
+      {upsidePotential.toLocaleString('en-IN')} ({upsidePotentialPercentage.toLocaleString('en-IN')}%)
     </Text>
   </Box>
 </Box>
@@ -708,16 +718,7 @@ console.log(res.data,"response")
   width="100%" // Ensure the container spans full width
   alignItems="center"
 >
-{(() => {
-  const currentTime = new Date();
-  const currentHour = currentTime.getHours();
-  const currentMinute = currentTime.getMinutes();
-  
-  const isMarketOpen = 
-    (currentHour > 9 || (currentHour === 9 && currentMinute >= 15)) &&
-    (currentHour < 15 || (currentHour === 15 && currentMinute <= 20));
-
-  return !isMarketOpen && (
+{ !isMarketOpen && (
     <Box p={2} textAlign="center">
       <Text
         fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
@@ -736,8 +737,7 @@ console.log(res.data,"response")
         for these {props.instrumentList.length} stocks. Your order will be executed on the next market day.
       </Text>
     </Box>
-  );
-})()}
+  )}
 
 
   <Box
