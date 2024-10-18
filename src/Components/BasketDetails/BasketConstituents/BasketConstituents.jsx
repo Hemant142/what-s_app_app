@@ -191,7 +191,7 @@ const BasketConstituents = ({ basketData }) => {
                     width="85px"
                     //   height="36px"
                   >
-                    {/* {inst?.shares} */}1
+                    {inst?.quantity}
                   </Text>
                 </Box>
                 <Box

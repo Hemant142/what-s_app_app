@@ -163,42 +163,46 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
     </Flex>
     <Box display={"flex"} justifyContent={"space-between"} mt={4}>
     <Box
-      width="154px"
-      height="73px"
-      top="326px"
-      left="44px"
-      padding="10px 23px 11px 18px"
-      borderRadius="8px"
-      border="1px solid #565E6C"
-      bg=" #262A33;
-"
-      boxShadow="0px 2px 5px 0px #171A1F17"
-     
+    minWidth={["140px", "144px", "154px"]}
+    height="73px"  // Set the height for uniformity
+    textAlign="center"
+    padding="10px 18px"
+    borderRadius="8px"
+    border="1px solid #565E6C"
+    bg="#262A33"
+    p={2}
+    boxShadow="0px 2px 5px 0px #171A1F17"
+    display="flex"
+    flexDirection="column"
+    justifyContent="center"
+    alignItems="center"
+  >
+    <Text
+      fontFamily="Inter"
+      fontSize={["10px", "12px", "14px"]} // Responsive font size for small to large screens
+      fontWeight="400"
+      lineHeight="20px"
+      textAlign="center"
+      color="white"
+      marginBottom={1}
     >
-      <Text
-        fontFamily="Inter"
-        fontSize="12px"
-        fontWeight="400"
-        lineHeight="20px"
-        textAlign="center"
-        color="white" // Change text color as needed
-        marginBottom={1} // Add spacing between the two text elements
-      >
-        {/* 3 Year CAGR */}
-        Potential UPSIDE
-      </Text>
-      <Text
-        fontFamily="Inter"
-        fontSize="16px" // You can adjust this size based on your design preference
-        fontWeight="500" // Change weight as needed
-        lineHeight="20px"
-        textAlign="center"
-        color="white" // Change text color as needed
-      >
-        {/* {basketData.basketInfo.cagr} */}
-        {upsidePotential.toLocaleString('en-IN')} ({upsidePotentialPercentage.toLocaleString('en-IN')}%)
-      </Text>
-    </Box>
+      Potential UPSIDE
+    </Text>
+    <Text
+      fontFamily="Inter"
+      fontSize={["14px", "16px", "18px"]} // Responsive font size based on screen size
+      fontWeight="500"
+      lineHeight="20px"
+      textAlign="center"
+      color="white"
+      whiteSpace="nowrap"
+      overflow="hidden"
+      textOverflow="ellipsis" // Handle overflow with ellipsis for long text
+    >
+      {upsidePotential} ({upsidePotentialPercentage}%)
+    </Text>
+  </Box>
+
     <Box
       width="154px"
       height="73px"

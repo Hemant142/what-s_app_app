@@ -356,109 +356,115 @@ console.log(res.data,"response")
         <Box display={"flex"} justifyContent={"space-between"} mt={4} mb={6}>
         
 
-          <Box display={"flex"} width={"100%"} justifyContent={"space-between"} mt={4}  >
-          <Box>
-            <HStack spacing={4} mt={4}>
-              <Button
-                colorScheme="white"
-                variant="outline"
-                _hover={{
-                  boxShadow: "0 0 10px white",
-                  transform: "scale(1.05)",
-                }}
-                size="sm"
-                _active={{
-                  boxShadow: "0 0 15px white",
-                  transform: "scale(0.95)",
-                }}
-                onClick={decreaseLot}
-                disabled={lots <= 1}
-              >
-                <Icon as={MinusIcon} />
-              </Button>
-              <Input
-                value={lots}
-                readOnly
-                textAlign="center"
-                width="50px"
-                   size="sm"
-                //   bg="white"
-                fontWeight="bold"
-              />
-              <Button
-                size="sm"
-                color={"#1DD75B"}
-                border={"1px solid #1DD75B"}
-                _hover={{
-                  boxShadow: "0 0 10px rgba(29, 215, 91, 0.7)",
-                  transform: "scale(1.05)",
-                }}
-                _active={{
-                  boxShadow: "0 0 15px rgba(29, 215, 91, 1)",
-                  transform: "scale(0.95)",
-                }}
-                variant="outline"
-                onClick={increaseLot}
-                disabled={amountToInvest >= currentBalance}
-              >
-                <Icon as={AddIcon} />
-              </Button>
-            </HStack>
-            <Text
-              fontSize="14px"
-              fontFamily="Inter"
-              fontWeight="400"
-              lineHeight="22px"
-              textAlign="left"
-              color="#FFFFFF"
-              mt={4}
-            >
-              Basket Multiple
-            </Text>
-          </Box>
-    <Box
-      width="154px"
-      // height="73px"
-      // top="326px"
-      // left="44px"
-      textAlign={"center"}
-      alignItems={"center"}
-      padding="10px 23px 11px 18px"
-      borderRadius="8px"
-      border="1px solid #565E6C"
-      bg=" #262A33"
-      p={4}
-      boxShadow="0px 2px 5px 0px #171A1F17"
-     
+        <Box 
+  display="flex" 
+  width="100%" 
+  justifyContent="space-between" 
+  gap={[2,4]} 
+  mt={4} 
+ 
+>
+  <Box>
+    <HStack spacing={4} mt={4}>
+      <Button
+        colorScheme="white"
+        variant="outline"
+        _hover={{
+          boxShadow: "0 0 10px white",
+          transform: "scale(1.05)",
+        }}
+        size="sm"
+        _active={{
+          boxShadow: "0 0 15px white",
+          transform: "scale(0.95)",
+        }}
+        onClick={decreaseLot}
+        disabled={lots <= 1}
+      >
+        <Icon as={MinusIcon} />
+      </Button>
+      <Input
+        value={lots}
+        readOnly
+        textAlign="center"
+        width="50px"
+        size="sm"
+        fontWeight="bold"
+      />
+      <Button
+        size="sm"
+        color="#1DD75B"
+        border="1px solid #1DD75B"
+        _hover={{
+          boxShadow: "0 0 10px rgba(29, 215, 91, 0.7)",
+          transform: "scale(1.05)",
+        }}
+        _active={{
+          boxShadow: "0 0 15px rgba(29, 215, 91, 1)",
+          transform: "scale(0.95)",
+        }}
+        variant="outline"
+        onClick={increaseLot}
+        disabled={amountToInvest >= currentBalance}
+      >
+        <Icon as={AddIcon} />
+      </Button>
+    </HStack>
+    <Text
+      fontSize="14px"
+      fontFamily="Inter"
+      fontWeight="400"
+      lineHeight="22px"
+      textAlign="left"
+      color="#FFFFFF"
+      mt={4}
     >
-      <Box >
-      <Text
-        fontFamily="Inter"
-        fontSize="12px"
-        fontWeight="400"
-        lineHeight="20px"
-       
-        textAlign="center"
-        color="white" // Change text color as needed
-        marginBottom={1} // Add spacing between the two text elements
-      >
-        {/*Potential UPSIDE*/}
-        Potential UPSIDE
-      </Text>
-      <Text
-        fontFamily="Inter"
-        fontSize="16px" // You can adjust this size based on your design preference
-        fontWeight="500" // Change weight as needed
-        lineHeight="20px"
-        textAlign="center"
-        color="#1DD75B" // Change text color as needed
-      >
-        {/* {basketData.basketInfo.cagr} */}
+      Basket Multiple
+    </Text>
+  </Box>
+
+  <Box
+    minWidth={["140px", "144px", "154px"]}
+    height="73px"  // Set the height for uniformity
+    textAlign="center"
+    padding="10px 18px"
+    borderRadius="8px"
+    border="1px solid #565E6C"
+    bg="#262A33"
+    p={2}
+    boxShadow="0px 2px 5px 0px #171A1F17"
+    display="flex"
+    flexDirection="column"
+    justifyContent="center"
+    alignItems="center"
+  >
+    <Text
+      fontFamily="Inter"
+      fontSize={["10px", "12px", "14px"]} // Responsive font size for small to large screens
+      fontWeight="400"
+      lineHeight="20px"
+      textAlign="center"
+      color="white"
+      marginBottom={1}
+    >
+      Potential UPSIDE
+    </Text>
+    <Text
+      fontFamily="Inter"
+      fontSize={["14px", "16px", "18px"]} // Responsive font size based on screen size
+      fontWeight="500"
+      lineHeight="20px"
+      textAlign="center"
+      color="#1DD75B"
+      whiteSpace="nowrap"
+      overflow="hidden"
+      textOverflow="ellipsis" // Handle overflow with ellipsis for long text
+    >
       {upsidePotential} ({upsidePotentialPercentage}%)
-      </Text>
-      </Box>
-    </Box>
-    </Box>
+    </Text>
+  </Box>
+</Box>
+
 
 
       
@@ -537,7 +543,7 @@ console.log(res.data,"response")
               textAlign="left"
               color="white" // Updated height
             >
-              Brokerage :
+            Approx Brokerage :
             </Text>
 
             <Text
@@ -574,7 +580,7 @@ console.log(res.data,"response")
               textAlign="left"
               color="white" // Updated height
             >
-              Other Charges :
+            Approx Other Charges :
             </Text>
 
             <Text
