@@ -45,8 +45,8 @@ const BasketConstituents = ({ basketData }) => {
   };
 
   return (
-    <Box className="basket-constituents" p={4} mt={4}>
-      <Text fontSize="lg" fontWeight="bold" mb={8}>
+    <Box className="basket-constituents" p={4} >
+      <Text fontSize="lg" fontWeight="bold" mb={4}>
         Basket Constituents & Weights
       </Text>
 
