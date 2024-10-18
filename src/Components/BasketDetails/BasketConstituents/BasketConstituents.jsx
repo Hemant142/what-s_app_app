@@ -46,7 +46,9 @@ const BasketConstituents = ({ basketData }) => {
 
   return (
     <Box className="basket-constituents" p={4} >
-      <Text fontSize="lg" fontWeight="bold" mb={4}>
+      <Text fontSize="lg" fontWeight="bold" mb={4} 
+     fontFamily={"Helvetica"}
+      >
         Basket Constituents & Weights
       </Text>
 
@@ -94,9 +96,10 @@ const BasketConstituents = ({ basketData }) => {
                     mr={2}
                   />
                   <Text
-                    fontFamily="Inter"
+                    fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
                     fontSize={["xs", "sm"]} // xs for smaller screens, sm for larger mobiles
                     lineHeight="20px"
+                  
                     // fontWeight="bold"         // 'bold' instead of "12px" for text weight
                     noOfLines={1} // Ensure it doesn’t wrap to multiple lines
                   >

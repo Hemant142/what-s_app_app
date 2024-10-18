@@ -132,6 +132,7 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
             />
             <Text
             fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+            
             fontSize="12px"
             fontWeight="600"
             lineHeight="22px"
@@ -178,7 +179,8 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
     alignItems="center"
   >
     <Text
-      fontFamily="Inter"
+      fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+            
       fontSize={["10px", "12px", "14px"]} // Responsive font size for small to large screens
       fontWeight="400"
       lineHeight="20px"
@@ -189,7 +191,8 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
       Potential UPSIDE
     </Text>
     <Text
-      fontFamily="Inter"
+    fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+      
       fontSize={["14px", "16px", "18px"]} // Responsive font size based on screen size
       fontWeight="500"
       lineHeight="20px"
@@ -216,7 +219,8 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
      
     >
       <Text
-        fontFamily="Inter"
+      fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+            
         fontSize="12px"
         fontWeight="400"
         lineHeight="20px"
@@ -227,7 +231,8 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
         1 Year Return
       </Text>
       <Text
-        fontFamily="Inter"
+        fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+      
         fontSize="16px" // You can adjust this size based on your design preference
         fontWeight="500" // Change weight as needed
         lineHeight="20px"

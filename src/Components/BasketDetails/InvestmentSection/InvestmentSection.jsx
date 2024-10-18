@@ -331,7 +331,7 @@ console.log(res.data,"response")
           padding="7px 12px" // Add padding to give spacing similar to top and left
         >
           <Text
-            fontFamily="Inter"
+            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
             fontSize="14px"
             fontWeight="400"
             lineHeight="22px"
@@ -386,6 +386,7 @@ console.log(res.data,"response")
       <Input
         value={lots}
         readOnly
+        fontFamily={"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"}
         textAlign="center"
         width="50px"
         size="sm"
@@ -439,7 +440,7 @@ console.log(res.data,"response")
     alignItems="center"
   >
     <Text
-      fontFamily="Inter"
+      fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
       fontSize={["10px", "12px", "14px"]} // Responsive font size for small to large screens
       fontWeight="400"
       lineHeight="20px"
@@ -450,7 +451,7 @@ console.log(res.data,"response")
       Potential UPSIDE
     </Text>
     <Text
-      fontFamily="Inter"
+      fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
       fontSize={["14px", "16px", "18px"]} // Responsive font size based on screen size
       fontWeight="500"
       lineHeight="20px"
@@ -474,7 +475,7 @@ console.log(res.data,"response")
 
         <Text
           fontSize="sm"
-          fontFamily="Inter"
+          fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
           fontWeight="noraml"
           lineHeight="22px"
           textAlign="left"
@@ -498,9 +499,10 @@ console.log(res.data,"response")
             height="40px"
           >
             <Text
-              fontFamily="Inter"
+              // fontFamily="Inter"
               fontSize="sm"
-            
+             fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+      
               fontWeight="bold"
               lineHeight="40px"
               textAlign="left"
@@ -512,7 +514,7 @@ console.log(res.data,"response")
 
             <Text
       
-              fontFamily="Inter"
+              fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
               width={'30%'}
               fontSize="sm"
               fontWeight="bold"
@@ -536,7 +538,7 @@ console.log(res.data,"response")
             height="40px"
           >
             <Text
-              fontFamily="Inter"
+              fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
               fontSize="sm"
               fontWeight="noraml"
               lineHeight="22px"
@@ -547,7 +549,7 @@ console.log(res.data,"response")
             </Text>
 
             <Text
-              fontFamily="Inter"
+              fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
               fontSize="sm"
               width={'30%'}
               // fontFamily="Inter"
@@ -574,7 +576,7 @@ console.log(res.data,"response")
           >
             <Text
               fontSize="sm"
-              fontFamily="Inter"
+              fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
               fontWeight="noraml"
               lineHeight="22px"
               textAlign="left"
@@ -585,7 +587,7 @@ console.log(res.data,"response")
 
             <Text
               fontSize="sm"
-              fontFamily="Inter"
+              fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
               fontWeight="noraml"
               lineHeight="22px"
               textAlign="left"
@@ -621,7 +623,7 @@ console.log(res.data,"response")
         
           >
             <Text
-              fontFamily="Inter"
+              fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
               fontSize="md"
               fontWeight="normal"
               lineHeight="22px"
@@ -633,7 +635,7 @@ console.log(res.data,"response")
             </Text>
 
             <Text
-              fontFamily="Inter"
+              fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
               fontSize="md"
               fontWeight="400"
             
@@ -670,7 +672,7 @@ console.log(res.data,"response")
             height="40px"
           >
             <Text
-              fontFamily="Inter"
+              fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
               fontSize="md"
               fontWeight="normal"
               lineHeight="22px"
@@ -682,7 +684,7 @@ console.log(res.data,"response")
             </Text>
 
             <Text
-              fontFamily="Inter"
+              fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
               fontSize="md"
               fontWeight="400"
               lineHeight="22px"
@@ -718,7 +720,7 @@ console.log(res.data,"response")
   return !isMarketOpen && (
     <Box p={2} textAlign="center">
       <Text
-        fontFamily="Inter"
+        fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
         fontSize={["10px", "12px"]}
         fontWeight="normal"
         lineHeight={["16px", "18px"]}
@@ -726,7 +728,9 @@ console.log(res.data,"response")
         color="#A7ADB7"
       >
         You are placing an{" "}
-        <Text as="span" fontWeight="bold" color="white">
+        <Text as="span" fontWeight="bold"
+        fontFamily={"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"}
+        color="white">
           order after market hours
         </Text>{" "}
         for these {props.instrumentList.length} stocks. Your order will be executed on the next market day.
@@ -748,6 +752,7 @@ console.log(res.data,"response")
       color="#1DD75B"
       border="1px solid #1DD75B"
       variant="outline"
+      fontFamily={"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"}
       width={["90%", "80%"]} // Responsive width
       height={["50px", "60px"]}
       _hover={{

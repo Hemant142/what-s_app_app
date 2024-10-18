@@ -5,6 +5,7 @@ const CompanyIntro = ({ description }) => {
     <Text
     p={2}
       fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+      
       fontSize="14px"
       fontWeight="400"
       lineHeight="22px"

@@ -12,6 +12,7 @@ const InvestmentInfo = ({ basketData }) => {
     <Box position="relative" mb="45px"  className="investment-info" p={4} >
       <Heading
         as="h4"
+        fontFamily={"Helvetica"}
         fontSize="17px"
         fontWeight="530"
         lineHeight="26px"
@@ -25,6 +26,7 @@ const InvestmentInfo = ({ basketData }) => {
         fontSize="14px"
         fontWeight="300"
         lineHeight="22px"
+        fontFamily={"Helvetica"}
         textAlign="left"
         color="rgba(144, 149, 160, 1)"
         noOfLines={isExpanded ? null : 4} // Handle truncation with Chakra's noOfLines prop
@@ -43,6 +45,7 @@ const InvestmentInfo = ({ basketData }) => {
         variant="link"
         color="rgba(0, 189, 214, 1)"
         position="absolute"
+        fontFamily={"Helvetica"}
         right="30px"
         onClick={handleToggle}
         fontSize="14px"
