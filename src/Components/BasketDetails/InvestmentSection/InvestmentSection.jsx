@@ -46,6 +46,8 @@ const upsidePotentialPercentage=parseInt(props.upsidePotentialPercentage)
   const [isSubmitting, setIsSubmitting] = useState(false);
   // const [upsidePotential,setUpsidePotential]=useState(0)
   const [newUpsidePotential,setNewUpsidePotential]=useState(upsidePotential)
+  const [bufferAmount,setBufferAmount]=useState(0)
+  const [isMarketOpen,setisMarketOpen]=useState(false)
   const [timeLeft, setTimeLeft] = useState(300); // 5 minutes = 300 seconds
   const basketId = props.basketId || ''; // Ensure a default value if props.basketId is undefined
   let token = Cookies.get("whats_app_token");
@@ -54,6 +56,14 @@ const upsidePotentialPercentage=parseInt(props.upsidePotentialPercentage)
   // Update total amount when amountToInvest, brokerage, or other charges change
   useEffect(() => {
     setTotal(brokerage + othercharges + amountToInvest);
+if(brokerage + othercharges + amountToInvest){
+  const result =Math.floor(0.05*(brokerage + othercharges + amountToInvest))
+  // console.log(result,"Buffer value")
+  setBufferAmount(result)
+}
+
+// console.log(bufferAmount,"Buffer Amount")
+
   }, [brokerage, othercharges, amountToInvest]);
 
   // Optional: Use this effect if `minReqAmt` changes during the lifecycle of the component
@@ -63,6 +73,39 @@ const upsidePotentialPercentage=parseInt(props.upsidePotentialPercentage)
     }
   }, [minReqAmt]);
 
+
+  useEffect(() => {
+    const checkTimeAndDate = () => {
+      const now = new Date();
+  
+      // Convert current time to Indian Standard Time (UTC+5:30)
+      const IST_OFFSET = 5.5 * 60; // 5 hours 30 minutes in minutes
+      const currentISTTime = new Date(now.getTime() + IST_OFFSET * 60 * 1000); // Add offset to current time
+  
+      const currentDay = currentISTTime.getDay(); // Get the current day (0 = Sunday, 6 = Saturday)
+      const currentDate = currentISTTime.getDate();
+      const currentTime = currentISTTime.getHours() * 60 + currentISTTime.getMinutes();
+  
+      const startMinutes = 9 * 60 + 15; // 9:15 AM
+      const endMinutes = 15 * 60 + 20; // 3:20 PM
+  
+      // Adjust currentDay check for weekdays (1 to 5 for Monday to Friday)
+      if (currentDay >= 1 && currentDay <= 5) {
+        if (currentTime >= startMinutes && currentTime <= endMinutes) {
+          setisMarketOpen(true);
+        } else {
+          setisMarketOpen(false);
+        }
+      } else {
+        setisMarketOpen(false);
+      }
+  
+      // console.log(currentDate, "current Date Time ", currentTime);
+    };
+  
+    checkTimeAndDate();
+  }, []);
+  
   
   useEffect(() => {
     if (token) {
@@ -269,13 +312,13 @@ const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
 
 
 
-  const currentTime = new Date();
-  const currentHour = currentTime.getHours();
-  const currentMinute = currentTime.getMinutes();
+  // const currentTime = new Date();
+  // const currentHour = currentTime.getHours();
+  // const currentMinute = currentTime.getMinutes();
   
-  const isMarketOpen = 
-    (currentHour > 9 || (currentHour === 9 && currentMinute >= 15)) &&
-    (currentHour < 15 || (currentHour === 15 && currentMinute <= 20));
+  // const isMarketOpen = 
+  //   (currentHour > 9 || (currentHour === 9 && currentMinute >= 15)) &&
+  //   (currentHour < 15 || (currentHour === 15 && currentMinute <= 20));
 
   return (
     <Box >
@@ -440,7 +483,7 @@ const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
           lineHeight="22px"
           textAlign="left"
         >
-          Basket Minimum Amount : {amountToInvest.toLocaleString('en-IN')}
+          Basket Minimum Amount : {minReqAmt.toLocaleString('en-IN')}
         </Text>
 
    
@@ -670,7 +713,7 @@ const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
   alignItems="center"
 >
 { !isMarketOpen && (
-    <Box p={2} textAlign="center">
+    <Box p={2} textAlign="left">
       <Text
         fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
         fontSize={["10px", "12px"]}
@@ -685,7 +728,17 @@ const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
         color="white">
           order after market hours
         </Text>{" "}
-        for these {props.instrumentList.length} stocks. Your order will be executed on the next market day.
+        for these {props.instrumentList.length} stocks. Your order will be executed on the next market day.  Please keep some  
+        <Text as="span" fontWeight="bold"
+        fontFamily={"system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"}
+        color="white">
+        {" "}   buffer amount of {bufferAmount} {" "}
+        </Text>
+     
+        
+        
+        
+        for next day market movement.
       </Text>
     </Box>
   )}
