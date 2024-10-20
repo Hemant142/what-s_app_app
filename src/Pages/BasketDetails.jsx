@@ -29,7 +29,6 @@ export default function BasketDetails() {
 
   const { id } = useParams(); // Get the basket ID from the route params
 
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -61,8 +60,6 @@ export default function BasketDetails() {
   let userId = Cookies.get("userId");
 
 
-// console.log(userId,"UserId")
- 
 useEffect(() => {
   if (basketData) {
     // Calculate the total required fund
@@ -86,11 +83,11 @@ useEffect(() => {
     setMinAmount(total);
     setUpsidePotentialPercentage(totalUpsidePotentialPercentage); // Assuming you have a state for upside potential
     setUpsidePotential(totalUpsidePotential)
-    // console.log("Total Upside Potential:", totalUpsidePotential);
+  
   }
 }, [basketData]);
 
-// console.log(upsidePotential,"upsidePotential")
+
 
 
 
@@ -163,11 +160,11 @@ useEffect(() => {
 // console.log(userId,"id", id)
 // Cookies.set('whats_app_token',"")
 // Cookies.set('basketId',"")
-console.log(token,"token")
+
   useEffect(() => {
     dispatch(getBasketDetails(id, token))
       .then((res) => {
-      console.log(res,"RESponse")
+   
         if (res.data.status === "success") {
           setApiLoading(false);
           Cookies.set("basketData", JSON.stringify(res.data.data), {
@@ -202,7 +199,6 @@ console.log(token,"token")
       // fetchBrokerage()
 
   }, [dispatch, id, userId]);
-  // console.log(basketData,"basket data")
 
   const calculateFundREquired = (instrumentListData) => {
     const qty = instrumentListData.quantity;
@@ -225,24 +221,25 @@ console.log(token,"token")
     if (upsidePotentialPercentage < 0) {
       return 0; // or you can handle this differently based on your requirement
     }
-  // console.log(upsidePotentialPercentage)
+
     return upsidePotentialPercentage;
   };
 
 
 
   const handleUpsidePotential = (instrumentListData) => {
-    console.log(instrumentListData,"instrumentListData")
+  
     let cmp = Number(instrumentListData.currentPrice);
     let takeProfit = Number(instrumentListData.takeProfit);
     let qty=Number(instrumentListData.quantity)
   
     let upsidePotential = ((takeProfit - cmp)*qty).toFixed(2)
  
-  // console.log(upsidePotential,"upsidePotential")
+
     return Number(upsidePotential);
   };
-  // console.log(upsidePotential)
+
+
 
   return (
     <Box>
@@ -320,14 +317,14 @@ console.log(token,"token")
 
               {/* <Activity basketData={basketData} /> */}
 
-              <Divider
+              {/* <Divider
                 ml={2}
                 mr={2}
                 m="auto"
                 width="350px" // Sets the width
                 border="1px solid #BCC1CA" // Adds the solid border with the specified color
                 position="relative"
-              />
+              /> */}
 
               {/* <AboutCentrum basketData={basketData} id={id} /> */}
 
@@ -337,7 +334,10 @@ console.log(token,"token")
                 basketName={basketData.title || "N/A"} // Provide a default if title is undefined
                 currentBalance={Number(currentBalance) || 0} // Provide a default if currentBalance is undefined
                 instrumentList={basketData.instrumentList || []} // Provide a default if instrumentList is undefined
-              /> 
+                upsidePotential={upsidePotential ||0}
+                upsidePotentialPercentage={Number(upsidePotentialPercentage)||0}
+            
+            /> 
             </Box>
           )}
         </Box>

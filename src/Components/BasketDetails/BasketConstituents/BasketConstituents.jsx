@@ -26,21 +26,21 @@ const BasketConstituents = ({ basketData }) => {
     if (upsidePotentialPercentage < 0) {
       return 0; // or you can handle this differently based on your requirement
     }
-  // console.log(upsidePotentialPercentage)
+ 
     return upsidePotentialPercentage;
   };
 
 
 
   const handleUpsidePotential = (instrumentListData) => {
-    console.log(instrumentListData,"instrumentListData")
+
     let cmp = Number(instrumentListData.currentPrice);
     let takeProfit = Number(instrumentListData.takeProfit);
     let qty=Number(instrumentListData.quantity)
   
     let upsidePotential = ((takeProfit - cmp)*qty).toFixed(2)
  
-  console.log(upsidePotential,"upsidePotential")
+
     return Number(upsidePotential);
   };
 

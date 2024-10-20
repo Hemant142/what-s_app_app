@@ -29,7 +29,7 @@ const OtpVerification = ({ onVerify, authToken, onResend }) => {
   // Countdown for resend button
   let basketId = Cookies.get('basketId');
 
-  console.log(basketId,"basketId")
+
 
   useEffect(() => {
     if (countdown > 0) {
@@ -118,7 +118,7 @@ const OtpVerification = ({ onVerify, authToken, onResend }) => {
     }
   };
 
-  console.log(otp,"OTPESDTR")
+
 
 //   const handleResendOTP = async () => {
 //     try {
@@ -169,109 +169,129 @@ setOtp("")
       });
     }
   };
+  
 
 
   return (
     <Box
-      bg="#262A33"
-      borderRadius="md"
-      border="1px solid #BCC1CA"
-      width={{ base: "100%", md: "400px" }} // Responsive width
-      boxShadow="0px 2px 5px rgba(0, 0, 0, 0.2)"
-      p={4}
-      as="form"
-      mt="auto"
-      mx="auto" // Center the box on mobile screens
-      display="flex"
-      flexDirection="column"
-      justifyContent="center"
-      alignItems="center" // Center items
-    >
-      {/* Header */}
-      <Box textAlign="center" mb={6}>
-        <Box
-          border="3px solid #DEE1E6"
-          width="50px"
-          bg="#DEE1E6"
-          height="5px"
-          mt={2}
-          mx="auto"
-          mb={2}
-        />
-        <Text fontSize="25px" fontWeight="bold" color="white" lineHeight="36px">
-          Login
-        </Text>
-      </Box>
-
-      <Box textAlign="center" my={4}>
-        <Text fontSize="14px" fontFamily={"inter"} lineHeight="22px" textAlign="center">
-          Please enter the verification code <strong>we sent to your mobile address</strong> to complete the verification process.
-        </Text>
-      </Box>
-
-      {/* Form Controls */}
-     {/* Form Controls */}
-     <Box p={4} width="full">
-        <FormControl id="otp" isRequired mb={4}>
-          <InputGroup justifyContent="center">
-            <HStack spacing={6} justify="center" alignItems="center">
-              <PinInput
-                value={otp}
-                onChange={handleOtpComplete}
-                size="lg"
-                focusBorderColor="#1DD75B"
-              >
-                {[...Array(4)].map((_, index) => (
-                  <PinInputField
-                    key={index}
-                    bg="white"
-                    color="black"
-                    borderColor="#1DD75B"
-                    borderRadius="md"
-                    height="60px"  // Increase height for bigger size
-                    width="60px"   // Increase width for bigger size
-                    fontSize="2xl" // Increase font size for better readability
-                  />
-                ))}
-              </PinInput>
-            </HStack>
-          </InputGroup>
-        </FormControl>
-
-        {/* Error Message */}
-        {error && (
-          <Text color="red.400" fontSize="14px" textAlign="center" mb={2}>
-            {error}
-          </Text>
-        )}
-
-        {/* Resend OTP Button */}
-        <Button
-          color="#1DD75B"
-          border="1px solid #1DD75B"
-          size="lg"
-          w="full"
-          variant="outline"
-          onClick={handleResendOTP}
-          fontWeight="normal"
-          borderRadius="md"
-          py={6}
-          mt={4}
-          isDisabled={countdown > 0} // Disable button if countdown is active
-          _hover={{
-            boxShadow: "0 0 10px #1DD75B",
-            transform: "scale(1.05)",
-            bg: "rgba(29, 215, 91, 0.05)",
-          }}
-          _active={{
-            boxShadow: "0 0 12px #1DD75B",
-            transform: "scale(0.95)",
-          }}
-        >
-          {countdown > 0 ? `Resend OTP in ${countdown}s` : "Resend OTP"}
-        </Button>
-      </Box>
+    bg="#262A33"
+    borderRadius="md"
+    border="1px solid #BCC1CA"
+    width={{ base: "100%", md: "400px" }} // Responsive width for mobile and larger screens
+    boxShadow="0px 2px 5px rgba(0, 0, 0, 0.2)"
+    p={4}
+    as="form"
+    mt="auto"
+    mx="auto" // Centers the box on mobile screens
+    display="flex"
+    flexDirection="column"
+    justifyContent="center"
+    alignItems="center" // Center items
+  >
+    {/* Header */}
+    <Box textAlign="center" mb={6}>
+      <Box
+        border="3px solid #DEE1E6"
+        width="50px"
+        bg="#DEE1E6"
+        height="5px"
+        mt={2}
+        mx="auto"
+        mb={2}
+      />
+      <Text
+        fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+        fontSize={{ base: "20px", md: "25px" }} // Adjust font size based on screen size
+        fontWeight="bold"
+        color="white"
+        lineHeight="36px"
+      >
+        Login
+      </Text>
     </Box>
+  
+    <Box textAlign="center" my={4}>
+      <Text
+        fontSize={{ base: "12px", md: "14px" }} // Adjust font size for readability on small screens
+        lineHeight="22px"
+        textAlign="center"
+        fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+      >
+        Please enter the verification code <strong>we sent to your mobile address</strong> to complete the verification process.
+      </Text>
+    </Box>
+  
+    {/* Form Controls */}
+    <Box p={4} width="full">
+      <FormControl id="otp" isRequired mb={4}>
+        <InputGroup justifyContent="center">
+          <HStack spacing={6} justify="center" alignItems="center">
+            <PinInput
+              value={otp}
+              onChange={handleOtpComplete}
+              fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+              size="lg"
+              focusBorderColor="#1DD75B"
+            >
+              {[...Array(4)].map((_, index) => (
+                <PinInputField
+                  fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+                  key={index}
+                  bg="white"
+                  color="black"
+                  borderColor="#1DD75B"
+                  borderRadius="md"
+                  height={{ base: "50px", md: "60px" }} // Adjust height for mobile screens
+                  width={{ base: "50px", md: "60px" }} // Adjust width for mobile screens
+                  fontSize={{ base: "xl", md: "2xl" }} // Adjust font size for better readability
+                />
+              ))}
+            </PinInput>
+          </HStack>
+        </InputGroup>
+      </FormControl>
+  
+      {/* Error Message */}
+      {error && (
+        <Text
+          color="red.400"
+          fontSize="14px"
+          textAlign="center"
+          mb={2}
+          fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+        >
+          {error}
+        </Text>
+      )}
+  
+      {/* Resend OTP Button */}
+      <Button
+        color="#1DD75B"
+        border="1px solid #1DD75B"
+        size="lg"
+        w="full"
+        variant="outline"
+        onClick={handleResendOTP}
+        fontWeight="normal"
+        borderRadius="md"
+        py={6}
+        mt={4}
+        isDisabled={countdown > 0} // Disable button if countdown is active
+        _hover={{
+          boxShadow: "0 0 10px #1DD75B",
+          transform: "scale(1.05)",
+          bg: "rgba(29, 215, 91, 0.05)",
+        }}
+        _active={{
+          boxShadow: "0 0 12px #1DD75B",
+          transform: "scale(0.95)",
+        }}
+      >
+        {countdown > 0 ? `Resend OTP in ${countdown}s` : "Resend OTP"}
+      </Button>
+    </Box>
+  </Box>
+  
   );
 };
 

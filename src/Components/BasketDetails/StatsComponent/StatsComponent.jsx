@@ -16,13 +16,14 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
       className="stats"
       justifyContent="space-between"
     //   marginTop={2}
+  
     
      
      
     >
       {/* Investment Value */}
       <Box
- 
+
         className="stat-item"
         flex="1"
         textAlign="left"
@@ -39,9 +40,10 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
         >
           Min Amount
         </Text>
-        <Flex alignItems="center" marginTop={1}>
-          <Text color="green.400" fontSize="xl" fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
-             position="relative" top={1}>
+        <Flex alignItems="center"  marginTop={1}>
+          <Text color="green.400" fontSize="16px"
+            fontWeight="500" fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+             position="relative" >
             ₹
           </Text>
           <Heading
@@ -62,7 +64,7 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
       {/* 3Y CAGR */}
       {basketData.isActive !== undefined && (
         <Box
-       
+     
           className="stat-item"
           flex="1"
           textAlign="left"
@@ -80,7 +82,9 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
             3Y CAGR
           </Text>
           <Heading
+       
             as="h3"
+           
             fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
             fontSize="16px"
             fontWeight="500"
@@ -113,11 +117,11 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
           backgroundColor="rgba(238, 253, 243, 1)"
           borderWidth="1px"
           borderColor="rgba(184, 245, 205, 1)"
-          borderRadius="8px"
+          borderRadius="sm"
           boxShadow="0px 0px 2px rgba(23, 26, 31, 0.12)"
           fontFamily={"Epilogue"}
          
-          padding={2} // Adding some padding for better spacing
+          padding={1} // Adding some padding for better spacing
         >
           <Flex alignItems="center">
             {/* Icon with color change based on the volatility level */}
@@ -164,6 +168,8 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
 
       
     </Flex>
+
+
     <Box display={"flex"} justifyContent={"space-between"} mt={4}>
     <Box
     minWidth={["140px", "144px", "154px"]}

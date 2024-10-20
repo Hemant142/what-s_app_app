@@ -29,7 +29,11 @@ const InvestmentSection = (props) => {
 
   const minReqAmt = parseInt(props.minReq, 10) || 0; // Ensure base 10 and default value
   const currentBalance = parseInt(props.currentBalance, 10) || 0;
+  const upsidePotential = parseFloat(props.upsidePotential);
 
+
+  
+const upsidePotentialPercentage=parseInt(props.upsidePotentialPercentage)
   const [showInvestmentOptions, setShowInvestmentOptions] = useState(false);
   const [amountToInvest, setAmountToInvest] = useState(minReqAmt); // Set initial amount based on minReqAmt
   const [lots, setLots] = useState(1); // Initial lot size as 1
@@ -40,9 +44,9 @@ const InvestmentSection = (props) => {
   const [rating, setRating] = useState(null);
   const [tempRating, setTempRating] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [upsidePotential,setUpsidePotential]=useState(0)
-  const [upsidePotentialPercentage,setUpsidePotentialPercentage]=useState(0)
-
+  // const [upsidePotential,setUpsidePotential]=useState(0)
+  const [newUpsidePotential,setNewUpsidePotential]=useState(upsidePotential)
+  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes = 300 seconds
   const basketId = props.basketId || ''; // Ensure a default value if props.basketId is undefined
   let token = Cookies.get("whats_app_token");
   let userName = Cookies.get("user-name");
@@ -59,64 +63,58 @@ const InvestmentSection = (props) => {
     }
   }, [minReqAmt]);
 
-
+  
   useEffect(() => {
-    if (props) {
-      // Calculate the total required fund
+    if (token) {
+      const timerId = setInterval(() => {
+        setTimeLeft((prevTime) => {
+          if (prevTime <= 1) {
+            clearInterval(timerId); // Stop the timer when it reaches 0
+            return 0;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+
+      // Cleanup function to clear interval when component unmounts
+      return () => clearInterval(timerId);
+    }
+  }, [token]);
+
+  // Format time as MM:SS
+  const formatTime = (seconds) => {
+    const minutes = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
+  };
+
+
+  // useEffect(() => {
+  //   if (props) {
+  //     // Calculate the total required fund
    
   
-      // Calculate the sum of all upside potential percentages
-      const totalUpsidePotentialPercentage = props.instrumentList.reduce(
-        (acc, instrument) => acc + handleUpsidePotentialPercentage(instrument),
-        0
-      );
+  //     // Calculate the sum of all upside potential percentages
+  //     const totalUpsidePotentialPercentage = props.instrumentList.reduce(
+  //       (acc, instrument) => acc + handleUpsidePotentialPercentage(instrument),
+  //       0
+  //     );
   
-      const totalUpsidePotential = props.instrumentList.reduce(
-        (acc, instrument) => acc + handleUpsidePotential(instrument),
-        0
-      );
+  //     const totalUpsidePotential = props.instrumentList.reduce(
+  //       (acc, instrument) => acc + handleUpsidePotential(instrument),
+  //       0
+  //     );
   
-      // Set the calculated values in the state
+  //     // Set the calculated values in the state
   
-      setUpsidePotentialPercentage(totalUpsidePotentialPercentage); // Assuming you have a state for upside potential
-      setUpsidePotential(totalUpsidePotential)
-  
-    }
-  }, [props]);
+  //     setUpsidePotentialPercentage(totalUpsidePotentialPercentage); // Assuming you have a state for upside potential
+  //     setUpsidePotential(totalUpsidePotential)
+  //   }
+  // }, [props]);
+
+ 
 
 
-  const handleInvestClick = () => {
-    setShowInvestmentOptions(true);
-    setAmountToInvest(minReqAmt); // Reset amount to minimum requirement
-  };
-
-  const handleSuccessfulTransaction = (amt) => {
-    toast({
-      title: "Invested successfully",
-      description: (
-        <Box>
-          <Text>{moment().format("ddd MMM DD")}</Text>
-          <Text>{props.basketName}</Text>
-          <Text>Amount: ₹{amt}</Text>
-        </Box>
-      ),
-      status: "success",
-      duration: 5000,
-      isClosable: true,
-      position: "top-center",
-    });
-  };
-
-  const handleFailedTransaction = (msg) => {
-    toast({
-      title: "Transaction Failed",
-      description: msg,
-      status: "error",
-      duration: 4000,
-      isClosable: true,
-      position: "top-center",
-    });
-  };
 
   const handleInsufficientBalance = (msg) => {
     toast({
@@ -144,12 +142,12 @@ const InvestmentSection = (props) => {
     const newLots = lots + 1;
     const newAmount = minReqAmt * newLots;
 const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
-const newUpsidePotentialPercentage=parseFloat((upsidePotentialPercentage * newLots).toFixed(2));
+
     if (newAmount <= currentBalance) {
       setLots(newLots);
       setAmountToInvest(newAmount);
-      setUpsidePotential(newUpsidePotential)
-      setUpsidePotentialPercentage(newUpsidePotentialPercentage)
+      setNewUpsidePotential(newUpsidePotential)
+
     } else {
       handleInsufficientBalance("Cannot exceed current balance.");
     }
@@ -159,12 +157,12 @@ const newUpsidePotentialPercentage=parseFloat((upsidePotentialPercentage * newLo
     if (lots > 1) {
       const newLots = lots - 1;
       const newAmount = minReqAmt / newLots;
-      const newUpsidePotential=parseFloat((upsidePotential/lots).toFixed(2))
-      const newUpsidePotentialPercentage=parseFloat((upsidePotentialPercentage/lots).toFixed(2))
+      const latestUpsidePotential=parseFloat((newUpsidePotential-upsidePotential).toFixed(2))
+   
       setLots(newLots);
       setAmountToInvest(newAmount);
-      setUpsidePotential(newUpsidePotential)
-      setUpsidePotentialPercentage(newUpsidePotentialPercentage)
+      setNewUpsidePotential(latestUpsidePotential)
+   
     } else {
       handleInvalidAmount("Cannot have less than one lot.", minReqAmt);
     }
@@ -174,57 +172,7 @@ const newUpsidePotentialPercentage=parseFloat((upsidePotentialPercentage * newLo
   const formattedAmountToInvest = (amountToInvest || 0).toLocaleString();
   const formattedTotal = (total || 0).toLocaleString();
 
-  const handleBuyClick = () => {
-    if (amountToInvest < minReqAmt) {
-      handleInvalidAmount(
-        "Invalid Amount, please check min amount, you have entered ₹",
-        amountToInvest
-      );
-      return false;
-    } else if (amountToInvest > currentBalance) {
-      handleInvalidAmount(
-        "Insufficient Balance, you have entered ₹",
-        amountToInvest
-      );
-      return false;
-    } else {
-      // Pass lot and amount to the Confirm Order page
-      navigate("/confirm-order", {
-        state: {
-          lots: lots,
-          currentBalance: currentBalance,
-          amountToInvest: amountToInvest,
-          basketId: props.id,
-          basketName: props.basketName, // In case you want to pass the basket name too
-          instrumentList: props.instrumentList,
-        },
-      });
-    }
-    // else {
-    //   const userId = localStorage.getItem("userId");
-    //   let config = {
-    //     method: "post",
-    //     maxBodyLength: Infinity,
-    //     url: `https://centrum-app-api.vercel.app/api/centrum/STOQCLUB/add-clients/v2?user_id=${userId}&basket_id=${id}&investment_amount=${amountToInvest}`,
-    //     headers: {},
-    //   };
-    //   setApiLoader(true);
-    //   axios
-    //     .request(config)
-    //     .then((response) => {
-    //       setApiLoader(false);
-    //       if (response.data.status === "SUCCESS") {
-    //         handleSuccessfulTransaction(amountToInvest);
-    //       } else {
-    //         handleInsufficientBalance(response.data.data);
-    //       }
-    //     })
-    //     .catch(() => {
-    //       setApiLoader(false);
-    //       handleFailedTransaction("Transaction could not be completed.");
-    //     });
-    // }
-  };
+
 
   const handleConfirmOrder = () => {
     if (total > currentBalance) {
@@ -241,8 +189,7 @@ const newUpsidePotentialPercentage=parseFloat((upsidePotentialPercentage * newLo
  
     dispatch(OrderPlaced(basketId, lots, token))
       .then((res) => {
-       
-console.log(res.data,"response")
+
         if(res.data.status==="failed"){
           toast({
             title: "Warning",
@@ -272,11 +219,11 @@ console.log(res.data,"response")
         
           // Clear the token
           Cookies.set('whats_app_token', "");
-          
-          // Navigate back to /basketId after 10 seconds
-          setTimeout(() => {
-            navigate(`/basketId`);  // Redirect to /basketId
-          }, 10000);
+             // Set a timer to navigate back after 10 seconds
+             setTimeout(() => {
+              navigate(`/${basketId}`); // Redirect to /basketId
+            }, 10000); // 10 seconds delay
+    
         }
         
       })
@@ -340,16 +287,19 @@ console.log(res.data,"response")
           alignItems="center" // Vertically align the text in the center
           padding="7px 12px" // Add padding to give spacing similar to top and left
         >
-          <Text
-            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
-            fontSize="14px"
-            fontWeight="400"
-            lineHeight="22px"
-            textAlign="left"
-            color="#117B34"
-          >
-            Complete your transaction in 5:00 before the session expires
-          </Text>
+        {token && (
+        <Text
+          fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+          
+          fontSize="14px"
+          fontWeight="400"
+          lineHeight="22px"
+          textAlign="left"
+          color="#117B34"
+        >
+          Complete your transaction in {formatTime(timeLeft)} before the session expires
+        </Text>
+      )}
         </Box>
       <Box
  
@@ -471,7 +421,7 @@ console.log(res.data,"response")
       overflow="hidden"
       textOverflow="ellipsis" // Handle overflow with ellipsis for long text
     >
-      {upsidePotential.toLocaleString('en-IN')} ({upsidePotentialPercentage.toLocaleString('en-IN')}%)
+      {newUpsidePotential===0?upsidePotential:newUpsidePotential} ({upsidePotentialPercentage.toLocaleString('en-IN')}%)
     </Text>
   </Box>
 </Box>

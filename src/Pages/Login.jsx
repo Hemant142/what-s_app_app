@@ -31,7 +31,7 @@ const Login = () => {
   const navigate=useNavigate()
   const { id } = useParams();
   const token = Cookies.get('whats_app_token');
-  // console.log(id,"Login")
+
  
 
   useEffect(() => {
@@ -68,12 +68,12 @@ const Login = () => {
         userId: userId,
         panCard: panCard,
       };
-      console.log(data, "Data");
+   
 
       // Dispatch action and handle the promise
       dispatch(clientToken(data))
         .then((res) => {
-          console.log(res, "Response Login");
+       
           Cookies.set("userId", userId);
           if (res.data.status === "failed") {
             toast({
@@ -97,7 +97,7 @@ const Login = () => {
             // Send OTP request using the Bearer token
             dispatch(otpSend(token))
               .then((otpResponse) => {
-                console.log(otpResponse, "otpResponse");
+               
                 toast({
                   title: "OTP sent to your registered mobile!",
                   position: "bottom",
@@ -152,7 +152,7 @@ const Login = () => {
 
     try {
       const response = await dispatch(otpVarificationClient(otp, authToken));
-      console.log(response,"RESponse")
+ 
       if (response.data.status === "success") {
         const { verifiedAccessToken, centrumId, username } = response.data.data;
 
@@ -198,40 +198,35 @@ const Login = () => {
 
   return (
     <Box
-      display="flex"
-      flexDirection="column"
-      justifyContent="space-between"
-      bg="#171A1F"
-      height="100vh"
-    >
-      {/* Logo Section */}
-      <Box as="header" width="100%" textAlign="center" mb={6}>
-        <Image
-          src={Logo}
-          alt="Logo"
-          mt={"10%"}
-          width="85%"
-          mx="auto"
-          mb={4}
-        />
-      </Box>
+    display="flex"
+    flexDirection="column"
+    justifyContent="space-between"
+    bg="#171A1F"
+    height="100vh"
+    // p={{ base: "4", md: "6" }} // Padding changes based on screen size
+  >
+    {/* Logo Section */}
+    <Box as="header" width="100%" textAlign="center" mb={{ base: 4, md: 6 }}>
+      <Image
+        src={Logo}
+        alt="Logo"
+        mt={{ base: "10%", md: "5%" }}
+        width={{ base: "70%", md: "85%" }} // Adjust width for responsiveness
+        mx="auto"
+        mb={4}
+      />
+    </Box>
 
-      {/* Form Section */}
-      
-
-        {/* OTP Verification Component */}
-        {isOTPDrawerOpen ? (
-          <OtpVerification
-          onVerify={handleOtpVerify} authToken={authToken}
-          />
-        ):(
-
-
-          <Box
+    {/* OTP Verification Component */}
+    {isOTPDrawerOpen ? (
+      <OtpVerification onVerify={handleOtpVerify} authToken={authToken} />
+    ) : (
+      <Box
         bg="#262A33"
         borderRadius="md"
         border="1px solid #BCC1CA"
-        width="100%"
+        width={{ base: "100%", md: "80%", lg: "50%" }} // Responsive width
+        mx="auto"
         boxShadow="0px 2px 5px rgba(0, 0, 0, 0.2)"
         p={4}
         as="form"
@@ -249,17 +244,18 @@ const Login = () => {
             mb={2}
           />
           <Text
-            fontSize="25px"
+            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+            fontSize={{ base: "20px", md: "25px" }} // Responsive font size
             fontWeight="bold"
             color="white"
-            lineHeight="36px"
+            lineHeight={{ base: "28px", md: "36px" }} // Responsive line height
           >
             Login
           </Text>
         </Box>
 
         {/* Form Controls */}
-        <Box p={4}>
+        <Box p={{ base: 2, md: 4 }}>
           <FormControl id="userId" isRequired mb={4}>
             <FormLabel color="#FFFFFF">User ID</FormLabel>
             <InputGroup>
@@ -268,6 +264,7 @@ const Login = () => {
               </InputLeftElement>
               <Input
                 value={userId}
+                fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
                 onChange={(e) => setUserId(e.target.value)}
                 placeholder="Enter UserID"
                 color="white"
@@ -275,7 +272,7 @@ const Login = () => {
                 focusBorderColor="#1DD75B"
                 borderColor="#1DD75B"
                 borderRadius="md"
-                fontSize="lg"
+                fontSize={{ base: "md", md: "lg" }} // Responsive font size
                 px={4}
                 py={3}
                 _hover={{ borderColor: "#1DD75B" }}
@@ -298,7 +295,7 @@ const Login = () => {
                 focusBorderColor="#1DD75B"
                 borderColor="#1DD75B"
                 borderRadius="md"
-                fontSize="lg"
+                fontSize={{ base: "md", md: "lg" }} // Responsive font size
                 px={4}
                 py={3}
                 _hover={{ borderColor: "#1DD75B" }}
@@ -309,6 +306,7 @@ const Login = () => {
           {/* Button */}
           <Button
             color="#1DD75B"
+            fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
             border="1px solid #1DD75B"
             size="lg"
             w="full"
@@ -331,8 +329,8 @@ const Login = () => {
           </Button>
         </Box>
       </Box>
-        )}
-    </Box>
+    )}
+  </Box>
   );
 };
 

@@ -1,20 +1,20 @@
 // CustomToast.js
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import {
   Box,
   HStack,
   Icon,
   IconButton,
   Text,
-  useToast,
-} from '@chakra-ui/react';
-import { CloseIcon } from '@chakra-ui/icons';
+} from "@chakra-ui/react";
+import { CloseIcon } from "@chakra-ui/icons";
 import { FaCircleCheck, FaStar } from "react-icons/fa6";
 import { CiCircleCheck } from "react-icons/ci";
 
 const CustomToast = ({ userName, rating, handleStarClick, onClose }) => {
   const [tempRating, setTempRating] = useState(0);
-  const [orderStatus, setOrderStatus] = useState('Pending'); // Default status as 'Pending'
+  const [orderStatus, setOrderStatus] = useState("Pending"); // Default status as 'Pending'
+  const [countdown, setCountdown] = useState(10); // Countdown state for 10 seconds
 
   useEffect(() => {
     const currentTime = new Date();
@@ -28,11 +28,29 @@ const CustomToast = ({ userName, rating, handleStarClick, onClose }) => {
 
     // Check if current time is within the market hours
     if (currentTimeInMinutes >= startTime && currentTimeInMinutes <= endTime) {
-      setOrderStatus('Completed');
+      setOrderStatus("Completed");
     } else {
-      setOrderStatus('Pending');
+      setOrderStatus("Pending");
     }
-  }, []); // Run this effect once when the component mounts
+  }, []);
+
+  useEffect(() => {
+    // Timer for 10-second countdown
+    const timer = setInterval(() => {
+      setCountdown((prevCountdown) => {
+        if (prevCountdown > 1) {
+          return prevCountdown - 1;
+        } else {
+          clearInterval(timer); // Stop the timer at 0
+          onClose(); // Close the toast after 10 seconds
+          return 0;
+        }
+      });
+    }, 1000);
+
+    return () => clearInterval(timer); // Cleanup the interval on component unmount
+  }, [onClose]);
+
   return (
     <Box
       bg="#262A33"
@@ -60,19 +78,17 @@ const CustomToast = ({ userName, rating, handleStarClick, onClose }) => {
         <HStack spacing={3}>
           <Icon as={FaCircleCheck} color="#17A948" boxSize={12} />
           <Text
-  fontFamily="Epilogue"
-  fontSize="18px"
-  fontWeight="normal"
-  lineHeight="28px"
-  textAlign="left"
-  color="white"
->
-  {orderStatus === 'Completed'
-    ? "Your order has been successfully placed."
-    : "Your order will be processed at the next market open."
-  }
-</Text>
-
+            fontFamily="Epilogue"
+            fontSize="18px"
+            fontWeight="normal"
+            lineHeight="28px"
+            textAlign="left"
+            color="white"
+          >
+            {orderStatus === "Completed"
+              ? "Your order has been successfully placed."
+              : "Your order will be processed at the next market open."}
+          </Text>
         </HStack>
       </Box>
 
@@ -114,7 +130,7 @@ const CustomToast = ({ userName, rating, handleStarClick, onClose }) => {
           width="103px"
           height="26px"
         >
-         Invest
+          Invest
         </Text>
         <Text
           fontFamily="Inter"
@@ -157,18 +173,17 @@ const CustomToast = ({ userName, rating, handleStarClick, onClose }) => {
           </Box>
         </Box>
         <Text
-  fontFamily="Inter"
-  fontSize="14px"
-  fontWeight="normal"
-  lineHeight="22px"
-  textAlign="left"
-  color="#A7ADB7"
->
-  {orderStatus === 'Completed'
-    ? "Your order has been successfully placed."
-    : "Your order's status will be updated once the markets open."
-  }
-</Text>
+          fontFamily="Inter"
+          fontSize="14px"
+          fontWeight="normal"
+          lineHeight="22px"
+          textAlign="left"
+          color="#A7ADB7"
+        >
+          {orderStatus === "Completed"
+            ? "Your order has been successfully placed."
+            : "Your order's status will be updated once the markets open."}
+        </Text>
 
         <Text
           fontFamily="Inter"
@@ -178,7 +193,7 @@ const CustomToast = ({ userName, rating, handleStarClick, onClose }) => {
           textAlign="left"
           color="#A7ADB7"
         >
-          You'll be redirected back in 10s
+          You'll be redirected back in {countdown}s {/* Countdown display */}
         </Text>
       </Box>
 
@@ -208,13 +223,17 @@ const CustomToast = ({ userName, rating, handleStarClick, onClose }) => {
             <Icon
               key={star}
               as={FaStar}
-              color={star <= (tempRating !== null ? tempRating : rating) ? "#F3C63F" : "#A7ADB7"} // Gold for selected stars, gray for unselected
+              color={
+                star <= (tempRating !== null ? tempRating : rating)
+                  ? "#F3C63F"
+                  : "#A7ADB7"
+              } // Gold for selected stars, gray for unselected
               boxSize={6}
               cursor="pointer"
               onClick={() => {
                 setTempRating(star); // Set temp rating on click
                 handleStarClick(star); // Call the function to handle the click event
-              }} 
+              }}
             />
           ))}
         </HStack>
