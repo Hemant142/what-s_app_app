@@ -1,4 +1,5 @@
 import {
+  USER_BALANCE_SUCCESS,
   USER_FAIL,
   USER_FORGOT_SUCCESS,
   USER_LOADING,
@@ -12,6 +13,7 @@ let initialState = {
   loading: false,
   error: false,
   userdata: {}, // To store the user data
+  userBalance:0
 };
 
 export const reducer = (state = initialState, { type, payload }) => {
@@ -55,6 +57,16 @@ export const reducer = (state = initialState, { type, payload }) => {
         ...state,
         loading: false,
         error: false,
+      };
+    }
+
+    
+    case USER_BALANCE_SUCCESS: { // Handle user balance update
+      return {
+        ...state,
+        loading: false,
+        error: false,
+        userBalance: payload, // Set the user balance
       };
     }
 

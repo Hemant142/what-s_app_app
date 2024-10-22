@@ -1,4 +1,4 @@
-import { USER_LOADING, USER_LOGIN_SUCCESS } from "../actionTypes";
+import { USER_BALANCE_SUCCESS, USER_LOADING, USER_LOGIN_SUCCESS } from "../actionTypes";
 import axios from "axios";
 
 let URL= process.env.REACT_APP_STOQCLUB_URL
@@ -35,7 +35,7 @@ export const otpSend=(token)=>(dispatch)=>{
 
 }
 export const clientToken = (data) => (dispatch) => {
-
+ console.log(data,"clientToken")
     dispatch({ type: USER_LOADING });
     return axios.post(
       `${NewURL}/app/client/generate-token?userId=${data.userId}&password=${data.panCard}`
@@ -57,4 +57,26 @@ export const getUserInfo=(userId)=>(dispatch)=>{
   })
 }
 
+
+
+export const getBalance = (token) => (dispatch) => {
+  return axios
+    .get(`${NewURL}app/client/get-client-balance`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+    .then((res) => {
+      // console.log(res.data.data.balance, "getBalance");
+      if(res.data.status==="success"){
+
+        dispatch({ type: USER_BALANCE_SUCCESS, payload: res.data.data.balance }); // Assuming the balance is in res.data.balance
+      }
+    
+    })
+    .catch((error) => {
+      console.log("Error during getBalance request:", error);
+      throw error; // Throw the error to handle it outside if needed
+    });
+};
 

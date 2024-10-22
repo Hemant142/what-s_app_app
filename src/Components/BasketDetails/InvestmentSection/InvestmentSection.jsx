@@ -78,29 +78,47 @@ if(brokerage + othercharges + amountToInvest){
     const checkTimeAndDate = () => {
       const now = new Date();
   
-      // Convert current time to Indian Standard Time (UTC+5:30)
-      const IST_OFFSET = 5.5 * 60; // 5 hours 30 minutes in minutes
-      const currentISTTime = new Date(now.getTime() + IST_OFFSET * 60 * 1000); // Add offset to current time
+      // Get the current UTC time
+      const utcHours = now.getUTCHours();
+      const utcMinutes = now.getUTCMinutes();
   
-      const currentDay = currentISTTime.getDay(); // Get the current day (0 = Sunday, 6 = Saturday)
-      const currentDate = currentISTTime.getDate();
-      const currentTime = currentISTTime.getHours() * 60 + currentISTTime.getMinutes();
+      // Convert UTC time to Indian Standard Time (IST) by adding 5 hours 30 minutes
+      const istHours = utcHours + 5;
+      const istMinutes = utcMinutes + 30;
   
-      const startMinutes = 9 * 60 + 15; // 9:15 AM
-      const endMinutes = 15 * 60 + 20; // 3:20 PM
-  
-      // Adjust currentDay check for weekdays (1 to 5 for Monday to Friday)
-      if (currentDay >= 1 && currentDay <= 5) {
-        if (currentTime >= startMinutes && currentTime <= endMinutes) {
-          setisMarketOpen(true);
-        } else {
-          setisMarketOpen(false);
-        }
-      } else {
-        setisMarketOpen(false);
+      // Adjust for overflow if minutes exceed 60
+      let currentISTHours = istHours;
+      let currentISTMinutes = istMinutes;
+      if (istMinutes >= 60) {
+        currentISTHours += 1;
+        currentISTMinutes = istMinutes - 60;
       }
   
-      // console.log(currentDate, "current Date Time ", currentTime);
+      // Adjust for overflow if hours exceed 24 (next day)
+      if (currentISTHours >= 24) {
+        currentISTHours = currentISTHours - 24;
+      }
+  
+      // Convert the time to minutes from midnight (IST)
+      const currentTimeInMinutes = currentISTHours * 60 + currentISTMinutes;
+  
+      const marketOpenTime = 9 * 60 + 15; // 9:15 AM IST in minutes
+      const marketCloseTime = 15 * 60 + 20; // 3:20 PM IST in minutes
+  
+      // Get the current day in IST (0 = Sunday, 6 = Saturday)
+      const istDay = (now.getUTCDay() + 5 / 24 + 30 / 1440) % 7; // Adjust for IST day offset
+  
+      // Check if it's a weekday (Monday to Friday)
+      if (istDay >= 1 && istDay <= 5) {
+        // Check if the current time is between market open and close times in IST
+        if (currentTimeInMinutes >= marketOpenTime && currentTimeInMinutes <= marketCloseTime) {
+          setisMarketOpen(true);  // Market is open
+        } else {
+          setisMarketOpen(false);  // Market is closed
+        }
+      } else {
+        setisMarketOpen(false);  // It's a weekend
+      }
     };
   
     checkTimeAndDate();
@@ -132,28 +150,7 @@ if(brokerage + othercharges + amountToInvest){
   };
 
 
-  // useEffect(() => {
-  //   if (props) {
-  //     // Calculate the total required fund
-   
-  
-  //     // Calculate the sum of all upside potential percentages
-  //     const totalUpsidePotentialPercentage = props.instrumentList.reduce(
-  //       (acc, instrument) => acc + handleUpsidePotentialPercentage(instrument),
-  //       0
-  //     );
-  
-  //     const totalUpsidePotential = props.instrumentList.reduce(
-  //       (acc, instrument) => acc + handleUpsidePotential(instrument),
-  //       0
-  //     );
-  
-  //     // Set the calculated values in the state
-  
-  //     setUpsidePotentialPercentage(totalUpsidePotentialPercentage); // Assuming you have a state for upside potential
-  //     setUpsidePotential(totalUpsidePotential)
-  //   }
-  // }, [props]);
+
 
  
 
@@ -229,13 +226,12 @@ const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
       return;
     }
  
- 
     dispatch(OrderPlaced(basketId, lots, token))
       .then((res) => {
 
         if(res.data.status==="failed"){
           toast({
-            title: "Warning",
+            title: "",
             description: res.data.message,
             status: "warning",
             duration: 5000,
@@ -270,6 +266,7 @@ const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
         }
         
       })
+
       .catch((error) => {
         console.log(error, "error confirm order ");
       });

@@ -150,7 +150,7 @@ const BasketConstituents = ({ basketData }) => {
                 // justifyContent="flex-end"  // Aligns content to the left
                 alignItems="center"
               >
-                <Box display="flex" alignItems="center" width={"30%"}>
+                <Box display="flex"  gap={2} alignItems="center" width={"30%"}>
                   <Text
                     fontFamily="Inter"
                     fontSize="11px"
@@ -176,7 +176,7 @@ const BasketConstituents = ({ basketData }) => {
                   </Text>
                 </Box>
 
-                <Box display="flex" alignItems="center" border={"1px solid red"} width={"30%"}>
+                <Box display="flex" alignItems="center" gap={2} width={"30%"}>
                   <Text
                     fontFamily="Inter"
                     fontSize="11px"
@@ -306,7 +306,7 @@ const BasketConstituents = ({ basketData }) => {
                 // justifyContent="flex-end"  // Aligns content to the left
                 alignItems="center"
               >
-                <Box display="flex" alignItems="center" width={"30%"}>
+                <Box display="flex" alignItems="center" gap={2} width={"30%"}>
                   <Text
                     fontFamily="Inter"
                     fontSize="11px"
@@ -332,7 +332,7 @@ const BasketConstituents = ({ basketData }) => {
                   </Text>
                 </Box>
 
-                <Box display="flex" alignItems="center" width={"30%"}>
+                <Box display="flex" alignItems="center" gap={2} width={"30%"}>
                   <Text
                     fontFamily="Inter"
                     fontSize="11px"

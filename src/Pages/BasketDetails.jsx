@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate, useParams } from "react-router-dom";
 import { getBasketDetails } from "../Redux/basketReducer/action";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import Loader from "../Components/Loader/Loader";
 import { Box, Button, Divider, Flex, Text } from "@chakra-ui/react";
 import DesktopWarning from "../Components/BasketDetails/DesktopWarning/DesktopWarning";
@@ -16,6 +16,7 @@ import Activity from "../Components/BasketDetails/Activity/Activity";
 import AboutCentrum from "../Components/BasketDetails/AboutCentrum/AboutCentrum";
 import InvestmentSection from "../Components/BasketDetails/InvestmentSection/InvestmentSection";
 import axios from "axios";
+import { getBalance } from "../Redux/authReducer/action";
 
 export default function BasketDetails() {
   const [apiLoading, setApiLoading] = useState(true);
@@ -26,6 +27,7 @@ export default function BasketDetails() {
   const [brokerage, setBrokerage] = useState(0);
   const [upsidePotential,setUpsidePotential]=useState(0)
   const [upsidePotentialPercentage,setUpsidePotentialPercentage]=useState(0)
+  const currentBalance=useSelector((store)=>store.authReducer.userBalance)
 
   const { id } = useParams(); // Get the basket ID from the route params
 
@@ -90,74 +92,6 @@ useEffect(() => {
 
 
 
-
-  // let userId="E0002160"
-  // let currentBalance = Cookies.get("balance");
-  let currentBalance = 100000
-  // Function to handle each brokerage API call
-
-  if(userId==="H0002444"){
-    userId="E0002160"
-  }
-
-
-
-  // const fetchBrokerage = async (instrument) => {
-  //   const brokerageRequestData = {
-  //     userId: "E0002160",
-  //     exchange: "NSE_EQ",
-  //     tradingSymbol: "IDEAFORGE",
-  //     qty: 12,
-  //     price: 684.5,
-  //     product: "delivery",
-  //     transType: "buy"
-  // }
-    
-    
-  //   // {
-  //   //   userId: userId, // Use the value from cookies
-  //   //   exchange: "NSE_EQ", // Hardcoded
-  //   //   tradingSymbol: instrument.name, // From instrumentList
-  //   //   qty: Number(instrument.quantity), // From instrumentList
-  //   //   price: instrument.currentPrice, // From instrumentList
-  //   //   product: "delivery", // Hardcoded
-  //   //   transType: "buy", // Hardcoded
-  //   // };
-
-   
-
-  //   try {
-  //     const response = await axios.post(
-  //       "https://centralizedapi.centrumgalaxc.com/Advance/Brokerage/GetBrokerage",
-  //       brokerageRequestData
-  //     );
-  //     // console.log(response, "response");
-
-  //     if (response.data && response.data.length > 0) {
-  //       const brokerData = response.data[0]; // Assuming the API returns data in an array
-  //       const otherPrices =
-  //         brokerData.STT +
-  //         brokerData.transactionCharges +
-  //         brokerData.StampDuty +
-  //         brokerData.SebiCharges +
-  //         brokerData.DPcharges +
-  //         brokerData.ClearingCharges;
-
-  //       // Return the broker data along with calculated other prices
-  //       return {
-  //         ...brokerData,
-  //         otherPrices,
-  //       };
-  //     } else {
-  //       console.error("No data found in brokerage response");
-  //       return null;
-  //     }
-  //   } catch (error) {
-  //     // console.log("Error fetching brokerage:", error);
-  //     return null;
-  //   }
-  // };
-// console.log(userId,"id", id)
 // Cookies.set('whats_app_token',"")
 // Cookies.set('basketId',"")
 
@@ -197,6 +131,7 @@ useEffect(() => {
         console.log(error, "getBasketDetails error");
       });
       // fetchBrokerage()
+      dispatch(getBalance(token))
 
   }, [dispatch, id, userId]);
 

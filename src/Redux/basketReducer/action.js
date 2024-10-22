@@ -11,13 +11,13 @@ export const getAllBaskets = (token) => (dispatch) => {
   dispatch({ type: BASKET_REQUEST });
 
   axios
-    .get(`${URL}centrum-galaxc/user/v1/web-app/baskets`, {
+    .get(`${URL}web-app/baskets`, {
       headers: {
         Authorization: `Bearer ${token}`, // Pass Bearer token for authentication
       },
     })
     .then((res) => {
-      // console.log(res, "getAllBaskets");
+      console.log(res, "getAllBaskets");
       // Dispatch success action with the data
       dispatch({ type: GET_BASKET_SUCCESS, payload: res.data.data });
     })
