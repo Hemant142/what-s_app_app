@@ -17,7 +17,7 @@ export const getAllBaskets = (token) => (dispatch) => {
       },
     })
     .then((res) => {
-      console.log(res, "getAllBaskets");
+  
       // Dispatch success action with the data
       dispatch({ type: GET_BASKET_SUCCESS, payload: res.data.data });
     })

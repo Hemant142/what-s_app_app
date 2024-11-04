@@ -35,7 +35,7 @@ export const otpSend=(token)=>(dispatch)=>{
 
 }
 export const clientToken = (data) => (dispatch) => {
- console.log(data,"clientToken")
+
     dispatch({ type: USER_LOADING });
     return axios.post(
       `${NewURL}/app/client/generate-token?userId=${data.userId}&password=${data.panCard}`
@@ -67,7 +67,7 @@ export const getBalance = (token) => (dispatch) => {
       },
     })
     .then((res) => {
-      console.log(res.data.data.balance, "getBalance");
+     
       if(res.data.status==="success"){
 
         dispatch({ type: USER_BALANCE_SUCCESS, payload: res.data.data.balance }); // Assuming the balance is in res.data.balance

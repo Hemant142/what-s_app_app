@@ -57,7 +57,6 @@ const ConfirmOrder = () => {
       }
   }, []); // This effect will run only once when the component mounts
 
-  console.log(basketData, "basketData InvestmentSection");
 
   useEffect(() => {
     setBrokerage(345);
@@ -79,7 +78,7 @@ const ConfirmOrder = () => {
   } = location.state || {};
   const basketName = originalBasketName ? toTitleCase(originalBasketName) : "";
   // Function to convert to title case
-console.log(lots,"lots")
+
   // useEffect to update total when brokerage or othercharges change
   useEffect(() => {
     setTotal(brokerage + othercharges + amountToInvest);
@@ -107,12 +106,12 @@ const formattedTotal = (total || 0).toLocaleString();
         });
         return;
       }
-// console.log(basketId,lots,token)
+
       Cookies.set('whats_app_token',"")
       Cookies.set('basketId',"")
       dispatch(OrderPlaced(basketId,lots,token))
       .then((res)=>{
-        console.log(res,"REsponse")
+      
         
       })
       .catch((error)=>{

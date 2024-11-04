@@ -58,11 +58,10 @@ const upsidePotentialPercentage=parseInt(props.upsidePotentialPercentage)
     setTotal(brokerage + othercharges + amountToInvest);
 if(brokerage + othercharges + amountToInvest){
   const result =Math.floor(0.05*(brokerage + othercharges + amountToInvest))
-  // console.log(result,"Buffer value")
+
   setBufferAmount(result)
 }
 
-// console.log(bufferAmount,"Buffer Amount")
 
   }, [brokerage, othercharges, amountToInvest]);
 

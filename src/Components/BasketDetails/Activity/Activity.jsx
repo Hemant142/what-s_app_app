@@ -4,11 +4,11 @@ import { MdCheckCircle } from "react-icons/md";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 
 const Activity = ({ basketData }) => {
-    console.log(basketData.activity,"basketData.activity")
+ 
     let firstData=basketData.activity
     let secondData=basketData.activity
     let finalData=[...firstData,...secondData]
-    console.log(finalData,"Final ")
+   
   return (
     <Box marginY={8} p={4} >
       <Text fontSize="xl" fontWeight="bold" mb={4}>

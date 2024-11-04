@@ -265,7 +265,7 @@ const Login = () => {
               <Input
                 value={userId}
                 fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
-                onChange={(e) => setUserId(e.target.value)}
+                onChange={(e) => setUserId(e.target.value.toUpperCase())}
                 placeholder="Enter UserID"
                 color="white"
                 _placeholder={{ color: "white.500" }}
@@ -288,7 +288,7 @@ const Login = () => {
               </InputLeftElement>
               <Input
                 value={panCard}
-                onChange={(e) => setPanCard(e.target.value)}
+                onChange={(e) => setPanCard(e.target.value.toUpperCase())}
                 placeholder="Enter PAN Card Number"
                 color="white"
                 _placeholder={{ color: "white.500" }}

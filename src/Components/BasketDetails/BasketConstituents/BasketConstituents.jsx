@@ -14,7 +14,6 @@ const BasketConstituents = ({ basketData , instrumentList }) => {
   //   return fundRequired;
   // };
 
-console.log(instrumentList,"instrumentList")
   const handleUpsidePotentialPercentage = (instrumentListData) => {
     let cmp = Number(instrumentListData.currentPrice);
     let takeProfit = Number(instrumentListData.takeProfit);
