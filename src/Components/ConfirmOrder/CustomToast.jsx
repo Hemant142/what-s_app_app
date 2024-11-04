@@ -62,7 +62,7 @@ const CustomToast = ({ userName, rating, handleStarClick, onClose }) => {
       position="relative"
     >
       {/* Close Button */}
-      <IconButton
+      {/* <IconButton
         aria-label="Close Toast"
         icon={<CloseIcon />}
         size="sm"
@@ -71,7 +71,7 @@ const CustomToast = ({ userName, rating, handleStarClick, onClose }) => {
         right="10px"
         onClick={onClose}
         variant="ghost"
-      />
+      /> */}
 
       {/* Content */}
       <Box display="flex" alignItems="center" p={2}>

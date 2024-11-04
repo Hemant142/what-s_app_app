@@ -65,18 +65,18 @@ export default function BasketDetails() {
 useEffect(() => {
   if (basketData) {
     // Calculate the total required fund
-    const total = basketData.instrumentList.reduce(
+    const total = instrumentList.reduce(
       (acc, instrument) => acc + calculateFundREquired(instrument),
       0
     );
 
     // Calculate the sum of all upside potential percentages
-    const totalUpsidePotentialPercentage = basketData.instrumentList.reduce(
+    const totalUpsidePotentialPercentage = instrumentList.reduce(
       (acc, instrument) => acc + handleUpsidePotentialPercentage(instrument),
       0
     );
 
-    const totalUpsidePotential = basketData.instrumentList.reduce(
+    const totalUpsidePotential = instrumentList.reduce(
       (acc, instrument) => acc + handleUpsidePotential(instrument),
       0
     );
@@ -92,6 +92,7 @@ useEffect(() => {
 
 
 
+
 // Cookies.set('whats_app_token',"")
 // Cookies.set('basketId',"")
 
@@ -101,11 +102,56 @@ useEffect(() => {
    
         if (res.data.status === "success") {
           setApiLoading(false);
-          Cookies.set("basketData", JSON.stringify(res.data.data), {
-            expires: 7, // Cookie expires in 7 days
-          });
+         // Step 1: Create a count of instruments
+const instrumentCount = res.data.data.basketList[0].instrumentList.reduce((acc, instrument) => {
+  acc[instrument.instrument] = (acc[instrument.instrument] || 0) + 1;
+  return acc;
+}, {});
+
+// Step 2: Filter out instruments based on your criteria
+const secondaryInstruments = res.data.data.basketList[0].instrumentList
+  .filter((instrument, index, self) => {
+    // Ensure uniqueness by checking if it's the first occurrence
+    const isFirstOccurrence =
+      index === self.findIndex((i) => i.instrument === instrument.instrument);
+
+    // Get all instruments with the same ID
+    const sameInstruments = self.filter(
+      (i) => i.instrument === instrument.instrument
+    );
+
+    // Check for the presence of APPROVED and REJECTED statuses
+    const hasApproved = sameInstruments.some(
+      (i) => i.raHeadStatus === "APPROVED"
+    );
+    const hasRejected = sameInstruments.some(
+      (i) => i.raHeadStatus === "REJECTED"
+    );
+
+    // Include the instrument if:
+    // 1. It is APPROVED and there are no other APPROVED instruments
+    // 2. It is the first occurrence of APPROVED when both statuses exist
+    return (
+      (instrument.raHeadStatus === "APPROVED" &&
+        hasApproved &&
+        hasRejected &&
+        isFirstOccurrence) ||
+      (instrument.raHeadStatus === "APPROVED" &&
+        !hasRejected &&
+        instrumentCount[instrument.instrument] === 1) ||
+      (instrument.raHeadStatus === "REJECTED" &&
+        !hasApproved &&
+        isFirstOccurrence)
+    );
+  })
+  .reverse();
+
+let newInstrumentsData = secondaryInstruments.filter(
+  (instrument) => instrument.raHeadStatus === "APPROVED"
+);
+
           setBasketData(res.data.data.basketList[0]);
-          setInstrumentList(res.data.data.basketList[0].instrumentList); // Set the instrumentList from the response
+          setInstrumentList(newInstrumentsData); // Set the instrumentList from the response
 
           // If instrumentList exists and has length > 0
           if (
@@ -239,7 +285,7 @@ useEffect(() => {
                 position="relative"
               />
 
-              <BasketConstituents basketData={basketData} />
+              <BasketConstituents basketData={basketData} instrumentList={instrumentList} />
 
               <Divider
                 ml={2}

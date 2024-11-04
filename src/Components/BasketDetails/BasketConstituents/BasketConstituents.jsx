@@ -5,7 +5,7 @@ import { CiCircleCheck } from "react-icons/ci";
 import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import { BsArrowUpRightCircle, BsPatchCheck } from "react-icons/bs";
 
-const BasketConstituents = ({ basketData }) => {
+const BasketConstituents = ({ basketData , instrumentList }) => {
   // const calculateFundREquired = (instrumentListData) => {
   //   const qty = instrumentListData.quantity;
   //   const cmp = instrumentListData.currentPrice;
@@ -14,7 +14,7 @@ const BasketConstituents = ({ basketData }) => {
   //   return fundRequired;
   // };
 
-
+console.log(instrumentList,"instrumentList")
   const handleUpsidePotentialPercentage = (instrumentListData) => {
     let cmp = Number(instrumentListData.currentPrice);
     let takeProfit = Number(instrumentListData.takeProfit);
@@ -63,7 +63,7 @@ const BasketConstituents = ({ basketData }) => {
               />
 
       {basketData.instrumentList.length > 0 ? (
-        basketData.instrumentList.map((inst, index) => {
+        instrumentList.map((inst, index) => {
           return inst?.isInvested ? (
             <Box
               key={`inst_${index}`}
@@ -367,6 +367,7 @@ const BasketConstituents = ({ basketData }) => {
                 >
                   <Text
                     fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
+                    
                     fontSize="12px"
                     fontWeight="600"
                     lineHeight="22px"

@@ -215,21 +215,23 @@ const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
 
 
   const handleConfirmOrder = () => {
-    if (total > currentBalance) {
-      toast({
-        title: "Warning",
-        description: "Your total exceeds your current balance.",
-        status: "warning",
-        duration: 5000,
-        isClosable: true,
-      });
-      return;
-    }
+    setIsSubmitting(true)
+    // if (total > currentBalance) {
+    //   toast({
+    //     title: "Warning",
+    //     description: "Your total exceeds your current balance.",
+    //     status: "warning",
+    //     duration: 5000,
+    //     isClosable: true,
+    //   });
+    //   return;
+    // }
  
     dispatch(OrderPlaced(basketId, lots, token))
       .then((res) => {
 
         if(res.data.status==="failed"){
+          setIsSubmitting(false)
           toast({
             title: "",
             description: res.data.message,
@@ -260,6 +262,7 @@ const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
           Cookies.set('whats_app_token', "");
              // Set a timer to navigate back after 10 seconds
              setTimeout(() => {
+              setIsSubmitting(false)
               navigate(`/${basketId}`); // Redirect to /basketId
             }, 10000); // 10 seconds delay
     
