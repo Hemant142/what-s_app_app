@@ -48,7 +48,7 @@ const upsidePotentialPercentage=parseInt(props.upsidePotentialPercentage)
   const [newUpsidePotential,setNewUpsidePotential]=useState(upsidePotential)
   const [bufferAmount,setBufferAmount]=useState(0)
   const [isMarketOpen,setisMarketOpen]=useState(false)
-  const [timeLeft, setTimeLeft] = useState(300); // 5 minutes = 300 seconds
+  const [timeLeft, setTimeLeft] = useState(900); // 5 minutes = 300 seconds
   const basketId = props.basketId || ''; // Ensure a default value if props.basketId is undefined
   let token = Cookies.get("whats_app_token");
   let userName = Cookies.get("user-name");
@@ -130,6 +130,16 @@ if(brokerage + othercharges + amountToInvest){
         setTimeLeft((prevTime) => {
           if (prevTime <= 1) {
             clearInterval(timerId); // Stop the timer when it reaches 0
+
+            // Show toast notification
+            toast({
+              title: "Session expired",
+              description: "Your session has expired due to inactivity.",
+              status: "error",
+              duration: 5000, // Show toast for 5 seconds
+              isClosable: true,
+            });
+
             return 0;
           }
           return prevTime - 1;
@@ -139,7 +149,7 @@ if(brokerage + othercharges + amountToInvest){
       // Cleanup function to clear interval when component unmounts
       return () => clearInterval(timerId);
     }
-  }, [token]);
+  }, [token, toast]);
 
   // Format time as MM:SS
   const formatTime = (seconds) => {
