@@ -48,7 +48,8 @@ const upsidePotentialPercentage=parseInt(props.upsidePotentialPercentage)
   const [newUpsidePotential,setNewUpsidePotential]=useState(upsidePotential)
   const [bufferAmount,setBufferAmount]=useState(0)
   const [isMarketOpen,setisMarketOpen]=useState(false)
-  const [timeLeft, setTimeLeft] = useState(900); // 5 minutes = 300 seconds
+  const [timeLeft, setTimeLeft] = useState(900); // 15 minutes = 900 seconds
+
   const basketId = props.basketId || ''; // Ensure a default value if props.basketId is undefined
   let token = Cookies.get("whats_app_token");
   let userName = Cookies.get("user-name");
