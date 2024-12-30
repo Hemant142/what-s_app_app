@@ -363,7 +363,7 @@ console.log(token,"token")
           ) : (
             // Render your basket details here when basketData is available
             <Box>
-              <BackArrow />
+              {/* <BackArrow /> */}
               <DesktopWarning />
               <BasketComponent
                 basketData={basketData}
