@@ -122,45 +122,17 @@ const OtpVerification = ({ onVerify, authToken, onResend }) => {
 
 
 
-//   const handleResendOTP = async () => {
-//     try {
-//       onResend(); // Call resend OTP function
-//       toast({
-//         title: "OTP sent to your registered email!",
-//         position: "bottom",
-//         status: "success",
-//         duration: 2000,
-//         isClosable: true,
-//       });
-//       setCountdown(60); // Reset the timer to 60 seconds
-//     } catch (error) {
-//       toast({
-//         title: "Failed to send OTP",
-//         position: "bottom",
-//         status: "error",
-//         duration: 2000,
-//         isClosable: true,
-//       });
-//     }
-//   };
-
-
-
- // Handle OTP Resend
- const handleResendOTP = async () => {
+  const handleResendOTP = async () => {
     try {
-      await dispatch(otpSend(authToken));
-setOtp("")
+      onResend(); // Call resend OTP function
       toast({
-        title: "OTP sent to your registered mobile!",
+        title: "OTP sent to your registered email!",
         position: "bottom",
         status: "success",
         duration: 2000,
         isClosable: true,
       });
-
-    //   setTimer(60);
-    //   setIsSubmitting(false);
+      setCountdown(60); // Reset the timer to 60 seconds
     } catch (error) {
       toast({
         title: "Failed to send OTP",
@@ -171,6 +143,34 @@ setOtp("")
       });
     }
   };
+
+
+
+ // Handle OTP Resend
+//  const handleResendOTP = async () => {
+//     try {
+//       await dispatch(otpSend(authToken));
+// setOtp("")
+//       toast({
+//         title: "OTP sent to your registered mobile!",
+//         position: "bottom",
+//         status: "success",
+//         duration: 2000,
+//         isClosable: true,
+//       });
+
+//     //   setTimer(60);
+//     //   setIsSubmitting(false);
+//     } catch (error) {
+//       toast({
+//         title: "Failed to send OTP",
+//         position: "bottom",
+//         status: "error",
+//         duration: 2000,
+//         isClosable: true,
+//       });
+//     }
+//   };
   
 
 
@@ -273,7 +273,8 @@ setOtp("")
         size="lg"
         w="full"
         variant="outline"
-        onClick={onResend}
+        onClick={handleResendOTP}
+        
         fontWeight="normal"
         borderRadius="md"
         py={6}

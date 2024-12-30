@@ -73,7 +73,7 @@ useEffect(()=>{
 },[token])
 
   useEffect(() => {
-    Cookies.remove('whats_app_token')
+    // Cookies.remove('whats_app_token')
     dispatch(getBasketDetails(id, token));
     dispatch(getUserInfo(token));
     dispatch(fetchLatestBasketList(id, token));
