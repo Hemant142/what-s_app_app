@@ -49,7 +49,7 @@ const OtpVerification = ({ onVerify, authToken, onResend }) => {
   };
   
 
-
+  console.log(authToken,"authToken")
   const handleOtpVerify = async (otp) => {
     if (!otp || otp.length < 4) {
       toast({
@@ -60,14 +60,16 @@ const OtpVerification = ({ onVerify, authToken, onResend }) => {
       });
       return;
     }
+  
 
     try {
       const response = await dispatch(otpVarificationClient(otp, authToken));
+      console.log(response,"otpVarificationClient")
       if (response.data.status === "success") {
-        const { verifiedAccessToken, centrumId, username } = response.data.data;
+        const { otp_access_token, centrumId, username } = response.data.data;
 
         // Store tokens and user data in cookies
-        Cookies.set("whats_app_token", verifiedAccessToken);
+        Cookies.set("whats_app_token", otp_access_token);
         Cookies.set("userId_client", centrumId);
         Cookies.set("username_client", username);
 
@@ -108,6 +110,7 @@ const OtpVerification = ({ onVerify, authToken, onResend }) => {
         });
       }
     } catch (error) {
+      console.log(error,"Error")
       toast({
         title: "Failed to verify OTP",
         description: "An error occurred",

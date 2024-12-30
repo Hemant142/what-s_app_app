@@ -1,46 +1,47 @@
 import React, { useState } from "react";
 import { Box, Text, Flex, Icon, IconButton } from "@chakra-ui/react";
 import { CiCircleCheck } from "react-icons/ci";
-import { motion } from "framer-motion";  // Import motion for animation
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";  // Pagination icons
+import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import { motion } from "framer-motion";  // Import motion from framer-motion
 
-const Activity = ({ basketData }) => {
-  // const totalData = [...basketData?.instrumentList, ...basketData?.instrumentList];
-
-  const instrumentList = basketData.concerns.flatMap(concern => concern.instruments);
-
+export default function YourActivity({ basketHistory }) {
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 8;
-  const totalPages = Math.ceil(instrumentList.length / itemsPerPage);
+  const itemsPerPage = 10;
+  const totalPages = Math.ceil(basketHistory.length / itemsPerPage);
 
   const historyFormatDate = (dateString) => {
     const date = new Date(dateString);
     const options = { year: "numeric", month: "short", day: "numeric" };
-    return date.toLocaleDateString("en-US", options);
+    const formattedDate = date.toLocaleDateString("en-US", options);
+    const formattedTime = date.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit" });
+    return `${formattedDate} ${formattedTime}`;
   };
 
-  // Handle page change (next/previous)
   const handleNextPage = () => {
     if (currentPage < totalPages) {
       setCurrentPage(currentPage + 1);
+      setDirection("next"); // Set direction for next page
     }
   };
 
   const handlePreviousPage = () => {
     if (currentPage > 1) {
       setCurrentPage(currentPage - 1);
+      setDirection("previous"); // Set direction for previous page
     }
   };
 
-  // Calculate the items for the current page
+  const [direction, setDirection] = useState("next"); // Direction of page transition
+
+  // Determine the range of items for the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const currentItems = instrumentList.slice(startIndex, endIndex);
+  const currentItems = basketHistory.slice(startIndex, endIndex);
 
   return (
     <Box p={4}>
-      <Text fontSize="md" fontWeight="bold" fontFamily={"Helvetica"} mb={4}> {/* Reduced from 2xl to xl */}
-        Basket Activity
+      <Text fontSize="md" fontWeight="bold" mb={4} fontFamily={"Helvetica"}>
+        Your Activity
       </Text>
       <Box
         backgroundColor="rgba(38, 42, 51, 1)"
@@ -48,71 +49,56 @@ const Activity = ({ basketData }) => {
         borderRadius="md"
         boxShadow="md"
       >
-        <Box m={"4%"} display="flex" alignItems="center" gap={2} width="100%">
-          <Flex align="center" gap={2} width="40%">
-            <Icon as={CiCircleCheck} boxSize={5} color="#1DD75B" /> {/* Reduced icon size */}
-            <Text fontFamily="Inter" fontSize="12px" fontWeight="500" textAlign="left">
-              {historyFormatDate(basketData?.creationTime)}
-            </Text>
-          </Flex>
-
-          <Text
-            fontFamily="Inter"
-            fontSize="12px"  // Reduced from 14px to 12px
-            fontWeight="500"
-            textAlign="left"
-            width="50%"
-          >
-            Basket Created
-          </Text>
-        </Box>
-
         <motion.div
-          key={currentPage} // Trigger re-render for each page change
-          initial={{ x: 100 }}  // Start from right
-          animate={{ x: 0 }}  // Move to center
-          exit={{ x: -100 }}  // Slide out to left
-          transition={{ type: "spring", stiffness: 300, damping: 30 }}
+          key={currentPage}  // Key to trigger re-mounting for animation on page change
+          initial={{ x: direction === "next" ? "100%" : "-100%" }}  // Start from left or right based on direction
+          animate={{ x: 0 }}  // Move to the center
+          exit={{ x: direction === "next" ? "-100%" : "100%" }}  // Slide out to the opposite side
+          transition={{ type: "spring", stiffness: 300, damping: 30 }} // Animation timing
         >
           {currentItems?.length > 0 ? (
-            currentItems.reverse().map((inst, index) => (
+            currentItems.map((inst, index) => (
               <Box
                 key={`inst_${index}`}
                 m={"4%"}
                 display="flex"
                 alignItems="center"
-                gap={4}
+                gap={2}
                 width="100%"
               >
-                <Flex align="center" gap={2} width="40%">
-                  <Icon as={CiCircleCheck} boxSize={5} color="#1DD75B" /> {/* Reduced icon size */}
+                <Flex align="center" gap={2} width="48%" >
+                  <Icon as={CiCircleCheck} boxSize={5} color="#1DD75B" />
                   <Text fontFamily="Inter" fontSize="12px" fontWeight="500" textAlign="left">
                     {historyFormatDate(inst?.createdAt)}
                   </Text>
                 </Flex>
 
                 <Text
+              
                   fontFamily="Inter"
-                  fontSize="12px"  // Reduced from 14px to 12px
+                  fontSize="12px"
                   fontWeight="500"
                   textAlign="left"
-                  width="60%"
+                  width="50%"
                 >
-                  {inst?.instrument} {inst?.orderType === "ENTRY" ? "Added" : "Removed"}
+                  {inst?.instrument}
+                  {/* ({inst?.lotMultiplier}) */}
+                  {" "}
+                  {inst?.orderType === "ENTRY" ? "Invested" : "Basket Exit"}
                 </Text>
               </Box>
             ))
           ) : (
-            <Text fontSize="12px" textAlign="center" color="gray.500"> {/* Reduced from 14px to 12px */}
-              Please Start Investment
+            <Text fontSize="18px" textAlign="center" color="gray.500">
+              You never invested in this basket
             </Text>
           )}
         </motion.div>
       </Box>
 
       {/* Pagination Controls */}
-      {totalPages > 1 && (
-        <Flex alignItems="center" justifyContent="center" mt={4} gap={4}>
+      {totalPages>1&&(
+          <Flex alignItems="center" justifyContent="center" mt={4} gap={4}>
           <IconButton
             onClick={handlePreviousPage}
             disabled={currentPage === 1}
@@ -138,8 +124,7 @@ const Activity = ({ basketData }) => {
           />
         </Flex>
       )}
+    
     </Box>
   );
-};
-
-export default Activity;
+}

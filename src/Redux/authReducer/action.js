@@ -3,6 +3,9 @@ import axios from "axios";
 
 let URL= process.env.REACT_APP_STOQCLUB_URL
 let NewURL=process.env.REACT_APP_NewURL;
+// let V3_URL = process.env.REACT_APP_VTHREE
+let V3_URL = process.env.REACT_APP_VTHREE_AWS
+let GET_BALANCE_URL = process.env.REACT_APP_GET_BALANCE;  // Correct case of environment variable
 
 
 // Action for OTP verification
@@ -11,7 +14,7 @@ export const otpVarificationClient = (otp, authToken) => (dispatch) => {
 
   // Make API call to verify the OTP
   return axios.post(
-    `${NewURL}app/client/verify-otp?otp=${otp}`, 
+    `${V3_URL}centrum-galaxc/user/v3/auth/verify-otp/client?otp=${otp}`, 
     {}, // Pass an empty object for the body
     {
       headers: {
@@ -34,20 +37,29 @@ export const otpSend=(token)=>(dispatch)=>{
   )
 
 }
+
 export const clientToken = (data) => (dispatch) => {
 
     dispatch({ type: USER_LOADING });
     return axios.post(
-      `${NewURL}/app/client/generate-token?userId=${data.userId}&password=${data.panCard}`
+      `${V3_URL}centrum-galaxc/user/v3/auth/genrate-otp/client?userId=${data.userId}&password=${data.panCard}`
     );
   };
 
-export const getUserInfo=(userId)=>(dispatch)=>{
+export const getUserInfo=(token)=>(dispatch)=>{
   dispatch({ type: USER_LOADING });
-  axios.get(`${URL}get-balance/v2?user_id=${userId}`)
+
+  axios.get(`${V3_URL}centrum-galaxc/user/v3/client/client-info`,
+
+    {
+      headers: {
+        Authorization: `Bearer ${token}`, // Pass Bearer token for authentication
+      },
+    }
+  )
   .then((res)=>{
- 
-    if(res.data.status==="SUCCESS"){
+
+    if(res.data.status==="success"){
       dispatch({type:USER_LOGIN_SUCCESS, payload:res.data.data})
     }
     
@@ -57,8 +69,6 @@ export const getUserInfo=(userId)=>(dispatch)=>{
   })
 }
 
-
-
 export const getBalance = (token) => (dispatch) => {
   return axios
     .get(`${NewURL}app/client/get-client-balance`, {
@@ -67,7 +77,7 @@ export const getBalance = (token) => (dispatch) => {
       },
     })
     .then((res) => {
-     
+
       if(res.data.status==="success"){
 
         dispatch({ type: USER_BALANCE_SUCCESS, payload: res.data.data.balance }); // Assuming the balance is in res.data.balance
@@ -79,4 +89,3 @@ export const getBalance = (token) => (dispatch) => {
       throw error; // Throw the error to handle it outside if needed
     });
 };
-

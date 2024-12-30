@@ -44,6 +44,7 @@ const Login = () => {
     if(token&&id){
       navigate(`/basket/${id}`)
     }
+   
 
   }, [id,token]);
 
@@ -72,10 +73,11 @@ const Login = () => {
 
       // Dispatch action and handle the promise
       dispatch(clientToken(data))
-        .then((res) => {
-       
-          Cookies.set("userId", userId);
-          if (res.data.status === "failed") {
+      .then((res) => {
+console.log(res,"clientToken")
+   Cookies.set('userId',userId)
+          // setIsOTPDrawerOpen(true); // Open OTP drawer if login is successful
+          if(res.data.status==="failed"){
             toast({
               title: res.data.message,
               position: "bottom",
@@ -83,9 +85,12 @@ const Login = () => {
               duration: 2000,
               isClosable: true,
             });
-          } else if (res.data.access_token) {
-            let token = res.data.access_token;
-            setAuthToken(token);
+          }
+          if(res.data.status==="success"&&res.data.data.otp_access_token){
+            
+            let token=res.data.data.otp_access_token
+       
+            setAuthToken(token)
             toast({
               title: "Please Wait",
               position: "bottom",
@@ -93,41 +98,55 @@ const Login = () => {
               duration: 2000,
               isClosable: true,
             });
-
+  
+            toast({
+                      title: "OTP sent to your registered Mobile!",
+                      position: "bottom",
+                      status: "success",
+                      duration: 2000,
+                      isClosable: true,
+                    });
+                    setIsOTPDrawerOpen(true)
             // Send OTP request using the Bearer token
-            dispatch(otpSend(token))
-              .then((otpResponse) => {
+          // dispatch(otpSend(token))
+          //     .then((otpResponse) => {
+              
+          //       toast({
+          //         title: "OTP sent to your registered Mobile!",
+          //         position: "bottom",
+          //         status: "success",
+          //         duration: 2000,
+          //         isClosable: true,
+          //       });
+          //       setIsOTPDrawerOpen(true)
+             
+              
                
-                toast({
-                  title: "OTP sent to your registered mobile!",
-                  position: "bottom",
-                  status: "success",
-                  duration: 2000,
-                  isClosable: true,
-                });
-                setIsOTPDrawerOpen(true);
-              })
-              .catch((otpError) => {
-                toast({
-                  title: "Failed to send OTP",
-                  position: "bottom",
-                  status: "error",
-                  duration: 2000,
-                  isClosable: true,
-                });
-              });
+               
+          //     })
+          //     .catch((otpError) => {
+          //       toast({
+          //         title: "Failed to send OTP",
+          //         position: "bottom",
+          //         status: "error",
+          //         duration: 2000,
+          //         isClosable: true,
+          //       });
+          //     });
           }
-        })
-        .catch((error) => {
-          console.log(error, "Error");
-          toast({
-            title: "Login failed.",
-            description: error.message || "An error occurred.",
-            status: "error",
-            duration: 3000,
-            isClosable: true,
-          });
+       
+        
+      })
+      .catch((error) => {
+        console.log(error, "Error");
+        toast({
+          title: "Login failed.",
+          description: error.message || "An error occurred.",
+          status: "error",
+          duration: 3000,
+          isClosable: true,
         });
+      });
     } else {
       toast({
         title: "Please fill in all fields.",
@@ -149,10 +168,11 @@ const Login = () => {
       });
       return;
     }
-
+console.log(otp,"OTP")
+console.log(authToken,"authToken")
     try {
       const response = await dispatch(otpVarificationClient(otp, authToken));
- 
+ console.log(response,"otpVarificationClient res")
       if (response.data.status === "success") {
         const { verifiedAccessToken, centrumId, username } = response.data.data;
 

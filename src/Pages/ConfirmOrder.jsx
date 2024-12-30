@@ -28,6 +28,7 @@ import { FaCircleCheck, FaStar } from "react-icons/fa6";
 import { CiCircleCheck } from "react-icons/ci";
 import CustomToast from "../Components/ConfirmOrder/CustomToast";
 import { OrderPlaced } from "../Redux/basketReducer/action";
+// import { OrderPlaced } from "../Redux/basketReducer/action";
 
 const ConfirmOrder = () => {
   const location = useLocation();
@@ -95,48 +96,115 @@ const formattedTotal = (total || 0).toLocaleString();
 
 
 
-    const handleConfirmOrder = () => {
-      if (total > currentBalance) {
+//     const handleConfirmOrder = () => {
+//       if (total > currentBalance) {
+//         toast({
+//           title: 'Warning',
+//           description: "Your total exceeds your current balance.",
+//           status: 'warning',
+//           duration: 5000,
+//           isClosable: true,
+//         });
+//         return;
+//       }
+
+//       // Cookies.set('whats_app_token',"")
+//       // Cookies.set('basketId',"")
+//       dispatch(OrderPlaced(basketId,lots,token))
+//       .then((res)=>{
+//       c
+        
+//       })
+//       .catch((error)=>{
+//         console.log(error,"error confirm order ")
+//       })
+
+      
+//       toast({
+//         duration: 10000,
+//         position: 'bottom',
+//         render: (props) => (
+//           <CustomToast
+//             userName={userName}
+//             rating={rating}
+//             tempRating={tempRating}
+//             setTempRating={setTempRating}
+//             handleStarClick={handleStarClick}
+//             onClose={props.onClose}
+//           />
+//         ),
+//       });
+  
+
+// };
+  
+
+const handleConfirmOrder = () => {
+  // if (total > currentBalance) {
+  //   toast({
+  //     title: "Warning",
+  //     description: "Your total exceeds your current balance.",
+  //     status: "warning",
+  //     duration: 5000,
+  //     isClosable: true,
+  //   });
+  //   return;
+  // }
+
+ 
+  setIsSubmitting(true)
+  dispatch(OrderPlaced(basketId,lots,token))
+    .then((res) => {
+      // console.log(res,"response OrderPlaced")
+
+      if(res.data.status==="failed"){
+        setIsSubmitting(false)
         toast({
-          title: 'Warning',
-          description: "Your total exceeds your current balance.",
-          status: 'warning',
+          title: "",
+          description: res.data.message,
+          status: "warning",
           duration: 5000,
           isClosable: true,
         });
-        return;
       }
 
-      Cookies.set('whats_app_token',"")
-      Cookies.set('basketId',"")
-      dispatch(OrderPlaced(basketId,lots,token))
-      .then((res)=>{
-      
-        
-      })
-      .catch((error)=>{
-        console.log(error,"error confirm order ")
-      })
 
+      if (res.data.status === "success") {
       
-      toast({
-        duration: 10000,
-        position: 'bottom',
-        render: (props) => (
-          <CustomToast
-            userName={userName}
-            rating={rating}
-            tempRating={tempRating}
-            setTempRating={setTempRating}
-            handleStarClick={handleStarClick}
-            onClose={props.onClose}
-          />
-        ),
-      });
+        toast({
+                  duration: 10000,
+                  position: 'bottom',
+                  render: (props) => (
+                    <CustomToast
+                      userName={userName}
+                      rating={rating}
+                      tempRating={tempRating}
+                      setTempRating={setTempRating}
+                      handleStarClick={handleStarClick}
+                      onClose={props.onClose}
+                    />
+                  ),
+                });
+      
+                  Cookies.set('whats_app_token',"")
+ Cookies.set('basketId',"")
+      
+           // Set a timer to navigate back after 10 seconds
+          //  setTimeout(() => {
+          //   setIsSubmitting(false)
+          //   navigate(`/home`)
+          // }, 10000); // 10 seconds delay
   
+      }
+      
+    })
+
+    .catch((error) => {
+      console.log(error, "error confirm order ");
+    });
 
 };
-  
+
     const handleStarClick = (starRating) => {
       setRating(starRating); // Set rating immediately
     };
