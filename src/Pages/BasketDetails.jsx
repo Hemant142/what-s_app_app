@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import {
   fetchLatestBasketList,
   getBasketCalculation,
@@ -34,9 +34,10 @@ export default function BasketDetails() {
   // const [basketData, setBasketData] = useState(null);
   const [brokerage, setBrokerage] = useState(0);
   const [instrumentList, setInstrumentList] = useState([]);
+    const navigate=useNavigate()
 
   const token = Cookies.get("whats_app_token");
-console.log(token,"token")
+
   const { id } = useParams();
   const dispatch = useDispatch();
   const [upsidePotential, setUpsidePotential] = useState(0);
@@ -64,18 +65,22 @@ console.log(token,"token")
     (store) => store.basketReducer
   );
 
-  console.log(orderHoldings,"abcdefg")
   // const currentBalance = userDetails?.clientInfo?.TotalBalance
+useEffect(()=>{
+  if(!token){
+    navigate(`/${id}`)
+  }
+},[token])
 
   useEffect(() => {
-   
+    Cookies.remove('whats_app_token')
     dispatch(getBasketDetails(id, token));
     dispatch(getUserInfo(token));
     dispatch(fetchLatestBasketList(id, token));
     dispatch(getOrderHoldings(id,token));
     dispatch(getOrderHistory(id, token))
       .then((res) => {
-       console.log(res,"getOrderHistory")
+   
         if (res.data.status === "success") {
           setOrderHistory(res.data.data.list);
           // if (res.data.data.orderHistory.length > 0) {

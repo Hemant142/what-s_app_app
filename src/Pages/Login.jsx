@@ -74,7 +74,7 @@ const Login = () => {
       // Dispatch action and handle the promise
       dispatch(clientToken(data))
       .then((res) => {
-console.log(res,"clientToken")
+
    Cookies.set('userId',userId)
           // setIsOTPDrawerOpen(true); // Open OTP drawer if login is successful
           if(res.data.status==="failed"){
@@ -157,6 +157,10 @@ console.log(res,"clientToken")
     }
   };
 
+  const resendOTP = ()=>{
+    handleLogin()
+    console.log("resending OTP")
+  }
   // Handle OTP verification
   const handleOtpVerify = async (otp) => {
     if (!otp || otp.length < 4) {
@@ -168,11 +172,10 @@ console.log(res,"clientToken")
       });
       return;
     }
-console.log(otp,"OTP")
-console.log(authToken,"authToken")
+
     try {
       const response = await dispatch(otpVarificationClient(otp, authToken));
- console.log(response,"otpVarificationClient res")
+
       if (response.data.status === "success") {
         const { verifiedAccessToken, centrumId, username } = response.data.data;
 
@@ -239,7 +242,7 @@ console.log(authToken,"authToken")
 
     {/* OTP Verification Component */}
     {isOTPDrawerOpen ? (
-      <OtpVerification onVerify={handleOtpVerify} authToken={authToken} />
+      <OtpVerification onVerify={handleOtpVerify} authToken={authToken} onResend={resendOTP} />
     ) : (
       <Box
         bg="#262A33"

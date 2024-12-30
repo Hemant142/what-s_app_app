@@ -49,7 +49,6 @@ const OtpVerification = ({ onVerify, authToken, onResend }) => {
   };
   
 
-  console.log(authToken,"authToken")
   const handleOtpVerify = async (otp) => {
     if (!otp || otp.length < 4) {
       toast({
@@ -64,7 +63,7 @@ const OtpVerification = ({ onVerify, authToken, onResend }) => {
 
     try {
       const response = await dispatch(otpVarificationClient(otp, authToken));
-      console.log(response,"otpVarificationClient")
+
       if (response.data.status === "success") {
         const { otp_access_token, centrumId, username } = response.data.data;
 
@@ -274,7 +273,7 @@ setOtp("")
         size="lg"
         w="full"
         variant="outline"
-        onClick={handleResendOTP}
+        onClick={onResend}
         fontWeight="normal"
         borderRadius="md"
         py={6}
