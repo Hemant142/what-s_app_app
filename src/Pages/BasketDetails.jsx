@@ -65,6 +65,7 @@ export default function BasketDetails() {
     (store) => store.basketReducer
   );
 
+  console.log(userDetails,"userDetails")
   // const currentBalance = userDetails?.clientInfo?.TotalBalance
 useEffect(()=>{
   if(!token){
@@ -334,7 +335,7 @@ useEffect(()=>{
 
   return (
     <Box>
-      {Object.keys(basketData)?.length === 0 ? (
+      {Object.keys(basketData)?.length === 0 && Object.keys(userDetails)?.length === 0? (
         <Loader />
       ) : (
         // <InvestmentSection
@@ -502,7 +503,7 @@ useEffect(()=>{
                   basketId={id}
                   minReq={minAmount || 0} // Provide a default value if fundRequired is undefined
                   basketName={basketData.title || "N/A"} // Provide a default if title is undefined
-                  currentBalance={Number(currentBalance) || 0} // Provide a default if currentBalance is undefined
+                  currentBalance={Number(userDetails?.clientInfo?.TotalBalance) } // Provide a default if currentBalance is undefined
                   instrumentList={newInstrumentsData || []} // Provide a default if instrumentList is undefined
                   upsidePotential={upsidePotential || 0}
                   orderHistory={orderHistory?.length}
