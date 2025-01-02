@@ -59,6 +59,7 @@ export const getUserInfo=(token)=>(dispatch)=>{
   )
   .then((res)=>{
 
+    
     if(res.data.status==="success"){
       dispatch({type:USER_LOGIN_SUCCESS, payload:res.data.data})
     }
