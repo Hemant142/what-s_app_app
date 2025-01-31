@@ -47,7 +47,8 @@ const upsidePotentialPercentage=parseInt(props.upsidePotentialPercentage)
   // const [upsidePotential,setUpsidePotential]=useState(0)
   const [newUpsidePotential,setNewUpsidePotential]=useState(upsidePotential)
   const [bufferAmount,setBufferAmount]=useState(0)
-  const [isMarketOpen,setisMarketOpen]=useState(false)
+  // const [isMarketOpen,setisMarketOpen]=useState(false)
+  const [isMarketOpen, setIsMarketOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState(900); // 15 minutes = 900 seconds
 
   const basketId = props.basketId || ''; // Ensure a default value if props.basketId is undefined
@@ -74,56 +75,92 @@ if(brokerage + othercharges + amountToInvest){
   }, [minReqAmt]);
 
 
+  // useEffect(() => {
+  //   const checkTimeAndDate = () => {
+  //     const now = new Date();
+  
+  //     // Get the current UTC time
+  //     const utcHours = now.getUTCHours();
+  //     const utcMinutes = now.getUTCMinutes();
+  
+  //     // Convert UTC time to Indian Standard Time (IST) by adding 5 hours 30 minutes
+  //     const istHours = utcHours + 5;
+  //     const istMinutes = utcMinutes + 30;
+  
+  //     // Adjust for overflow if minutes exceed 60
+  //     let currentISTHours = istHours;
+  //     let currentISTMinutes = istMinutes;
+  //     if (istMinutes >= 60) {
+  //       currentISTHours += 1;
+  //       currentISTMinutes = istMinutes - 60;
+  //     }
+  
+  //     // Adjust for overflow if hours exceed 24 (next day)
+  //     if (currentISTHours >= 24) {
+  //       currentISTHours = currentISTHours - 24;
+  //     }
+  
+  //     // Convert the time to minutes from midnight (IST)
+  //     const currentTimeInMinutes = currentISTHours * 60 + currentISTMinutes;
+  
+  //     const marketOpenTime = 9 * 60 + 15; // 9:15 AM IST in minutes
+  //     const marketCloseTime = 15 * 60 + 20; // 3:20 PM IST in minutes
+  
+  //     // Get the current day in IST (0 = Sunday, 6 = Saturday)
+  //     const istDay = (now.getUTCDay() + 5 / 24 + 30 / 1440) % 7; // Adjust for IST day offset
+  
+  //     // Check if it's a weekday (Monday to Friday)
+  //     if (istDay >= 1 && istDay <= 5) {
+  //       // Check if the current time is between market open and close times in IST
+  //       if (currentTimeInMinutes >= marketOpenTime && currentTimeInMinutes <= marketCloseTime) {
+  //         setisMarketOpen(true);  // Market is open
+  //       } else {
+  //         setisMarketOpen(false);  // Market is closed
+  //       }
+  //     } else {
+  //       setisMarketOpen(false);  // It's a weekend
+  //     }
+  //   };
+  
+  //   checkTimeAndDate();
+  // }, []);
+  
   useEffect(() => {
     const checkTimeAndDate = () => {
-      const now = new Date();
-  
-      // Get the current UTC time
-      const utcHours = now.getUTCHours();
-      const utcMinutes = now.getUTCMinutes();
-  
-      // Convert UTC time to Indian Standard Time (IST) by adding 5 hours 30 minutes
-      const istHours = utcHours + 5;
-      const istMinutes = utcMinutes + 30;
-  
-      // Adjust for overflow if minutes exceed 60
-      let currentISTHours = istHours;
-      let currentISTMinutes = istMinutes;
-      if (istMinutes >= 60) {
-        currentISTHours += 1;
-        currentISTMinutes = istMinutes - 60;
-      }
-  
-      // Adjust for overflow if hours exceed 24 (next day)
-      if (currentISTHours >= 24) {
-        currentISTHours = currentISTHours - 24;
-      }
-  
+      // Get current time in IST directly
+      const nowIST = new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
+      const now = new Date(nowIST);
+
+      const currentISTHours = now.getHours(); // Get IST hours
+      const currentISTMinutes = now.getMinutes(); // Get IST minutes
+      const currentDay = now.getDay(); // Get IST day (0 = Sunday, 6 = Saturday)
+
+      console.log(currentISTHours, "currentISTHours");
+      console.log(currentISTMinutes, "currentISTMinutes");
+
       // Convert the time to minutes from midnight (IST)
       const currentTimeInMinutes = currentISTHours * 60 + currentISTMinutes;
-  
       const marketOpenTime = 9 * 60 + 15; // 9:15 AM IST in minutes
       const marketCloseTime = 15 * 60 + 20; // 3:20 PM IST in minutes
-  
-      // Get the current day in IST (0 = Sunday, 6 = Saturday)
-      const istDay = (now.getUTCDay() + 5 / 24 + 30 / 1440) % 7; // Adjust for IST day offset
-  
+
+      console.log(marketOpenTime, "marketOpenTime");
+      console.log(currentTimeInMinutes, "currentTimeInMinutes");
+
       // Check if it's a weekday (Monday to Friday)
-      if (istDay >= 1 && istDay <= 5) {
+      if (currentDay >= 1 && currentDay <= 5) {
         // Check if the current time is between market open and close times in IST
         if (currentTimeInMinutes >= marketOpenTime && currentTimeInMinutes <= marketCloseTime) {
-          setisMarketOpen(true);  // Market is open
+          setIsMarketOpen(true); // Market is open
         } else {
-          setisMarketOpen(false);  // Market is closed
+          setIsMarketOpen(false); // Market is closed
         }
       } else {
-        setisMarketOpen(false);  // It's a weekend
+        setIsMarketOpen(false); // It's a weekend
       }
     };
-  
+
     checkTimeAndDate();
   }, []);
-  
   
   useEffect(() => {
     if (token) {

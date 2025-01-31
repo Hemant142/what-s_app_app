@@ -5,7 +5,17 @@ import { Badge } from '@chakra-ui/react';
 import ArrowIcon from './ArrowIcon';
 import PercentageChange from './PercentageChange';
 
-const BasketHeader = ({ basketData }) => {
+const getPreviousMonth = () => {
+  const date = new Date();
+  date.setMonth(date.getMonth() - 1);
+  return date.toLocaleString('en-US', { month: 'short' });
+};
+
+const BasketHeader = ({ basketData,basketLastMonthReturn }) => {
+  const month = basketLastMonthReturn?.month 
+  ? basketLastMonthReturn.month.slice(0, 3).toUpperCase()
+  : getPreviousMonth().toUpperCase();
+const underlyingValue = basketLastMonthReturn ?? 0;
   return (
     <Flex
     textAlign={"left"}
@@ -35,10 +45,9 @@ const BasketHeader = ({ basketData }) => {
       >
         {basketData.title}
       </Heading>
-      <ArrowIcon monthProfitFlag={basketData.monthProfitFlag} />
+      <ArrowIcon monthProfitFlag={underlyingValue} />
       <PercentageChange
-        monthProfitFlag={basketData.monthProfitFlag} 
-        monthPercentageReturns={basketData.monthPercentageReturns} 
+      monthProfitFlag={underlyingValue}
       />
       <Badge
        fontFamily={"Epilogue"}
@@ -53,7 +62,7 @@ const BasketHeader = ({ basketData }) => {
         marginRight={2}
       >
         {/* {basketData.month} */}
-        sep
+        {month}
       </Badge>
     </Flex>
   );

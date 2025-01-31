@@ -65,7 +65,7 @@ export default function BasketDetails() {
     (store) => store.basketReducer
   );
 
-  console.log(userDetails,"userDetails")
+ 
   // const currentBalance = userDetails?.clientInfo?.TotalBalance
 useEffect(()=>{
   if(!token){
@@ -332,7 +332,7 @@ useEffect(()=>{
 
   const underlyingIndex = "NIFTY 50";
   const sixMonthsReturns = 5.7; // Example performance percentage
-
+console.log(singleBasketInfo,"singleBasketInfo")
   return (
     <Box>
       {Object.keys(basketData)?.length === 0 && Object.keys(userDetails)?.length === 0? (
@@ -373,7 +373,7 @@ useEffect(()=>{
               <DesktopWarning />
               <BasketComponent
                 basketData={basketData}
-                basketLastMonthReturn={basketCalculation?.basketLastMonthReturn}
+                basketLastMonthReturn={singleBasketInfo.lastMonthReturn}
               />
 
               {Object.keys(singleBasketInfo)?.length > 0 && (
