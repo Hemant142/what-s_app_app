@@ -38,7 +38,7 @@ const upsidePotentialPercentage=parseInt(props.upsidePotentialPercentage)
   const [amountToInvest, setAmountToInvest] = useState(minReqAmt); // Set initial amount based on minReqAmt
   const [lots, setLots] = useState(1); // Initial lot size as 1
   const [apiLoader, setApiLoader] = useState(false);
-  const [brokerage, setBrokerage] = useState(345); // Default value can be set here instead of `useEffect`
+  const [brokerage, setBrokerage] = useState(0); // Default value can be set here instead of `useEffect`
   const [othercharges, setOtherCharges] = useState(237); // Same for other charges
   const [total, setTotal] = useState(brokerage + othercharges + minReqAmt);
   const [rating, setRating] = useState(null);
@@ -71,6 +71,7 @@ if(brokerage + othercharges + amountToInvest){
   useEffect(() => {
     if (minReqAmt) {
       setAmountToInvest(minReqAmt);
+      setBrokerage(minReqAmt*0.005)
     }
   }, [minReqAmt]);
 
@@ -135,16 +136,14 @@ if(brokerage + othercharges + amountToInvest){
       const currentISTMinutes = now.getMinutes(); // Get IST minutes
       const currentDay = now.getDay(); // Get IST day (0 = Sunday, 6 = Saturday)
 
-      console.log(currentISTHours, "currentISTHours");
-      console.log(currentISTMinutes, "currentISTMinutes");
+ 
 
       // Convert the time to minutes from midnight (IST)
       const currentTimeInMinutes = currentISTHours * 60 + currentISTMinutes;
       const marketOpenTime = 9 * 60 + 15; // 9:15 AM IST in minutes
       const marketCloseTime = 15 * 60 + 20; // 3:20 PM IST in minutes
 
-      console.log(marketOpenTime, "marketOpenTime");
-      console.log(currentTimeInMinutes, "currentTimeInMinutes");
+    
 
       // Check if it's a weekday (Monday to Friday)
       if (currentDay >= 1 && currentDay <= 5) {
@@ -233,6 +232,7 @@ const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
     if (newAmount <= currentBalance) {
       setLots(newLots);
       setAmountToInvest(newAmount);
+      setBrokerage(newAmount*0.005)
       setNewUpsidePotential(newUpsidePotential)
 
     } else {
@@ -248,6 +248,7 @@ const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
    
       setLots(newLots);
       setAmountToInvest(newAmount);
+      setBrokerage(newAmount*0.005)
       setNewUpsidePotential(latestUpsidePotential)
    
     } else {
@@ -344,7 +345,8 @@ const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
     return upsidePotentialPercentage;
   };
 
-
+// 0.005*totalcost=brockrage 
+// Add to toal cost 
 
   const handleUpsidePotential = (instrumentListData) => {
 
@@ -511,7 +513,7 @@ const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
       overflow="hidden"
       textOverflow="ellipsis" // Handle overflow with ellipsis for long text
     >
-      {newUpsidePotential===0?upsidePotential:newUpsidePotential} ({upsidePotentialPercentage.toLocaleString('en-IN')}%)
+      {newUpsidePotential===0?upsidePotential.toFixed(1):newUpsidePotential.toFixed(2)} ({upsidePotentialPercentage.toLocaleString('en-IN')}%)
     </Text>
   </Box>
 </Box>

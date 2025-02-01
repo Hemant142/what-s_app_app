@@ -6,7 +6,7 @@ export default function PrivateRoute({ children }) {
   const token = Cookies.get('whats_app_token'); // Assuming this is your authentication token
   const location = useLocation();
   const { id } = useParams();
-console.log(token,"TOKEN")
+
 // const basketId=Cookies.get('basketId')
   // Extract the `id` from the URL if it exists
   const currentPath = location.pathname;

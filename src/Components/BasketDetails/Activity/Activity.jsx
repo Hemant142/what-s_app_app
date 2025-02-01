@@ -7,11 +7,17 @@ import { FaChevronLeft, FaChevronRight } from "react-icons/fa";  // Pagination i
 const Activity = ({ basketData }) => {
   // const totalData = [...basketData?.instrumentList, ...basketData?.instrumentList];
 
-  const instrumentList = basketData.concerns.flatMap(concern => concern.instruments);
+  // const instrumentList = basketData.concerns.flatMap(concern => concern.instruments);
+  const instrumentList = (basketData?.concerns ?? []).flatMap(
+    (concern) => concern?.instruments ?? []
+  );
+  
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 8;
-  const totalPages = Math.ceil(instrumentList.length / itemsPerPage);
+  // const totalPages = Math.ceil(instrumentList.length / itemsPerPage);
+  const totalPages = instrumentList.length > 0 ? Math.ceil(instrumentList.length / itemsPerPage) : 1;
+
 
   const historyFormatDate = (dateString) => {
     const date = new Date(dateString);
@@ -75,7 +81,7 @@ const Activity = ({ basketData }) => {
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
         >
           {currentItems?.length > 0 ? (
-            currentItems.reverse().map((inst, index) => (
+            [...currentItems].reverse().map((inst, index) => (
               <Box
                 key={`inst_${index}`}
                 m={"4%"}

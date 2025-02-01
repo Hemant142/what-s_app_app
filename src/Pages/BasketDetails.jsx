@@ -175,11 +175,15 @@ useEffect(()=>{
     }
 
     setCurrentBalance(userDetails?.clientInfo?.TotalBalance);
-    let basketHistory = basketData?.concerns?.flatMap(
-      (concern) => concern.instruments
+    // let basketHistory = basketData?.concerns?.flatMap(
+    //   (concern) => concern.instruments
+    // );
+    let basketHistory = (basketData?.concerns ?? []).flatMap(
+      (concern) => concern.instruments || []
     );
+  
     setBasketHistory(basketHistory);
-  }, [basketData, newInstrumentsData]);
+  }, [basketData, newInstrumentsData,userDetails]);
 
   useEffect(() => {
     const currentDate = new Date();
@@ -332,7 +336,7 @@ useEffect(()=>{
 
   const underlyingIndex = "NIFTY 50";
   const sixMonthsReturns = 5.7; // Example performance percentage
-console.log(singleBasketInfo,"singleBasketInfo")
+
   return (
     <Box>
       {Object.keys(basketData)?.length === 0 && Object.keys(userDetails)?.length === 0? (

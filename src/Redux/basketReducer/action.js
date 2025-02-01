@@ -152,7 +152,7 @@ export const getSingleBasketInfo = (id,token) =>(dispatch) => {
     },
   })
   .then((res) => {
-   console.log(res,"getSingleBasketInfo")
+ 
  
  if(res.data.status==='success'){
 
@@ -176,7 +176,7 @@ export const getOrderHoldings = (id,token) =>(dispatch) => {
     },
   })
   .then((res) => {
-   console.log(res,"getOrderHoldings")
+ 
  
  if(res.data.status==='success'){
 
