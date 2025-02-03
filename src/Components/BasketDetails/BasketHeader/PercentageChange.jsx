@@ -1,6 +1,7 @@
 import { Text } from '@chakra-ui/react';
 
 const PercentageChange = ({ monthProfitFlag }) => {
+ 
   return (
     <Text
       marginX={2}

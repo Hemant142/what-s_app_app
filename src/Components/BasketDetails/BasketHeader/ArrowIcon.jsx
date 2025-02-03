@@ -4,10 +4,10 @@ import { IoIosArrowRoundUp, IoIosArrowRoundDown } from 'react-icons/io';
 const ArrowIcon = ({ monthProfitFlag }) => {
   return (
     <Icon
-      // as={monthProfitFlag === "green" ? IoIosArrowRoundUp : IoIosArrowRoundDown}
-      as={IoIosArrowRoundUp}
-      // color={monthProfitFlag === "green" ? "green" : "red"}
-      color={"green"}
+      as={monthProfitFlag >0 ? IoIosArrowRoundUp : IoIosArrowRoundDown}
+      // as={IoIosArrowRoundUp}
+      color={monthProfitFlag >0 ? "#1DD75B" : "#E05858"}
+      // color={"green"}
       className="arrow-icon"
       
       height="auto"
