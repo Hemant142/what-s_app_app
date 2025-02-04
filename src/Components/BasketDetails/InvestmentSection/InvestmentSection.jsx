@@ -39,8 +39,8 @@ const upsidePotentialPercentage=parseInt(props.upsidePotentialPercentage)
   const [lots, setLots] = useState(1); // Initial lot size as 1
   const [apiLoader, setApiLoader] = useState(false);
   const [brokerage, setBrokerage] = useState(0); // Default value can be set here instead of `useEffect`
-  const [othercharges, setOtherCharges] = useState(237); // Same for other charges
-  const [total, setTotal] = useState(brokerage + othercharges + minReqAmt);
+  const [othercharges, setOtherCharges] = useState(0); // Same for other charges
+  const [total, setTotal] = useState(Number(brokerage) + Number(othercharges) + Number(minReqAmt));
   const [rating, setRating] = useState(null);
   const [tempRating, setTempRating] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -57,7 +57,7 @@ const upsidePotentialPercentage=parseInt(props.upsidePotentialPercentage)
 
   // Update total amount when amountToInvest, brokerage, or other charges change
   useEffect(() => {
-    setTotal(brokerage + othercharges + amountToInvest);
+    setTotal(Number(brokerage) + Number(othercharges) + Number(amountToInvest));
 if(brokerage + othercharges + amountToInvest){
   const result =Math.floor(0.05*(brokerage + othercharges + amountToInvest))
 
@@ -74,6 +74,17 @@ if(brokerage + othercharges + amountToInvest){
       setBrokerage(minReqAmt*0.005)
     }
   }, [minReqAmt]);
+
+  useEffect(()=>{
+    let exchangeTransactionCharge =amountToInvest* 0.003
+    let STT=amountToInvest*0.001
+    let StampDuty=amountToInvest*0.003
+    let totalOtherCharges=exchangeTransactionCharge+STT+StampDuty
+    setOtherCharges(totalOtherCharges.toFixed(2))
+    // - STT : 0.001%
+    // - Stamp Duty : 0.003%
+    
+  },[amountToInvest])
 
 
   // useEffect(() => {
@@ -194,6 +205,7 @@ if(brokerage + othercharges + amountToInvest){
     const secs = seconds % 60;
     return `${minutes}:${secs < 10 ? "0" : ""}${secs}`;
   };
+
 
 
 
@@ -610,7 +622,7 @@ const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
               textAlign="left"
               color="white" // Ensure the amountToInvest text is white
             >
-              {brokerage.toLocaleString('en-IN')}
+              {brokerage.toFixed(2).toLocaleString('en-IN')}
             </Text>
           </Box>
 
