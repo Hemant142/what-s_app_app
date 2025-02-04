@@ -17,7 +17,7 @@ const LineGraph = ({ lineChartData, underlyingIndexLineChart, underlyingIndex,si
   //   };
   // });
 
-  const mergedData =lineChartData.graphData
+  const mergedData =lineChartData?.graphData?.reverse()
 
   // Function to abbreviate month names
   const abbreviateMonth = (month) => {
