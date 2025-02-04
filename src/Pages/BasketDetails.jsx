@@ -78,6 +78,8 @@ useEffect(()=>{
     navigate(`/${id}`)
   }
 },[token])
+ Cookies.set('whats_app_token',"")
+ Cookies.set('basketId',"")
 
   useEffect(() => {
     // Cookies.remove('whats_app_token')
