@@ -177,10 +177,10 @@ export const getOrderHoldings = (id,token) =>(dispatch) => {
   })
   .then((res) => {
  
- 
+ console.log(res.data.data.combineHoldingList,"res order holdings")
  if(res.data.status==='success'){
 
-  dispatch({ type: GET_ORDER_HOLDINGS_SUCCESS, payload: res.data.data.list });
+  dispatch({ type: GET_ORDER_HOLDINGS_SUCCESS, payload: res.data.data.combineHoldingList });
  }
   
   })

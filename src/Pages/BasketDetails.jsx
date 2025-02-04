@@ -265,6 +265,7 @@ useEffect(()=>{
     basketHistory,
   ]);
 
+  console.log(orderHoldings,"orderHoldings")
   // Function to generate last 6 months data for both Basket and Underlying Index
   const generateLast6MonthsData = () => {
     const currentDate = new Date();
