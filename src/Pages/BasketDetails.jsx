@@ -295,14 +295,14 @@ useEffect(()=>{
 
   const calculateFundREquired = (instrumentListData) => {
     const qty = instrumentListData.quantity;
-    const cmp = instrumentListData.creationPrice;
+    const cmp = instrumentListData.cmp;
     const fundRequired = cmp * qty;
 
     return fundRequired;
   };
 
   const handleUpsidePotentialPercentage = (instrumentListData) => {
-    let cmp = Number(instrumentListData.creationPrice);
+    let cmp = Number(instrumentListData.cmp);
     let takeProfit = Number(instrumentListData.takeProfit);
 
     let upsidePotential = ((takeProfit - cmp) / cmp) * 100;
@@ -317,7 +317,7 @@ useEffect(()=>{
   };
 
   const handleUpsidePotential = (instrumentListData) => {
-    let cmp = Number(instrumentListData.creationPrice);
+    let cmp = Number(instrumentListData.cmp);
     let takeProfit = Number(instrumentListData.takeProfit);
     let qty = Number(instrumentListData.quantity);
 
