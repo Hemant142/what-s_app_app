@@ -65,6 +65,7 @@ export default function BasketDetails() {
   const { isLoading, newInstrumentsData, basketData,singleBasketInfo,orderHoldings } = useSelector(
     (store) => store.basketReducer
   );
+  console.log(userDetails,"userDetails")
   console.log(basketData,"basketData")
   console.log(singleBasketInfo,"singleBasketInfo")
   console.log(orderHoldings,"orderHoldings")
