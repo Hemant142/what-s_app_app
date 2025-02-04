@@ -21,22 +21,43 @@ export default function MyBasketConstituents({ basketData, orderHistory, newInst
   // },[token])
 
  
-  useEffect(()=>{
-    const latestDataMap = new Map();
+  // useEffect(()=>{
+  //   const latestDataMap = new Map();
 
-    orderHistory.forEach((entry) => {
-        const key = entry.instrumentID; // Unique identifier
-        const existingEntry = latestDataMap.get(key);
+  //   orderHistory.forEach((entry) => {
+  //       const key = entry.instrumentID; // Unique identifier
+  //       const existingEntry = latestDataMap.get(key);
   
-        // Update the entry if it doesn't exist or if the current entry is newer
-        if (!existingEntry || new Date(entry.createdAt) > new Date(existingEntry.createdAt)) {
-            latestDataMap.set(key, entry);
-        }
+  //       // Update the entry if it doesn't exist or if the current entry is newer
+  //       if (!existingEntry || new Date(entry.createdAt) > new Date(existingEntry.createdAt)) {
+  //           latestDataMap.set(key, entry);
+  //       }
+  //   });
+  
+  //   setMyBasketContituents(Array.from(latestDataMap.values().filter((instrument)=>instrument.orderType==='ENTRY')))
+
+  // },[orderHistory])
+  useEffect(() => {
+    const latestDataMap = new Map();
+  
+    orderHistory.forEach((entry) => {
+      const key = entry.instrumentID; // Unique identifier
+      const existingEntry = latestDataMap.get(key);
+  
+      // Update the entry if it doesn't exist or if the current entry is newer
+      if (!existingEntry || new Date(entry.createdAt) > new Date(existingEntry.createdAt)) {
+        latestDataMap.set(key, entry);
+      }
     });
   
-    setMyBasketContituents(Array.from(latestDataMap.values().filter((instrument)=>instrument.orderType==='ENTRY')))
-
-  },[orderHistory])
+    // Convert map values to an array and then filter
+    setMyBasketContituents(
+      Array.from(latestDataMap.values()).filter(
+        (instrument) => instrument.orderType === "ENTRY"
+      )
+    );
+  }, [orderHistory]);
+  
 
   const handleUpsidePotentialPercentage = (instrumentListData) => {
     let cmp = Number(instrumentListData.cmp);
