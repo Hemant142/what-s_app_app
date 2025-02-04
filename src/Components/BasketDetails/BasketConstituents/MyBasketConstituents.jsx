@@ -39,7 +39,7 @@ export default function MyBasketConstituents({ basketData, orderHistory, newInst
   },[orderHistory])
 
   const handleUpsidePotentialPercentage = (instrumentListData) => {
-    let cmp = Number(instrumentListData.creationPrice);
+    let cmp = Number(instrumentListData.cmp);
     let takeProfit = Number(instrumentListData.takeProfit) ;
 
     let upsidePotential = ((takeProfit - cmp) / cmp) * 100;
@@ -54,7 +54,7 @@ export default function MyBasketConstituents({ basketData, orderHistory, newInst
   };
 
   const handleUpsidePotential = (instrumentListData) => {
-    let cmp = Number(instrumentListData.creationPrice);
+    let cmp = Number(instrumentListData.cmp);
     let takeProfit = Number(instrumentListData.takeProfit || 985);
     let qty = Number(instrumentListData.quantity);
 
@@ -65,13 +65,13 @@ export default function MyBasketConstituents({ basketData, orderHistory, newInst
 
   // Calculate the total price of all instruments
   const totalPrice = orderHistory.reduce(
-    (sum, inst) => sum + inst.creationPrice * inst.quantity,
+    (sum, inst) => sum + inst.cmp * inst.quantity,
     0
   );
 
   // Function to calculate weightage
   const calculateWeightage = (inst) => {
-    const instrumentPrice = inst.creationPrice * inst.quantity;
+    const instrumentPrice = inst.cmp * inst.quantity;
     return ((instrumentPrice / totalPrice) * 100).toFixed(2);
   };
 

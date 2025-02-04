@@ -165,7 +165,7 @@ useEffect(()=>{
 
       // Set the calculated values in the state
       setMinAmount(Math.ceil(total));
-      setUpsidePotentialPercentage(totalUpsidePotentialPercentage); // Assuming you have a state for upside potential
+      setUpsidePotentialPercentage(Math.floor(totalUpsidePotentialPercentage/newInstrumentsData.length)); // Assuming you have a state for upside potential
       setUpsidePotential(totalUpsidePotential);
     }
 
@@ -300,6 +300,8 @@ useEffect(()=>{
 
     return fundRequired;
   };
+  console.log(newInstrumentsData,"New instrument data")
+  console.log(minAmount,"Min amount")
 
   const handleUpsidePotentialPercentage = (instrumentListData) => {
     let cmp = Number(instrumentListData.cmp);
