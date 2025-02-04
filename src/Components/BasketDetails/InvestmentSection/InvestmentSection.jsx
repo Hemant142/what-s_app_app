@@ -818,6 +818,7 @@ const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
       }}
       onClick={handleConfirmOrder}
       isLoading={isSubmitting}
+      disabled={amountToInvest>currentBalance}
     >
       Confirm Order
     </Button>

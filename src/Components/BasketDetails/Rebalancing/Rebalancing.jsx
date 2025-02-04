@@ -1,105 +1,84 @@
 import { Box, Button, Flex, Icon, Text, useToast } from '@chakra-ui/react';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { BsArrowUpRightCircle } from 'react-icons/bs';
 import Cookies from "js-cookie";
 import { RebalancingNewOrder } from '../../../Redux/basketReducer/action';
 import { useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
-export default function Rebalancing({ rebalancingList,id ,RebalancingSuccess}) {
-    const [timeRemaining, setTimeRemaining] = useState(null);
-    const token = Cookies.get("whats_app_token");
-    const dispatch = useDispatch();
-    const toast = useToast();
-    useEffect(() => {
-      if (rebalancingList.length > 0) {
-        // Sort the rebalancing list by statusDate to find the last (most recent) one
-        const sortedList = [...rebalancingList].sort(
-          (a, b) => new Date(b.statusDate) - new Date(a.statusDate)
+export default function Rebalancing({ rebalancingList, id, RebalancingSuccess }) {
+  const [timeRemaining, setTimeRemaining] = useState(null);
+  const navigate = useNavigate();
+
+  const token = Cookies.get("login_token_client");
+  const dispatch = useDispatch();
+  const toast = useToast();
+
+  const timerRef = useRef(null); // Use ref to store the timer
+
+  const convertToIST = (utcTime) => {
+    const utcDate = new Date(utcTime);
+    const istOffset = 5.5 * 60 * 60 * 1000; // IST Offset in milliseconds
+    return new Date(utcDate.getTime() + istOffset); // Return IST Date object
+  };
+
+  useEffect(() => {
+    if (rebalancingList.length === 0) return;
+
+    // Find the most recent item by sorting
+    const sortedList = [...rebalancingList].sort(
+      (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
+    );
+    const lastItem = sortedList[0];
+    const statusDate = convertToIST(lastItem.createdAt); // Convert to IST
+    const endTime = statusDate.getTime() + 24 * 60 * 60 * 1000; // Add 24 hours to creation time
+
+    const updateTimer = () => {
+      const now = Date.now(); // Use current UTC time
+      const remainingTime = endTime - now;
+
+      if (remainingTime <= 0) {
+        setTimeRemaining("00:00:00"); // Timer finished
+        clearInterval(timerRef.current); // Stop the timer
+      } else {
+        const hours = Math.floor((remainingTime / (1000 * 60 * 60)) % 24);
+        const minutes = Math.floor((remainingTime / (1000 * 60)) % 60);
+        const seconds = Math.floor((remainingTime / 1000) % 60);
+        setTimeRemaining(
+          `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`
         );
-        
-        const lastItem = sortedList[0]; // The most recent item
-        const statusDate = new Date(lastItem.statusDate); // Get the last status date
-        const endTime = new Date(statusDate.getTime() + 12 * 60 * 60 * 1000); // Add 12 hours
-  
-        const updateTimer = () => {
-          const now = new Date();
-          const remainingTime = endTime - now;
-  
-          if (remainingTime <= 0) {
-            setTimeRemaining("00:00:00"); // Timer finished
-            clearInterval(timer);
-          } else {
-            const hours = Math.floor((remainingTime / (1000 * 60 * 60)) % 24);
-            const minutes = Math.floor((remainingTime / (1000 * 60)) % 60);
-            const seconds = Math.floor((remainingTime / 1000) % 60);
-            setTimeRemaining(`${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`);
-          }
-        };
-  
-        const timer = setInterval(updateTimer, 1000);
-        updateTimer(); // Initialize immediately
-  
-        return () => clearInterval(timer); // Cleanup timer on unmount
       }
-    }, [rebalancingList]);
+    };
 
+    timerRef.current = setInterval(updateTimer, 1000); // Store the timer in the ref
+    updateTimer(); // Initialize immediately
 
-
-   
+    return () => clearInterval(timerRef.current); // Cleanup on unmount
+  }, [rebalancingList]);
 
   const handleUpsidePotentialPercentage = (instrumentListData) => {
-    const cmp = Number(instrumentListData.currentPrice);
+    const cmp = Number(instrumentListData.creationPrice);
     const takeProfit = Number(instrumentListData.takeProfit);
-  
+
     const upsidePotential = ((takeProfit - cmp) / cmp) * 100;
     const upsidePotentialPercentage = Math.floor(upsidePotential);
-  
+
     return upsidePotentialPercentage < 0 ? 0 : upsidePotentialPercentage; // Avoid negative values
   };
 
   const handleUpsidePotential = (instrumentListData) => {
-    const cmp = Number(instrumentListData.currentPrice);
+    const cmp = Number(instrumentListData.creationPrice);
     const takeProfit = Number(instrumentListData.takeProfit);
     const qty = Number(instrumentListData.quantity);
-  
+
     return ((takeProfit - cmp) * qty).toFixed(2);
   };
 
-
-  const handleRebalancing=()=>{
-  
-      dispatch(RebalancingNewOrder(id,token))
-      .then((res)=>{
-        if(res.data.detail){
-          RebalancingSuccess()
-          toast({
-            title: res.data.detail,
-            position: "bottom",
-            status: "warning",
-            duration: 2000,
-            isClosable: true,
-          });
-        }
-
-        if(res.data.status=="success"){
-          RebalancingSuccess()
-          toast({
-            title: res.data.message,
-            position: "bottom",
-            status: "success",
-            duration: 2000,
-            isClosable: true,
-          });
-        }
-
-
-      })
-      .catch((error)=>{
-        console.log(error)
-      })
-        
-    
-  }
+  const handleRebalancing = () => {
+    Cookies.set("basket-state", "Rebalancing");
+  Cookies.set("lots", 1);
+    navigate(`/confirm-order/${id}`);
+  };
 
   return (
     <Box p={4}>
@@ -236,7 +215,7 @@ export default function Rebalancing({ rebalancingList,id ,RebalancingSuccess}) {
                   fontWeight="600"
                   lineHeight="22px"
                   textAlign="center"
-                  color= {inst?.orderType=="Entry"? "#117B34": "#DB4437"}
+                  color={inst?.orderType == "ENTRY" ? "#117B34" : "#DB4437"}
                 >
                   {inst?.orderType}
                 </Text>
@@ -277,7 +256,7 @@ export default function Rebalancing({ rebalancingList,id ,RebalancingSuccess}) {
           }}
           onClick={handleRebalancing}
         >
-          Rebalancing
+          Rebalance
         </Button>
       </Box>
     </Box>
