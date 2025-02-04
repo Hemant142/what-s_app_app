@@ -52,6 +52,7 @@ export default function BasketDetails() {
   const [underlyingIndexLineChart, setUnderlyingIndexLineChart] = useState([
    
   ]);
+  
   const [rebalancingList, setRebalancingList] = useState([]);
   const [isRebalancing, setIsRebalancing] = useState(true);
   const [isRebalancingSuccess, setIsRebalancingSuccess] = useState(true);
@@ -65,7 +66,7 @@ export default function BasketDetails() {
     (store) => store.basketReducer
   );
 
- 
+ console.log(basketExpired,"basketExpired")
   // const currentBalance = userDetails?.clientInfo?.TotalBalance
 useEffect(()=>{
   if(!token){
