@@ -74,7 +74,7 @@ const Login = () => {
       // Dispatch action and handle the promise
       dispatch(clientToken(data))
       .then((res) => {
-
+console.log(res,"clientToken")
    Cookies.set('userId',userId)
           // setIsOTPDrawerOpen(true); // Open OTP drawer if login is successful
           if(res.data.status==="failed"){
