@@ -26,6 +26,7 @@ const InvestmentSection = (props) => {
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
+  
 
   const minReqAmt = parseInt(props.minReq, 10) || 0; // Ensure base 10 and default value
   const currentBalance = parseInt(props.currentBalance, 10) || 0;
