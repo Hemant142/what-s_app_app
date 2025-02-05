@@ -60,7 +60,7 @@ const upsidePotentialPercentage=parseInt(props.upsidePotentialPercentage)
   useEffect(() => {
     setTotal(Number(brokerage) + Number(othercharges) + Number(amountToInvest));
 if(brokerage + othercharges + amountToInvest){
-  const result =Math.floor(0.05*(brokerage + othercharges + amountToInvest))
+  const result =Math.floor(0.05*(Number(brokerage) + Number(othercharges) + Number(amountToInvest)))
 
   setBufferAmount(result)
 }
