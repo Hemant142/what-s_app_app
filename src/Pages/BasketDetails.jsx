@@ -42,7 +42,7 @@ export default function BasketDetails() {
   const [brokerage, setBrokerage] = useState(0);
   const [instrumentList, setInstrumentList] = useState([]);
   const [lotMultiplier, setLotMultiplier] = useState(null);
-  const token = Cookies.get("login_token_client");
+  const token = Cookies.get("whats_app_token");
 
   const { id } = useParams();
   const dispatch = useDispatch();
