@@ -60,7 +60,6 @@ export const reducer = (state = initialState, { type, payload }) => {
       };
     }
 
-    
     case USER_BALANCE_SUCCESS: { // Handle user balance update
       return {
         ...state,

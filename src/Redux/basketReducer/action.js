@@ -261,7 +261,7 @@ export const OrderPlaced = (id, lot, token) => (dispatch) => {
 
 export const RebalancingNewOrder=(id,token)=>(dispatch)=>{
   return axios.post(
-    `${NewURL}app/client/rebalance-new-order?basketId=${id}`,
+    `${V3_URL}centrum-galaxc/user/v3/client/update-order?basketID=${id}`,
     {}, // Add an empty object as the body payload
     {
       headers: {
@@ -270,6 +270,7 @@ export const RebalancingNewOrder=(id,token)=>(dispatch)=>{
     }
   );
 }
+
 
 export const basket_order_exit=(id,lot,token)=>(dispatch)=>{
   return axios.post(

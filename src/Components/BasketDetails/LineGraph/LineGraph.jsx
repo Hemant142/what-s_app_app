@@ -17,7 +17,7 @@ const LineGraph = ({ lineChartData, underlyingIndexLineChart, underlyingIndex,si
   //   };
   // });
 
-  const mergedData =lineChartData?.graphData?.reverse()
+  const mergedData =lineChartData?.graphData
 
   // Function to abbreviate month names
   const abbreviateMonth = (month) => {
@@ -94,7 +94,7 @@ const LineGraph = ({ lineChartData, underlyingIndexLineChart, underlyingIndex,si
       >
         In the last 6 months, the <span style={{ color: "#1DD75B" }}>Basket</span>{" "}
         outperformed the <span style={{ color: "#ED7D2D" }}>{underlyingIndex}</span>{" "}
-        Index by <span style={{ color: sixMonthsReturns>0?"#1DD75B": "" }}>{sixMonthsReturns}%</span>
+        Index by <span style={{ color: sixMonthsReturns>0?"#1DD75B": "" }}>{Number(sixMonthsReturns).toFixed(2)}%</span>
       </Text>
       <Divider
         ml={2}

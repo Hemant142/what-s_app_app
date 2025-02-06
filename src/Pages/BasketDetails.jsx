@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import Cookies from "js-cookie";
 import { useNavigate, useParams } from "react-router-dom";
+import { IoExitOutline } from "react-icons/io5";
+
 import {
   fetchLatestBasketList,
   getBasketCalculation,
@@ -24,72 +26,62 @@ import BasketConstituents from "../Components/BasketDetails/BasketConstituents/B
 import Activity from "../Components/BasketDetails/Activity/Activity";
 import AboutCentrum from "../Components/BasketDetails/AboutCentrum/AboutCentrum";
 import InvestmentSection from "../Components/BasketDetails/InvestmentSection/InvestmentSection";
-import { getBalance, getUserInfo } from "../Redux/authReducer/action";
+import {
+  clientInvestmentData,
+  getBalance,
+  getUserInfo,
+} from "../Redux/authReducer/action";
 import Rebalancing from "../Components/BasketDetails/Rebalancing/Rebalancing";
 import MyBasketConstituents from "../Components/BasketDetails/BasketConstituents/MyBasketConstituents";
 import YourActivity from "../Components/BasketDetails/Activity/YourActivity";
 
 export default function BasketDetails() {
   const [apiLoading, setApiLoading] = useState(true);
+  const [apiLoader, setApiLoader] = useState(false);
   // const [basketData, setBasketData] = useState(null);
   const [brokerage, setBrokerage] = useState(0);
   const [instrumentList, setInstrumentList] = useState([]);
-    const navigate=useNavigate()
-
-  const token = Cookies.get("whats_app_token");
+  const [lotMultiplier, setLotMultiplier] = useState(null);
+  const token = Cookies.get("login_token_client");
 
   const { id } = useParams();
   const dispatch = useDispatch();
   const [upsidePotential, setUpsidePotential] = useState(0);
   const [minAmount, setMinAmount] = useState(0);
   const [upsidePotentialPercentage, setUpsidePotentialPercentage] = useState(0);
-  const [lineChartData, setLineChartData] = useState([
-    
-  ]);
+  const [lineChartData, setLineChartData] = useState([]);
   const [orderHistory, setOrderHistory] = useState([]);
   const [basketHistory, setBasketHistory] = useState([]);
   const [basketCalculation, setBasketCalculation] = useState({});
-  const [underlyingIndexLineChart, setUnderlyingIndexLineChart] = useState([
-   
-  ]);
-  
+  const [underlyingIndexLineChart, setUnderlyingIndexLineChart] = useState([]);
   const [rebalancingList, setRebalancingList] = useState([]);
-  const [isRebalancing, setIsRebalancing] = useState(true);
+  const [rebalancingTime, setRebalancingTime] = useState(null);
+  const [isRebalancing, setIsRebalancing] = useState(false);
   const [isRebalancingSuccess, setIsRebalancingSuccess] = useState(true);
   const [basketExpired, setBasketExpired] = useState(false);
   const [currentBalance, setCurrentBalance] = useState(0);
-  // let userId = Cookies.get("user2Id_client");
+  let userId = Cookies.get("user2Id_client");
+  const navigate = useNavigate();
   // const currentBalance = useSelector((store) => store.authReducer.userBalance);
   let userDetails = useSelector((store) => store.authReducer.userdata);
   // const currentBalance= 2000
-  const { isLoading, newInstrumentsData, basketData,singleBasketInfo,orderHoldings } = useSelector(
-    (store) => store.basketReducer
-  );
-  console.log(userDetails,"userDetails")
-  console.log(basketData,"basketData")
-  console.log(singleBasketInfo,"singleBasketInfo")
-  console.log(orderHoldings,"orderHoldings")
-console.log(newInstrumentsData,"newInstrumentsData")
-   
- console.log(basketExpired,"basketExpired")
-  // const currentBalance = userDetails?.clientInfo?.TotalBalance
-useEffect(()=>{
-  if(!token){
-    navigate(`/${id}`)
-  }
-  
-},[token])
+  const {
+    isLoading,
+    newInstrumentsData,
+    basketData,
+    singleBasketInfo,
+    orderHoldings,
+  } = useSelector((store) => store.basketReducer);
 
+  // const currentBalance = userDetails?.clientInfo?.TotalBalance
 
   useEffect(() => {
-    // Cookies.remove('whats_app_token')
     dispatch(getBasketDetails(id, token));
     dispatch(getUserInfo(token));
     dispatch(fetchLatestBasketList(id, token));
-    dispatch(getOrderHoldings(id,token));
+    dispatch(getOrderHoldings(id, token));
     dispatch(getOrderHistory(id, token))
       .then((res) => {
-   
         if (res.data.status === "success") {
           setOrderHistory(res.data.data.list);
           // if (res.data.data.orderHistory.length > 0) {
@@ -122,7 +114,7 @@ useEffect(()=>{
       .catch((error) => {
         console.log(error, "Get ORder History Error");
       });
-      dispatch(getSingleBasketInfo(id,token))
+    dispatch(getSingleBasketInfo(id, token));
 
     // dispatch(getBasketHistory(id, token))
     //   .then((res) => {
@@ -145,12 +137,13 @@ useEffect(()=>{
     //   });
 
     // dispatch(getBalance(token));
-  }, [token, isRebalancingSuccess,id]);
+  }, [token, isRebalancingSuccess]);
 
-  const RebalancingSuccess = () => {
-    setIsRebalancingSuccess(!isRebalancingSuccess);
-  };
+  // const RebalancingSuccess = () => {
+  //   setIsRebalancingSuccess(!isRebalancingSuccess);
+  // };
 
+ 
   useEffect(() => {
     if (basketData && newInstrumentsData) {
       // Calculate the total required fund
@@ -189,9 +182,28 @@ useEffect(()=>{
     let basketHistory = (basketData?.concerns ?? []).flatMap(
       (concern) => concern.instruments || []
     );
-  
+    
     setBasketHistory(basketHistory);
   }, [basketData, newInstrumentsData,userDetails]);
+
+  useEffect(() => {
+    async function fetchClientInvestmentData() {
+      try {
+        const response = await dispatch(clientInvestmentData(id, token));
+        
+        if (response) {
+          if (response.data.totalLotMultiplier > 0) {
+            setLotMultiplier(response.data.totalLotMultiplier);
+          }
+          // Additional logic based on the fetched data can be added here.
+        }
+      } catch (error) {
+        console.error("Error fetching client investment data:", error);
+      }
+    }
+
+    fetchClientInvestmentData();
+  }, [token, id, dispatch]);
 
   useEffect(() => {
     const currentDate = new Date();
@@ -200,6 +212,7 @@ useEffect(()=>{
 
     const checkIfExpired = () => {
       const expiryDate = new Date(basketData.expiryTime + "T15:30:00");
+
       const isExpired =
         expiryDate <= currentDate ||
         (expiryDate.toDateString() === currentDate.toDateString() &&
@@ -214,6 +227,7 @@ useEffect(()=>{
     const intervalId = setInterval(checkIfExpired, 60000);
     return () => clearInterval(intervalId);
   }, [basketData]);
+
   useEffect(() => {
     const now = new Date(); // Get the current date and time
 
@@ -272,7 +286,6 @@ useEffect(()=>{
     basketHistory,
   ]);
 
-  console.log(orderHoldings,"orderHoldings")
   // Function to generate last 6 months data for both Basket and Underlying Index
   const generateLast6MonthsData = () => {
     const currentDate = new Date();
@@ -302,17 +315,17 @@ useEffect(()=>{
   }, []);
 
   const calculateFundREquired = (instrumentListData) => {
+    
     const qty = instrumentListData.quantity;
     const cmp = instrumentListData.cmp;
     const fundRequired = cmp * qty;
 
     return fundRequired;
   };
-  console.log(newInstrumentsData,"New instrument data")
-  console.log(minAmount,"Min amount")
+  
 
   const handleUpsidePotentialPercentage = (instrumentListData) => {
-    let cmp = Number(instrumentListData.cmp);
+    let cmp = Number(instrumentListData.creationPrice);
     let takeProfit = Number(instrumentListData.takeProfit);
 
     let upsidePotential = ((takeProfit - cmp) / cmp) * 100;
@@ -327,7 +340,7 @@ useEffect(()=>{
   };
 
   const handleUpsidePotential = (instrumentListData) => {
-    let cmp = Number(instrumentListData.cmp);
+    let cmp = Number(instrumentListData.creationPrice);
     let takeProfit = Number(instrumentListData.takeProfit);
     let qty = Number(instrumentListData.quantity);
 
@@ -336,14 +349,27 @@ useEffect(()=>{
     return Number(upsidePotential);
   };
 
-
+  const handleExitClick = () => {
+    Cookies.set("lots", lotMultiplier);
+    Cookies.set("basket-state", "Exit");
+    navigate(`/confirm-order/${id}`, {
+      state: {
+        // lots: lots,
+        currentBalance: currentBalance,
+        // amountToInvest: amountToInvest,
+        basketId: id,
+        // basketName: props.basketName, // In case you want to pass the basket name too
+        // instrumentList: props.instrumentList,
+      },
+    });
+  };
 
   const underlyingIndex = "NIFTY 50";
   const sixMonthsReturns = 5.7; // Example performance percentage
 
   return (
     <Box>
-      {Object.keys(basketData)?.length === 0 && Object.keys(userDetails)?.length === 0? (
+      {Object.keys(basketData)?.length === 0 ? (
         <Loader />
       ) : (
         // <InvestmentSection
@@ -388,9 +414,7 @@ useEffect(()=>{
                 <StatsComponent
                   basketData={basketData}
                   upsidePotential={upsidePotential || 0}
-                  upsidePotentialPercentage={
-                    upsidePotentialPercentage || 0
-                  }
+                  upsidePotentialPercentage={upsidePotentialPercentage || 0}
                   minAmount={minAmount || 0}
                   threeYearCAGR={singleBasketInfo?.["3YearCAGR"] || 0}
                   oneYearReturn={singleBasketInfo?.["oneYearReturn"] || 0}
@@ -429,7 +453,7 @@ useEffect(()=>{
                 <MyBasketConstituents
                   basketData={basketData}
                   newInstrumentsData={newInstrumentsData}
-                  orderHistory={orderHoldings}
+                  orderHoldings={orderHoldings}
                 />
               )}
               {orderHoldings?.length === 0 && (
@@ -505,22 +529,24 @@ useEffect(()=>{
                 </Box>
               )}
 
-
               <AboutCentrum basketData={basketData} id={id} />
-              {basketExpired === false && (
-                <InvestmentSection
-                  basketId={id}
-                  minReq={minAmount || 0} // Provide a default value if fundRequired is undefined
-                  basketName={basketData.title || "N/A"} // Provide a default if title is undefined
-                  currentBalance={Number(userDetails?.clientInfo?.TotalBalance) } // Provide a default if currentBalance is undefined
-                  instrumentList={newInstrumentsData || []} // Provide a default if instrumentList is undefined
-                  upsidePotential={upsidePotential || 0}
-                  orderHistory={orderHistory?.length}
-                  upsidePotentialPercentage={
-                    Number(upsidePotentialPercentage) || 0
-                  }
-                />
-              )}
+             {basketExpired === false &&rebalancingList?.length > 0 &&
+              !isRebalancing  && (
+  <InvestmentSection
+    basketId={id}
+    isRebalancing={isRebalancing}
+    orderHoldings={orderHoldings}
+    minReq={minAmount || 0}
+    basketName={basketData.title || "N/A"}
+    currentBalance={Number(currentBalance) || 0}
+    instrumentList={newInstrumentsData || []}
+    upsidePotential={upsidePotential || 0}
+    orderHistory={orderHistory?.length}
+    upsidePotentialPercentage={Number(upsidePotentialPercentage) || 0}
+  />
+
+)}
+
             </Box>
           )}
         </Box>

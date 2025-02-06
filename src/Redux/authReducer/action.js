@@ -90,3 +90,28 @@ export const getBalance = (token) => (dispatch) => {
       throw error; // Throw the error to handle it outside if needed
     });
 };
+
+
+
+export const clientInvestmentData = (id, token) => async (dispatch) => {
+  try {
+    const response = await axios.get(
+      `${V3_URL}centrum-galaxc/user/v3/client/client-investment-data?basketID=${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    if (response.data.status === "success") {
+      
+      return response.data; // Return the data for further use
+    } else {
+      throw new Error("Failed to fetch client investment data");
+    }
+  } catch (error) {
+    console.error("Error in clientInvestmentData:", error);
+    throw error; // Propagate the error
+  }
+};

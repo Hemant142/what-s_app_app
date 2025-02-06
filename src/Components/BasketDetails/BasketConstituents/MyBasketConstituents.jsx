@@ -9,56 +9,18 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 // import { fetchSymbols } from "../../../Redux/symbolReducer/action";
 
-export default function MyBasketConstituents({ basketData, orderHistory, newInstrumentsData }) {
+export default function MyBasketConstituents({ basketData, orderHoldings, newInstrumentsData }) {
   // const Symbols = useSelector((store) => store.symbolsReducer.symbols);
   const dispatch = useDispatch();
-  const token = Cookies.get("whats_app_token");
-  const [myBasketConstituents,setMyBasketContituents]=useState([])
+  const token = Cookies.get("login_token_client");
 
-  
+
   // useEffect(()=>{
   //     dispatch(fetchSymbols(token));
   // },[token])
 
+
  
-  // useEffect(()=>{
-  //   const latestDataMap = new Map();
-
-  //   orderHistory.forEach((entry) => {
-  //       const key = entry.instrumentID; // Unique identifier
-  //       const existingEntry = latestDataMap.get(key);
-  
-  //       // Update the entry if it doesn't exist or if the current entry is newer
-  //       if (!existingEntry || new Date(entry.createdAt) > new Date(existingEntry.createdAt)) {
-  //           latestDataMap.set(key, entry);
-  //       }
-  //   });
-  
-  //   setMyBasketContituents(Array.from(latestDataMap.values().filter((instrument)=>instrument.orderType==='ENTRY')))
-
-  // },[orderHistory])
-  useEffect(() => {
-    const latestDataMap = new Map();
-  
-    orderHistory.forEach((entry) => {
-      const key = entry.instrumentID; // Unique identifier
-      const existingEntry = latestDataMap.get(key);
-  
-      // Update the entry if it doesn't exist or if the current entry is newer
-      if (!existingEntry || new Date(entry.createdAt) > new Date(existingEntry.createdAt)) {
-        latestDataMap.set(key, entry);
-      }
-    });
-  
-    // Convert map values to an array and then filter
-    setMyBasketContituents(
-      Array.from(latestDataMap.values()).filter(
-        (instrument) => instrument.orderType === "ENTRY"
-      )
-    );
-  }, [orderHistory]);
-  
-
   const handleUpsidePotentialPercentage = (instrumentListData) => {
     let cmp = Number(instrumentListData.cmp);
     let takeProfit = Number(instrumentListData.takeProfit) ;
@@ -85,7 +47,7 @@ export default function MyBasketConstituents({ basketData, orderHistory, newInst
   };
 
   // Calculate the total price of all instruments
-  const totalPrice = orderHistory.reduce(
+  const totalPrice = orderHoldings.reduce(
     (sum, inst) => sum + inst.cmp * inst.quantity,
     0
   );
@@ -95,8 +57,18 @@ export default function MyBasketConstituents({ basketData, orderHistory, newInst
     const instrumentPrice = inst.cmp * inst.quantity;
     return ((instrumentPrice / totalPrice) * 100).toFixed(2);
   };
+  const returns=(inst)=>{
+return ((inst.cmp*inst.quantity - inst.avragePrice*inst.quantity)).toFixed(2)
+  }
+  const percentageReturns=(inst)=>{
+    // ( (currentPrice*quantity - avragePrice*quantity)/avragePrice*quantity)*100
+return(((inst.cmp - inst.avragePrice)/inst.avragePrice)*100).toFixed(2)
+  }
 
- 
+  // cureentpricve *quatntity==curent value
+  // avgbyprice*quantity==avg by value
+  // cureent value - avg by pricve 
+ // (curent price- avg privce)
 
 
   return (
@@ -116,8 +88,8 @@ export default function MyBasketConstituents({ basketData, orderHistory, newInst
       />
 
       {
-        myBasketConstituents?.length > 0 ? (
-          myBasketConstituents.map((inst, index) => (
+        orderHoldings?.length > 0 ? (
+          orderHoldings.map((inst, index) => (
             <Box
               key={`inst_${index}`}
               className="new-constituent-item"
@@ -135,13 +107,13 @@ export default function MyBasketConstituents({ basketData, orderHistory, newInst
                    fontFamily="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif"
                    
                     as={
-                      handleUpsidePotentialPercentage(inst) > 0
+                      percentageReturns(inst) > 0
                         ? BsArrowUpRightCircle
                         : BsArrowDownLeftCircle
                     } // You can change the icon for other flags
                     boxSize={6}
                     color={
-                      handleUpsidePotentialPercentage(inst) > 0
+                      percentageReturns(inst) > 0
                         ? "#1DD75B"
                         : "#E05858"
                     } // Adjust this if needed
@@ -167,12 +139,12 @@ export default function MyBasketConstituents({ basketData, orderHistory, newInst
                     lineHeight="22px"
                     textAlign="right"
                     color={
-                      handleUpsidePotentialPercentage(inst) > 0
+                      returns(inst) > 0
                         ? "#1DD75B"
                         : "#E05858"
                     }
                   >
-                    ₹ {handleUpsidePotential(inst).toFixed(2)}{" "}
+                    ₹ {Math.abs(returns(inst))}{" "}
                     {/* Display the upside potential */}
                   </Text>
                   <Text
@@ -183,12 +155,12 @@ export default function MyBasketConstituents({ basketData, orderHistory, newInst
                     lineHeight="18px"
                     textAlign="right"
                     color={
-                      handleUpsidePotentialPercentage(inst) > 0
+                      percentageReturns(inst) > 0
                         ? "#1DD75B"
                         : "#E05858"
                     }
                   >
-                    ({handleUpsidePotentialPercentage(inst)}%)
+                    ({Math.abs(percentageReturns(inst))}%)
                   </Text>
                 </Box>
               </Flex>
@@ -238,7 +210,7 @@ export default function MyBasketConstituents({ basketData, orderHistory, newInst
                     lineHeight="22px"
                     textAlign="left" // Align text to the left
                   >
-                    {inst?.creationPrice || "N/A"}{" "}
+                    {inst?.cmp || "N/A"}{" "}
                     {/* Added default value if currentPrice is undefined */}
                   </Text>
                 </Box>
@@ -291,7 +263,7 @@ export default function MyBasketConstituents({ basketData, orderHistory, newInst
                     lineHeight="22px"
                     textAlign="left" // Align text to the left
                   >
-                    8
+                    {inst?.avragePrice}
                   </Text>
                 </Box>
               </Box>

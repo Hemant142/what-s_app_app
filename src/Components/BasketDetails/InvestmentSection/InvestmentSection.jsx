@@ -321,6 +321,7 @@ const newUpsidePotential=parseFloat((upsidePotential*newLots).toFixed(2));
         
           // Clear the token
           Cookies.set('whats_app_token', "");
+          Cookies.set('user-name', "");
              // Set a timer to navigate back after 10 seconds
              setTimeout(() => {
               setIsSubmitting(false)

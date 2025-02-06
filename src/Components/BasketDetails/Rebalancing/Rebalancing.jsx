@@ -5,14 +5,20 @@ import Cookies from "js-cookie";
 import { RebalancingNewOrder } from '../../../Redux/basketReducer/action';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import CustomToast from '../../ConfirmOrder/CustomToast';
 
 export default function Rebalancing({ rebalancingList, id, RebalancingSuccess }) {
   const [timeRemaining, setTimeRemaining] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isMarketOpen,setIsMarketOpen]=useState(false)
   const navigate = useNavigate();
 
   const token = Cookies.get("login_token_client");
   const dispatch = useDispatch();
   const toast = useToast();
+  let userName = Cookies.get("user-name");
+  const [rating, setRating] = useState(null);
+    const [tempRating, setTempRating] = useState(0);
 
   const timerRef = useRef(null); // Use ref to store the timer
 
@@ -21,6 +27,42 @@ export default function Rebalancing({ rebalancingList, id, RebalancingSuccess })
     const istOffset = 5.5 * 60 * 60 * 1000; // IST Offset in milliseconds
     return new Date(utcDate.getTime() + istOffset); // Return IST Date object
   };
+
+
+  useEffect(() => {
+    const checkTimeAndDate = () => {
+      // Get current time in IST directly
+      const nowIST = new Date().toLocaleString("en-US", { timeZone: "Asia/Kolkata" });
+      const now = new Date(nowIST);
+
+      const currentISTHours = now.getHours(); // Get IST hours
+      const currentISTMinutes = now.getMinutes(); // Get IST minutes
+      const currentDay = now.getDay(); // Get IST day (0 = Sunday, 6 = Saturday)
+
+
+      // Convert the time to minutes from midnight (IST)
+      const currentTimeInMinutes = currentISTHours * 60 + currentISTMinutes;
+      const marketOpenTime = 9 * 60 + 15; // 9:15 AM IST in minutes
+      const marketCloseTime = 15 * 60 + 20; // 3:20 PM IST in minutes
+
+ 
+
+      // Check if it's a weekday (Monday to Friday)
+      if (currentDay >= 1 && currentDay <= 5) {
+        // Check if the current time is between market open and close times in IST
+        if (currentTimeInMinutes >= marketOpenTime && currentTimeInMinutes <= marketCloseTime) {
+          setIsMarketOpen(true); // Market is open
+        } else {
+          setIsMarketOpen(false); // Market is closed
+        }
+      } else {
+        setIsMarketOpen(false); // It's a weekend
+      }
+    };
+
+    checkTimeAndDate();
+  }, []);
+
 
   useEffect(() => {
     if (rebalancingList.length === 0) return;
@@ -74,10 +116,79 @@ export default function Rebalancing({ rebalancingList, id, RebalancingSuccess })
     return ((takeProfit - cmp) * qty).toFixed(2);
   };
 
+  const totalPrice = rebalancingList.reduce(
+    (sum, inst) => sum + inst.cmp * inst.quantity,
+    0
+  );
+  
+  const calculateWeightage = (inst) => {
+    const instrumentPrice = inst.cmp * inst.quantity;
+    return ((instrumentPrice / totalPrice) * 100).toFixed(0);
+  };
+
+
+  const handleStarClick = (starRating) => {
+    setRating(starRating); // Set rating immediately
+  };
   const handleRebalancing = () => {
-    Cookies.set("basket-state", "Rebalancing");
-  Cookies.set("lots", 1);
-    navigate(`/confirm-order/${id}`);
+  //   Cookies.set("basket-state", "Rebalancing");
+  // Cookies.set("lots", 1);
+  //   navigate(`/confirm-order/${id}`);
+
+    // Integrating Rebalancing API
+    setIsSubmitting(true)
+   console.log(id,"ID")
+   console.log(token,"Token")
+    dispatch(RebalancingNewOrder(id, token))
+    .then((res) => {
+     
+console.log(res,"REBALANCING")
+      if(res.data.status==="failed"){
+        setIsSubmitting(false)
+        toast({
+          title: "",
+          description: res.data.message,
+          status: "warning",
+          duration: 5000,
+          isClosable: true,
+        });
+      }
+
+
+      if (res.data.status === "success") {
+      
+        toast({
+          duration: 10000,
+          position: "bottom",
+          render: (props) => (
+            <CustomToast
+              userName={userName}
+              rating={rating}
+              tempRating={tempRating}
+              setTempRating={setTempRating}
+              handleStarClick={handleStarClick}
+              onClose={props.onClose}
+            />
+          ),
+        });
+      
+      
+           Cookies.remove('whats_app_token');
+                  Cookies.remove('user-name');
+                     // Set a timer to navigate back after 10 seconds
+                     setTimeout(() => {
+                      setIsSubmitting(false)
+                      navigate(`/${id}`); // Redirect to /basketId
+                    }, 10000); // 10 seconds delay
+  
+      }
+      
+    })
+
+    .catch((error) => {
+      setIsSubmitting(false)
+      console.log(error, "error confirm Rebalancing ");
+    });
   };
 
   return (
@@ -172,7 +283,7 @@ export default function Rebalancing({ rebalancingList, id, RebalancingSuccess })
                   lineHeight="18px"
                   width="85px"
                 >
-                  2%
+                  {calculateWeightage(inst)}%
                 </Text>
               </Box>
 
@@ -254,6 +365,8 @@ export default function Rebalancing({ rebalancingList, id, RebalancingSuccess })
             boxShadow: "0 0 15px rgba(29, 215, 91, 1)",
             transform: "scale(0.95)",
           }}
+          isLoading={isSubmitting}
+          disabled={!isMarketOpen}
           onClick={handleRebalancing}
         >
           Rebalance
