@@ -76,8 +76,7 @@ export default function BasketDetails() {
   // const currentBalance = userDetails?.clientInfo?.TotalBalance
 console.log(id,"ID")
 console.log(token,"Token")
-           Cookies.set('whats_app_token',"");
-                  Cookies.set('user-name',"");
+          
   useEffect(() => {
     dispatch(getBasketDetails(id, token));
     dispatch(getUserInfo(token));
