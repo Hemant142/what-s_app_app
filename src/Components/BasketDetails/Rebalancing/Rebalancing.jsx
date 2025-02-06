@@ -61,6 +61,7 @@ export default function Rebalancing({ rebalancingList, id, RebalancingSuccess })
     };
 
     checkTimeAndDate();
+    
   }, []);
 
 
