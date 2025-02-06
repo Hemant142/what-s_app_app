@@ -61,7 +61,7 @@ export default function Rebalancing({ rebalancingList, id, RebalancingSuccess })
     };
 
     checkTimeAndDate();
-    
+
   }, []);
 
 
@@ -174,8 +174,8 @@ console.log(res,"REBALANCING")
         });
       
       
-           Cookies.remove('whats_app_token');
-                  Cookies.remove('user-name');
+          Cookies.set('whats_app_token',"");
+                           Cookies.set('user-name',"");
                      // Set a timer to navigate back after 10 seconds
                      setTimeout(() => {
                       setIsSubmitting(false)
