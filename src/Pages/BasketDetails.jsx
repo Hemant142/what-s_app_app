@@ -65,6 +65,8 @@ export default function BasketDetails() {
   // const currentBalance = useSelector((store) => store.authReducer.userBalance);
   let userDetails = useSelector((store) => store.authReducer.userdata);
   // const currentBalance= 2000
+  console.log(rebalancingList,"rebalancingList")
+  console.log(isRebalancing,"isRebalancing")
   const {
     isLoading,
     newInstrumentsData,
@@ -532,7 +534,7 @@ console.log(token,"Token")
               )}
 
               <AboutCentrum basketData={basketData} id={id} />
-             {basketExpired === false &&rebalancingList?.length > 0 &&
+             {basketExpired === false &&rebalancingList?.length === 0 &&
               !isRebalancing  && (
   <InvestmentSection
     basketId={id}
