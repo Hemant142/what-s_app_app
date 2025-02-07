@@ -534,7 +534,7 @@ console.log(token,"Token")
               )}
 
               <AboutCentrum basketData={basketData} id={id} />
-             {basketExpired === false &&rebalancingList?.length === 0 &&
+             {basketExpired === false &&
               !isRebalancing  && (
   <InvestmentSection
     basketId={id}
