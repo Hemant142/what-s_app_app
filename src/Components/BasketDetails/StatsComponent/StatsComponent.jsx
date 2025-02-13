@@ -59,7 +59,7 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
         </Flex>
       </Box>
 
-      {/* 3Y CAGR */}
+      {/* UPSIDE POTENTIAL */}
       {upsidePotential !== undefined && (
         <Box
      
@@ -208,7 +208,7 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
       overflow="hidden"
       textOverflow="ellipsis"
     >
-      {threeYearCAGR.toLocaleString('en-IN')}
+      {threeYearCAGR.toLocaleString('en-IN')}%
     </Text>
   </Box>
 
@@ -242,7 +242,7 @@ const StatsComponent = ({ basketData,minAmount,upsidePotential,upsidePotentialPe
       textAlign="center"
       color="white"
     >
-      {oneYearReturn.toLocaleString('en-IN')}%
+      {Number(oneYearReturn).toFixed(2).toLocaleString('en-IN')}%
     </Text>
   </Box>
 </Box>

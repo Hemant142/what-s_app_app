@@ -251,7 +251,8 @@ console.log(token,"Token")
         return isWithin12Hours && isNotInOrderHoldings;
       }
     );
-
+console.log(filteredRebalancingList,"filteredRebalancingList")
+console.log(orderHoldings,"orderHoldings")
     // Update the isRebalancing state if any items match the criteria
 
     // Include the latest EXIT instrument from orderHistory if applicable

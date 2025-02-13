@@ -189,6 +189,9 @@ if(brokerage + othercharges + amountToInvest){
               isClosable: true,
             });
 
+            Cookies.set('whats_app_token', "");
+            Cookies.set('user-name', "");
+
             return 0;
           }
           return prevTime - 1;

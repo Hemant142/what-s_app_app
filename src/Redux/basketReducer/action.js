@@ -78,7 +78,7 @@ export const getBasketDetails = (id,token) => (dispatch) => {
     }
   )
   .then((res) => {
-     
+     console.log(res,"getBasketDetails")
     if (res.data.status === "success") {
      
         dispatch({ type: GET_BASKETDATA_SUCCESS,payload: res.data.data.basketList[0]});

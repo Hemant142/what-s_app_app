@@ -44,7 +44,8 @@ export default function AboutCentrum({ basketData, id }) {
             SEBI Registration No.: INH000001469
           </Text>
           <Text maxWidth="600px" mb={2}>
-            We are SEBI registered Research advisory firm, creating thematic baskets of curated stocks.
+          We are SEBI registered Research Analyst.
+          We bring you thematic basket of curated stocks.
           </Text>
         </Box>
 
